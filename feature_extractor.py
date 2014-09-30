@@ -3,5 +3,5 @@ class FeatureExtractor(object):
         """Does semantic analysis stuff, extracts important information
         to NLP’d data.
         """
-        features = { ‘request_type’: ‘query’ }
+        features = {'request_type': 'query'}
         return features

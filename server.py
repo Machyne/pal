@@ -19,7 +19,7 @@ class Server(Object):
 
     def handleRequest(self, req):
         try:
-            validate(req):
+            validate(req)
         except MissingKeyException as e:
             reply(x) // Or something
 
@@ -27,7 +27,8 @@ class Server(Object):
         processed_data = NLPPreprocessor.preprocess(req)
         features = FeatureExtractor.extractFeatures(processed_data)
         services = self.filter.filter(client, features[‘request_type’])
-        conf_levels = {service: service.get_confidence(req, features) for service in services}
+        conf_levels = {service: service.get_confidence(req, features)
+                       for service in services}
         chosen_service = max(conf_levels, key=conf_levels.get)
         reply(chosen_service.go(features, req))
 

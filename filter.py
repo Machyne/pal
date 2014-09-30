@@ -7,7 +7,10 @@ class Filter(object):
         """Handle the initial filtering of potentially relevant services.
         """
         if (client, feature_request_type) not in self.cache:
-            ret = filter(lambda service: service.applies_to_me(client, feature_request_type), self.all_service)
+            ret = filter(
+                lambda service: service.applies_to_me(client,
+                                                      feature_request_type),
+                self.all_service)
             self.cache[(client, feature_request_type)] = ret
             return ret
         else:
