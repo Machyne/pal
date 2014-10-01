@@ -10,7 +10,7 @@ class Server(Object):
                 raise MissingKeyException(x)
 
     def __init__(self):
-        self.all_services = AbstractService.magic(‘more magic’)
+        self.all_services = AbstractService.magic('more magic')
         self.filter = Filter(self.all_services)
 
     def main(self):
@@ -23,14 +23,14 @@ class Server(Object):
         except MissingKeyException as e:
             reply(x) // Or something
 
-        client = req[‘client’]
+        client = req['client']
         processed_data = NLPPreprocessor.preprocess(req)
         features = FeatureExtractor.extractFeatures(processed_data)
-        services = self.filter.filter(client, features[‘request_type’])
+        services = self.filter.filter(client, features['request_type'])
         conf_levels = {service: service.get_confidence(req, features)
                        for service in services}
         chosen_service = max(conf_levels, key=conf_levels.get)
         reply(chosen_service.go(features, req))
 
-if __name__ == ‘__main__’:
+if __name__ == '__main__':
     Server().main()
