@@ -1,5 +1,11 @@
 import abc
+from flask import Flask
+from flask.ext.restful import Api
+from flask_restful_swagger import swagger
 
+app = Flask(__name__)
+
+api = swagger.docs(api=Api(app), apiVersion='0.1')
 
 class Server(Object):
     EXPECTED_KEYS = ['query', 'client']
