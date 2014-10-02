@@ -2,7 +2,7 @@ from .abstract_service import AbstractService
 # XXX shouldn't use '.' import, should use 'pal.services.', but that's not working for some reason...
 
 
-class IMBDService(AbstractService):
+class IMDBService(AbstractService):
 
     def applies_to_me(self, client, feature_request_type):
         return True

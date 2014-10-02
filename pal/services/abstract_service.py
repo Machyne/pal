@@ -1,4 +1,8 @@
 class AbstractService(object):
+    @classmethod
+    def magic(cls, more_magic):
+        from .imdb_service import IMDBService
+        return [IMDBService()]
 
     def applies_to_me(self, client, feature_request_type):
         """Determines whether this service is a valid possible outcome for the
