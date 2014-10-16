@@ -1,11 +1,10 @@
 from flask import Flask, redirect, Blueprint, request
-from flask.ext.restful import reqparse, abort, Api, Resource, fields, \
-    marshal_with
+from flask.ext.restful import abort, Api, Resource
 from flask_restful_swagger import swagger
 
 from pal.services.abstract_service import AbstractService
 from pal.feature_extractor import FeatureExtractor
-from pal.nlp_preprocessor import NLPPreprocessor
+from pal.standard_nlp import StandardNLP
 from pal.filter import Filter
 from pal.exceptions import MissingKeyException
 
@@ -15,11 +14,12 @@ pal_blueprint = Blueprint('pal_blueprint', __name__)
 ###################################
 # This is important:
 api_pal = swagger.docs(Api(pal_blueprint), apiVersion='0.1',
-                    basePath='http://localhost:5000',
-                    resourcePath='/',
-                    produces=["application/json", "text/html"],
-                    api_spec_url='/spec')
+                       basePath='http://localhost:5000',
+                       resourcePath='/',
+                       produces=["application/json", "text/html"],
+                       api_spec_url='/spec')
 ###################################
+
 
 class Server(Resource):
 
@@ -36,8 +36,9 @@ class Server(Resource):
     @swagger.operation(
         notes='Get a PAL Response',
         nickname='howdy',
-        # Parameters can be automatically extracted from URLs (e.g. <string:id>)
-        # but you could also override them here, or add other parameters.
+        # Parameters can be automatically extracted from URLs
+        # (e.g. <string:id>) but you could also override them here,
+        # or add other parameters.
         parameters=[
             {
                 'name': 'quest',
@@ -65,13 +66,14 @@ class Server(Resource):
         except MissingKeyException as e:
             abort(404, message=str(e))
 
-        processed_data = NLPPreprocessor.preprocess(req)
-        features = FeatureExtractor.extractFeatures(processed_data)
+        nlp_data = StandardNLP.preprocess(req)
+        features = FeatureExtractor.extractFeatures(nlp_data)
         services = self.filter.filter(req['client'], features['request_type'])
-        conf_levels = {service: service.get_confidence(req, features)
+        conf_levels = {service: service.get_confidence(features)
                        for service in services}
         chosen_service = max(conf_levels, key=conf_levels.get)
-        return chosen_service.go(features, req), 200, {'Access-Control-Allow-Origin': '*'}
+        return chosen_service.go(features), 200,
+        {'Access-Control-Allow-Origin': '*'}
 
 
 ##
@@ -79,9 +81,11 @@ class Server(Resource):
 ##
 api_pal.add_resource(Server, '/pal')
 
+
 @app.route('/docs')
 def docs():
     return redirect('/static/docs.html')
+
 
 @app.route('/')
 def index():

@@ -1,4 +1,4 @@
-class NLPPreprocessor(object):
+class StandardNLP(object):
     @classmethod
     def preprocess(cls, data):
         """parses input into a usable form, applies NLP stuff"""
