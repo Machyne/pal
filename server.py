@@ -89,7 +89,7 @@ def docs():
 
 @app.route('/')
 def index():
-    return 'CI WORKS!'
+    return 'CI WORKS 2!'
 
 # main doesn't run in wsgi
 app.register_blueprint(pal_blueprint, url_prefix='/api')
