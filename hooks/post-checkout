@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo 'Deleting any .pyc files and empty directories'
+cd ./$(git rev-parse --show-cdup)  # Returns to the git root
+find . -name "*.pyc" -delete       # pyc files
+find . -type d -empty -delete      # empty directories

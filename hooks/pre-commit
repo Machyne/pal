@@ -1,0 +1,163 @@
+#!/usr/bin/env python
+# Check all of the files changed and returns non-zero status if there's a problem.
+
+
+import os
+import re
+import subprocess
+import sys
+
+try:
+    from termcolor import colored # NOQA
+except ImportError:
+    colored = lambda string, color=None: string # NOQA
+
+
+def run_cmd(cmd):
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    output, error = process.communicate()
+    return output + error
+
+
+def indent(string):
+    if string:
+        return re.sub('^', '\t', string, flags=re.M)
+    else:
+        return string
+
+
+def extract_name(line):
+    """ Extract a function or class name from line."""
+    line = line.lstrip()  # strip away any leading whitespace
+    if line.startswith("def ") or line.startswith("class "):
+        name_w_args = line.split(" ")[1]
+        actual_name = name_w_args.split("(")[0]
+        return actual_name
+
+
+class CommitChecker(object):
+
+    def __init__(self):
+        self.filename = None
+        self.mimetype = None
+        self.content = None
+        self.lines = []
+        self.errors = []
+
+    @property
+    def success(self):
+        return not self.errors
+
+    def _error(self, message):
+        self.errors.append((self.filename, message))
+
+    def _warn(self, message):
+        print colored(('  WARNING: %s' % (message)), 'yellow')
+
+    def get_errors(self):
+        return sorted(self.errors)
+
+    # MAIN RUN METHOD -----------------------------------------------------
+
+    def run(self):
+        filenames = os.popen('git diff --cached --name-only --diff-filter=ACMR')
+            # Gets the list of file names staged for commit that have been
+            # [A]dded, [C]opied, [M]odified, [R]enamed
+        for filename in filenames:
+            self.filename = filename.strip()
+            self.mimetype = os.popen('file --brief %s' % filename).read().strip().lower()
+            # Something like "a python script text executable"
+            if 'symbolic' in self.mimetype:
+                continue
+
+            # If the self.filename is a directory, don't try to read it as a file
+            if os.path.isdir(self.filename):
+                continue
+
+            self.content = file(self.filename).read()
+            self.lines = self.content.split('\n')
+
+            # TODO(Alex): use the following to just check changed lines
+            # diff_full = os.popen('git diff --cached %s' % filename).readlines()
+            # diff_additions = [l for l in diff_full if l.startswith('+')]
+            # diff_deletions = [l for l in diff_full if l.startswith('-')]
+
+            print 'Checking', self.filename
+            try:
+                self._check_junk_file()
+                self._check_pyflakes()
+                #TODO: add a _check_pep8
+                self._check_shebang()
+                self._check_imports()
+                self._check_conflict_marks()
+
+            except AssertionError, e:
+                self._error(e.message)
+
+    # CHECKS #######################################################
+    #
+
+    JUNK_FILE_RE = re.compile(r'\.( py[oc] | ~ )', re.X)
+
+    def _check_junk_file(self):
+        assert not self.JUNK_FILE_RE.search(self.filename), "You shouldn't be committing %s" % self.filename
+
+    def _check_pyflakes(self):
+        if 'python script' in self.mimetype:
+            lines_to_ignore = set()
+            for num, line in enumerate(self.lines):
+                if '# NOQA' in line or '# pyflakes: ignore' in line:
+                    lines_to_ignore.add(str(num + 1))
+
+            def should_warn(line):
+                if ':' not in line:
+                    return False
+                num, _ = line.split(':', 1)
+                return num not in lines_to_ignore
+
+            output = run_cmd('pyflakes %s' % self.filename)  # Run pyflakes
+            output = re.sub(r'^[^:]+:', '', output, flags=re.M)  # Remove filename
+            output = '\n'.join(line for line in output.split('\n') if should_warn(line))
+            output = indent(output)
+            assert not output, "Pyflakes failed:\n%s" % output
+
+    def _check_shebang(self):
+        # XXX: I'm not sure how this plays with virtualenv, but it's best practice to have the shebang
+        shebang = '#!/usr/bin/env python'
+        if 'python script' in self.mimetype:
+            assert self.content.startswith(shebang), "First line should be '%s'" % shebang
+
+    def _check_conflict_marks(self):
+        if 'text' in self.mimetype:
+            for num, line in enumerate(self.lines):
+                if re.search(r'^(<|>|=){7}', line):
+                    self._error('There is a conflict mark in the source. '
+                                'Are you sure merge was successful?, Line: %s' % num)
+
+    def _check_imports(self):
+        if 'python script' in self.mimetype:
+            for (num, line) in enumerate(self.lines):
+                if line.strip().startswith(("import ", "from ")):
+                    assert ',' not in line, "Only 1 import per line -- %i:  %s" % (num + 1, line)
+
+
+if __name__ == '__main__':
+    checker = CommitChecker()
+    checker.run()
+    if checker.success:
+        print colored('All pre-commit checks OK', 'green')
+    else:
+        print
+        print colored('#' * 80, 'red')
+        print colored('PRE-COMMIT CHECK FAILED', 'red')
+        print colored('#' * 80, 'red')
+        print
+        for filename, message in checker.get_errors():
+            print '%s: %s' % (filename, message)
+        print
+
+        if os.path.exists('.git/MERGE_HEAD'):
+            print colored('Since you are merging, this is only a warning. Please fix these errors!')
+            sys.exit(0)
+        else:
+            sys.exit(1)
