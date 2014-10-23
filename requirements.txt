@@ -7,6 +7,8 @@ aniso8601==0.83
 argparse==1.2.1
 flask-restful-swagger==0.14
 itsdangerous==0.24
+nltk==3.0.0
+numpy==1.9.0
 pep8==1.5.7
 pyflakes==0.8.1
 pytz==2014.7

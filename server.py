@@ -1,5 +1,11 @@
-from flask import Flask, redirect, Blueprint, request
-from flask.ext.restful import abort, Api, Resource
+#!/usr/bin/env python
+from flask import Flask
+from flask import redirect
+from flask import Blueprint
+from flask import request
+from flask.ext.restful import abort
+from flask.ext.restful import Api
+from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 
 from pal.services.abstract_service import AbstractService
@@ -66,9 +72,12 @@ class Server(Resource):
         except MissingKeyException as e:
             abort(404, message=str(e))
 
-        nlp_data = StandardNLP.preprocess(req)
+        nlp_data = StandardNLP.preprocess(req['quest'])
         features = FeatureExtractor.extractFeatures(nlp_data)
-        services = self.filter.filter(req['client'], features['request_type'])
+        services = self.filter.filter(
+            req['client'],
+            (features['questionType'] if 'questionType' in features
+                else features['actionType']))
         conf_levels = {service: service.get_confidence(features)
                        for service in services}
         chosen_service = max(conf_levels, key=conf_levels.get)
@@ -76,9 +85,9 @@ class Server(Resource):
         {'Access-Control-Allow-Origin': '*'}
 
 
-##
-## Actually setup the Api resource routing here
-##
+#
+# Actually setup the Api resource routing here
+#
 api_pal.add_resource(Server, '/pal')
 
 
@@ -95,5 +104,5 @@ def index():
 app.register_blueprint(pal_blueprint, url_prefix='/api')
 
 if __name__ == '__main__':
-#    app.register_blueprint(pal_blueprint, url_prefix='/api')
+    # app.register_blueprint(pal_blueprint, url_prefix='/api')
     app.run(debug=True)
