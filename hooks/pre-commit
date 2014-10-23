@@ -70,6 +70,10 @@ class CommitChecker(object):
             if 'symbolic' in self.mimetype:
                 continue
 
+            if self.filename.endswith('.md'):
+                # We don't really care about checking Markdown (yet)
+                continue
+
             # If the self.filename is a directory, don't try to read it as a file
             if os.path.isdir(self.filename):
                 continue
