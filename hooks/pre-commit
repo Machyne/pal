@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-# Check all of the files changed and returns non-zero status if there's a problem.
+# Check all of the files changed and returns
+# a non-zero status if there's a problem.
 
 
 import os
@@ -7,14 +8,18 @@ import re
 import subprocess
 import sys
 
+import pep8
+
+
 try:
-    from termcolor import colored # NOQA
+    from termcolor import colored  # NOQA
 except ImportError:
-    colored = lambda string, color=None: string # NOQA
+    colored = lambda string, color=None: string  # NOQA
 
 
 def run_cmd(cmd):
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE, shell=True)
     output, error = process.communicate()
     return output + error
 
@@ -33,6 +38,30 @@ def extract_name(line):
         name_w_args = line.split(" ")[1]
         actual_name = name_w_args.split("(")[0]
         return actual_name
+    else:
+        return ''
+
+
+class DelayedReport(pep8.StandardReport):
+
+    def get_file_results(self):
+        error_messages = list()
+        self._deferred_print.sort()
+        for line_number, offset, code, text, doc in self._deferred_print:
+            error_string = "%(row)d:%(col)d: %(code)s %(text)s" % {
+                'row': self.line_offset + line_number,
+                'col': offset + 1,
+                'code': code,
+                'text': text,
+            }
+            line = (self.lines[line_number - 1]
+                    if line_number < len(self.lines) else '')
+            pointer_line = re.sub(r'\S', ' ', line[:offset]) + '^'
+            if self._show_source:
+                error_string = "%s\n%s\n%s" % (error_string, line, pointer_line)
+            error_messages.append(error_string)
+
+        return error_messages, self.file_errors
 
 
 class CommitChecker(object):
@@ -43,6 +72,7 @@ class CommitChecker(object):
         self.content = None
         self.lines = []
         self.errors = []
+        self.pep8 = None
 
     @property
     def success(self):
@@ -57,32 +87,36 @@ class CommitChecker(object):
     def get_errors(self):
         return sorted(self.errors)
 
-    # MAIN RUN METHOD -----------------------------------------------------
+    # MAIN RUN METHOD ---------------------------------------------------------
 
     def run(self):
         filenames = os.popen('git diff --cached --name-only --diff-filter=ACMR')
-            # Gets the list of file names staged for commit that have been
-            # [A]dded, [C]opied, [M]odified, [R]enamed
+        # Gets the list of file names staged for commit that have been
+        # [A]dded, [C]opied, [M]odified, or [R]enamed
         for filename in filenames:
             self.filename = filename.strip()
-            self.mimetype = os.popen('file --brief %s' % filename).read().strip().lower()
+            self.mimetype = os.popen('file --brief %s' %
+                                     filename).read().strip().lower()
             # Something like "a python script text executable"
+
             if 'symbolic' in self.mimetype:
                 continue
 
-            if self.filename.endswith('.md'):
+            if self.filename.endswith('.md') or self.filename.endswith('.txt'):
                 # We don't really care about checking Markdown (yet)
                 continue
 
-            # If the self.filename is a directory, don't try to read it as a file
             if os.path.isdir(self.filename):
+                # If the self.filename is a directory,
+                # don't try to read it as a file
                 continue
 
             self.content = file(self.filename).read()
             self.lines = self.content.split('\n')
 
             # TODO(Alex): use the following to just check changed lines
-            # diff_full = os.popen('git diff --cached %s' % filename).readlines()
+            # diff_full = os.popen('git diff --cached %s' %
+            #                      filename).readlines()
             # diff_additions = [l for l in diff_full if l.startswith('+')]
             # diff_deletions = [l for l in diff_full if l.startswith('-')]
 
@@ -90,21 +124,21 @@ class CommitChecker(object):
             try:
                 self._check_junk_file()
                 self._check_pyflakes()
-                #TODO: add a _check_pep8
+                self._check_pep8()
                 self._check_shebang()
-                self._check_imports()
                 self._check_conflict_marks()
+                self._check_names()
 
             except AssertionError, e:
                 self._error(e.message)
 
     # CHECKS #######################################################
-    #
 
     JUNK_FILE_RE = re.compile(r'\.( py[oc] | ~ )', re.X)
 
     def _check_junk_file(self):
-        assert not self.JUNK_FILE_RE.search(self.filename), "You shouldn't be committing %s" % self.filename
+        error_message = "You shouldn't be committing %s" % self.filename
+        assert not self.JUNK_FILE_RE.search(self.filename), error_message
 
     def _check_pyflakes(self):
         if 'python script' in self.mimetype:
@@ -120,29 +154,48 @@ class CommitChecker(object):
                 return num not in lines_to_ignore
 
             output = run_cmd('pyflakes %s' % self.filename)  # Run pyflakes
-            output = re.sub(r'^[^:]+:', '', output, flags=re.M)  # Remove filename
-            output = '\n'.join(line for line in output.split('\n') if should_warn(line))
+            output = re.sub(r'^[^:]+:', '', output,
+                            flags=re.M)  # Remove filename
+            output = '\n'.join(line for line in output.split('\n')
+                               if should_warn(line))
             output = indent(output)
             assert not output, "Pyflakes failed:\n%s" % output
 
+    def _check_pep8(self):
+        if self.pep8 is None:
+            self.pep8 = pep8.StyleGuide(max_line_length=80)
+        self.pep8.init_report(DelayedReport)
+        pep8_errors, error_count = self.pep8.input_file(self.filename)
+        if error_count:
+            self.errors += [(self.filename, error) for error in pep8_errors]
+
     def _check_shebang(self):
-        # XXX: I'm not sure how this plays with virtualenv, but it's best practice to have the shebang
+        # XXX: I'm not sure how this plays with virtualenv,
+        # but it's best practice to have the shebang
         shebang = '#!/usr/bin/env python'
         if 'python script' in self.mimetype:
-            assert self.content.startswith(shebang), "First line should be '%s'" % shebang
+            shebang_message = "First line should be '%s'" % shebang
+            assert self.content.startswith(shebang), shebang_message
+
+    def _check_names(self):
+        """ Check that function names use snake_case and
+            class names use CamelCase.
+        """
+        names = {
+            'classes': [],
+            'functions': []
+        }
+        for num, line in enumerate(self.lines):
+            #TODO Implement this
+            pass
 
     def _check_conflict_marks(self):
         if 'text' in self.mimetype:
             for num, line in enumerate(self.lines):
                 if re.search(r'^(<|>|=){7}', line):
-                    self._error('There is a conflict mark in the source. '
-                                'Are you sure merge was successful?, Line: %s' % num)
-
-    def _check_imports(self):
-        if 'python script' in self.mimetype:
-            for (num, line) in enumerate(self.lines):
-                if line.strip().startswith(("import ", "from ")):
-                    assert ',' not in line, "Only 1 import per line -- %i:  %s" % (num + 1, line)
+                    msg = ('There is a conflict mark in the source. Are you'
+                           ' sure the merge was successful?, Line: %s' % num)
+                    self._error(msg)
 
 
 if __name__ == '__main__':
@@ -157,11 +210,13 @@ if __name__ == '__main__':
         print colored('#' * 80, 'red')
         print
         for filename, message in checker.get_errors():
-            print '%s: %s' % (filename, message)
+            print colored('%s: %s' % (filename, message),
+                          "yellow")
         print
 
         if os.path.exists('.git/MERGE_HEAD'):
-            print colored('Since you are merging, this is only a warning. Please fix these errors!')
+            print colored('Since you are merging, this is only a warning. '
+                          'Please fix these errors!', 'yellow')
             sys.exit(0)
         else:
             sys.exit(1)
