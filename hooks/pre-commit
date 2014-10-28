@@ -127,7 +127,7 @@ class CommitChecker(object):
                 self._check_pep8()
                 self._check_shebang()
                 self._check_conflict_marks()
-                self._check_names()
+                # self._check_names()
 
             except AssertionError, e:
                 self._error(e.message)
@@ -181,13 +181,14 @@ class CommitChecker(object):
         """ Check that function names use snake_case and
             class names use CamelCase.
         """
-        names = {
-            'classes': [],
-            'functions': []
-        }
-        for num, line in enumerate(self.lines):
-            #TODO Implement this
-            pass
+        # TODO Implement this
+        pass
+        # names = {  # NOQA
+        #     'classes': [],
+        #     'functions': []
+        # }
+        # for num, line in enumerate(self.lines):
+        #     pass
 
     def _check_conflict_marks(self):
         if 'text' in self.mimetype:
