@@ -8,11 +8,15 @@ class FeatureExtractor(object):
         """Does semantic analysis stuff, extracts important information
         to NLP'd data.
         """
-        nouns = [w[0] for w in processed_data['pos'] if 'NN' in w[1]]
         tree = nltk.ne_chunk(processed_data['pos'])
-        print nouns, tree
+        tree = [(token if isinstance(token, tuple) else
+                 (' '.join(map(lambda a: a[0], token.leaves())),
+                  token.label()))
+                for token in tree]
+        nouns = [token for token in tree
+                 if 'NN' in token[1] or ' ' in token[0]]
         features = {'keywords': ['movie'],
-                    'nouns': [('person', 'Tom Hanks')],
+                    'nouns': nouns,
                     'tense': 'past',
                     'isQuestion': True,
                     'questionType': 'quantity'}
