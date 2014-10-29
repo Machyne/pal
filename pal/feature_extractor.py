@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import nltk
+
+
 class FeatureExtractor(object):
     @classmethod
     def extractFeatures(cls, processed_data):
@@ -6,7 +9,8 @@ class FeatureExtractor(object):
         to NLP'd data.
         """
         nouns = [w[0] for w in processed_data['pos'] if 'NN' in w[1]]
-        print nouns
+        tree = nltk.ne_chunk(processed_data['pos'])
+        print nouns, tree
         features = {'keywords': ['movie'],
                     'nouns': [('person', 'Tom Hanks')],
                     'tense': 'past',
