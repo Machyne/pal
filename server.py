@@ -77,7 +77,7 @@ class Server(Resource):
 
 
 ##
-## Actually setup the Api resource routing here
+# Actually setup the Api resource routing here
 ##
 api_pal.add_resource(Server, '/pal')
 
@@ -95,5 +95,5 @@ def index():
 app.register_blueprint(pal_blueprint, url_prefix='/api')
 
 if __name__ == '__main__':
-#    app.register_blueprint(pal_blueprint, url_prefix='/api')
+    # app.register_blueprint(pal_blueprint, url_prefix='/api')
     app.run(debug=True)
