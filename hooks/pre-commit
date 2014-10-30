@@ -30,6 +30,16 @@ def indent(string):
     else:
         return string
 
+SUBSEQUENT_PATTERN = r"[a-z0-9]*"
+CAMEL_PATTERN = r"(?:[A-Z]%s)+" % SUBSEQUENT_PATTERN
+SNAKE_PATTERN = r"(?:_{0,2}[a-z]%s(?:_[a-z]%s)*_{0,2})|_" % (
+                SUBSEQUENT_PATTERN, SUBSEQUENT_PATTERN)
+
+CLASS_PATTERN = r"( {4})*class (?P<name>%s)\(" % CAMEL_PATTERN
+FUNCTION_PATTERN = r"( {4})*def (?P<name>%s)\(" % SNAKE_PATTERN
+LOCAL_VAR_PATTERN = r"( {4})+(?:self.)?(?P<name>%s) =" % SNAKE_PATTERN
+GLOBAL_VAR_PATTERN = r"(?P<name>[A-Z][A-Z_]*) ="
+
 
 def extract_name(line):
     """ Extract a function or class name from line."""
@@ -38,6 +48,10 @@ def extract_name(line):
         name_w_args = line.split(" ")[1]
         actual_name = name_w_args.split("(")[0]
         return actual_name
+    elif " = " in line:
+        assignments = line.split(" = ")[0]
+        if ', ' in assignments:
+            return assignments.split(', ')
     else:
         return ''
 
@@ -58,7 +72,8 @@ class DelayedReport(pep8.StandardReport):
                     if line_number < len(self.lines) else '')
             pointer_line = re.sub(r'\S', ' ', line[:offset]) + '^'
             if self._show_source:
-                error_string = "%s\n%s\n%s" % (error_string, line, pointer_line)
+                error_string = "%s\n%s\n%s" % (error_string, line,
+                                               pointer_line)
             error_messages.append(error_string)
 
         return error_messages, self.file_errors
@@ -66,7 +81,10 @@ class DelayedReport(pep8.StandardReport):
 
 class CommitChecker(object):
 
-    def __init__(self):
+    FIRST_COMMIT_SHA = "d0aea49773d13481943e585cf6d41067dfe8acb1"
+
+    def __init__(self, check_all=False):
+        self.check_all = check_all
         self.filename = None
         self.mimetype = None
         self.content = None
@@ -74,41 +92,66 @@ class CommitChecker(object):
         self.errors = []
         self.pep8 = None
 
+        self.class_re = re.compile(CLASS_PATTERN)
+        self.func_re = re.compile(FUNCTION_PATTERN)
+        self.local_re = re.compile(LOCAL_VAR_PATTERN)
+        self.global_re = re.compile(GLOBAL_VAR_PATTERN)
+
     @property
     def success(self):
         return not self.errors
 
+    @property
+    def diff_options(self):
+        check_against = self.FIRST_COMMIT_SHA if self.check_all else 'HEAD'
+        opts = "--cached %s --name-only --diff-filter=ACMR" % check_against
+        # Gets the list of file names staged for commit that have been
+        # [A]dded, [C]opied, [M]odified, or [R]enamed
+        return opts
+
     def _error(self, message):
         self.errors.append((self.filename, message))
 
-    def _warn(self, message):
-        print colored(('  WARNING: %s' % (message)), 'yellow')
+    @property
+    def _should_skip(self):
+        return ('symbolic' in self.mimetype or
+                self.filename.endswith('.md') or
+                self.filename.endswith('.txt') or
+                os.path.isdir(self.filename))
 
     def get_errors(self):
         return sorted(self.errors)
 
+    def show_errors(self):
+        if self.success:
+            print colored('All pre-commit checks OK', 'green')
+        else:
+            print colored('\n' + '#'*80, 'red')
+            print colored(' '*28 + 'PRE-COMMIT CHECK FAILED', 'red')
+            print colored('#'*80 + '\n', 'red')
+
+            for filename, message in self.get_errors():
+                print colored('%s: %s' % (filename, message),
+                              "yellow")
+            print
+            if os.path.exists('.git/MERGE_HEAD'):
+                print colored('Since you are merging, this is only a warning. '
+                              'Please fix these errors!', 'yellow')
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
     # MAIN RUN METHOD ---------------------------------------------------------
 
     def run(self):
-        filenames = os.popen('git diff --cached --name-only --diff-filter=ACMR')
-        # Gets the list of file names staged for commit that have been
-        # [A]dded, [C]opied, [M]odified, or [R]enamed
+        filenames = os.popen('git diff %s' % self.diff_options)
         for filename in filenames:
             self.filename = filename.strip()
             self.mimetype = os.popen('file --brief %s' %
                                      filename).read().strip().lower()
             # Something like "a python script text executable"
 
-            if 'symbolic' in self.mimetype:
-                continue
-
-            if self.filename.endswith('.md') or self.filename.endswith('.txt'):
-                # We don't really care about checking Markdown (yet)
-                continue
-
-            if os.path.isdir(self.filename):
-                # If the self.filename is a directory,
-                # don't try to read it as a file
+            if self._should_skip:
                 continue
 
             self.content = file(self.filename).read()
@@ -127,7 +170,7 @@ class CommitChecker(object):
                 self._check_pep8()
                 self._check_shebang()
                 self._check_conflict_marks()
-                # self._check_names()
+                self._check_names()
 
             except AssertionError, e:
                 self._error(e.message)
@@ -163,7 +206,7 @@ class CommitChecker(object):
 
     def _check_pep8(self):
         if self.pep8 is None:
-            self.pep8 = pep8.StyleGuide(max_line_length=80)
+            self.pep8 = pep8.StyleGuide()
         self.pep8.init_report(DelayedReport)
         pep8_errors, error_count = self.pep8.input_file(self.filename)
         if error_count:
@@ -178,17 +221,47 @@ class CommitChecker(object):
             assert self.content.startswith(shebang), shebang_message
 
     def _check_names(self):
-        """ Check that function names use snake_case and
-            class names use CamelCase.
+        """ Check that function/variable names use snake_case and class names
+            use CamelCase.
         """
-        # TODO Implement this
-        pass
-        # names = {  # NOQA
-        #     'classes': [],
-        #     'functions': []
-        # }
-        # for num, line in enumerate(self.lines):
-        #     pass
+        for num, line in enumerate(self.lines):
+            def match_and_check(regex, format_insertions, fallback_re=None):
+                error_message = ("%(type)s name '%(name)s' isn't in %(form)s" +
+                                 " form. (Line %i)" % num)
+                match = regex.search(line)
+                if fallback_re and not match:
+                    match = fallback_re.search(line)
+
+                # special case for multiple-assignment statements
+                if type(format_insertions['name']) == list:
+                    for name in format_insertions['name']:
+                        match = re.match(SNAKE_PATTERN, name)
+                        if not match:
+                            break
+
+                if match is None:
+                    self._error(error_message % format_insertions)
+
+            stripped = line.lstrip()
+            if stripped.startswith("#") or "# NOQA" in line:
+                # Don't nitpick commented out lines
+                continue
+            elif stripped.startswith("class"):
+                match_and_check(self.class_re,
+                                {'type': 'Class',
+                                 'name': extract_name(line),
+                                 'form': 'CapWords'})
+            elif stripped.startswith("def"):
+                match_and_check(self.func_re,
+                                {'type': 'Function',
+                                 'name': extract_name(line),
+                                 'form': 'snake_case'})
+            elif re.search(r"([^'\"])\s= ", line):
+                match_and_check(self.local_re,
+                                {'type': 'Variable',
+                                 'name': extract_name(line),
+                                 'form': 'snake_case'},
+                                self.global_re)
 
     def _check_conflict_marks(self):
         if 'text' in self.mimetype:
@@ -202,22 +275,4 @@ class CommitChecker(object):
 if __name__ == '__main__':
     checker = CommitChecker()
     checker.run()
-    if checker.success:
-        print colored('All pre-commit checks OK', 'green')
-    else:
-        print
-        print colored('#' * 80, 'red')
-        print colored('PRE-COMMIT CHECK FAILED', 'red')
-        print colored('#' * 80, 'red')
-        print
-        for filename, message in checker.get_errors():
-            print colored('%s: %s' % (filename, message),
-                          "yellow")
-        print
-
-        if os.path.exists('.git/MERGE_HEAD'):
-            print colored('Since you are merging, this is only a warning. '
-                          'Please fix these errors!', 'yellow')
-            sys.exit(0)
-        else:
-            sys.exit(1)
+    checker.show_errors()
