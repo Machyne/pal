@@ -73,7 +73,7 @@ class Server(Resource):
             abort(404, message=str(e))
 
         nlp_data = StandardNLP.preprocess(req['quest'])
-        features = FeatureExtractor.extractFeatures(nlp_data)
+        features = FeatureExtractor.extract_features(nlp_data)
         services = self.filter.filter(
             req['client'],
             (features['questionType'] if 'questionType' in features
@@ -89,6 +89,8 @@ class Server(Resource):
 # Actually setup the Api resource routing here
 #
 api_pal.add_resource(Server, '/pal')
+api_pal.add_resource(StandardNLP, '/preprocess')
+api_pal.add_resource(FeatureExtractor, '/features')
 
 
 @app.route('/docs')

@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 import nltk
+from flask import request
+from flask.ext.restful import Resource
+from flask_restful_swagger import swagger
 
 
-class FeatureExtractor(object):
+class FeatureExtractor(Resource):
     @classmethod
-    def extractFeatures(cls, processed_data):
+    def extract_features(cls, processed_data):
         """Does semantic analysis stuff, extracts important information
         to NLP'd data.
         """
@@ -21,3 +24,21 @@ class FeatureExtractor(object):
                     'isQuestion': True,
                     'questionType': 'quantity'}
         return features
+
+    @swagger.operation(
+        notes='Recognize features',
+        nickname='preprocess',
+        parameters=[
+            {
+                'name': 'postags',
+                'description': 'Part of Speech Tagged sentence',
+                'required': True,
+                'allowMultiple': False,
+                'dataType': 'string',
+                'paramType': 'form'
+            }
+        ])
+    def post(self):
+        pos = [tuple(x) for x in eval(request.form['postags'])]
+        print pos
+        return self.extract_features({"pos": pos})
