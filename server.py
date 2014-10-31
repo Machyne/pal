@@ -85,9 +85,9 @@ class Server(Resource):
         {'Access-Control-Allow-Origin': '*'}
 
 
-#
+##
 # Actually setup the Api resource routing here
-#
+##
 api_pal.add_resource(Server, '/pal')
 api_pal.add_resource(StandardNLP, '/preprocess')
 api_pal.add_resource(FeatureExtractor, '/features')
