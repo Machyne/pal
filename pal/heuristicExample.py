@@ -96,3 +96,11 @@ def movieHeuristic(listOfVariableValues, extractedDict):
 #   17 - Where
 #   18 - Theater/Theatre
 #   19 - Story
+
+
+# Hill climbing in a nutshell
+# while True:
+#     step listOfVariableValues
+#     movieHeuristic()
+#     if curValues > best:
+#         best = cur
