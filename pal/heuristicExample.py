@@ -7,6 +7,30 @@
 # if dict.contains(keyword)
 #     toBeReturned += var
 
+# Returns a heuristic value for an extracted dict, given a list of
+# variable values.
+#
+# listOfVariableValues
+#   0  - Movie
+#   1  - Film
+#   2  - Movies
+#   3  - hasProperNouns
+#   4  - actor/acted/actress
+#   5  - Released
+#   6  - Rating/Review
+#   7  - Plot
+#   8  - lead/leads
+#   9  - Genre
+#   10 - Produce*
+#   11 - Writer/Written/Wrote
+#   12 - Ticket
+#   13 - Purchase/Buy
+#   14 - Time
+#   15 - Showing
+#   16 - Playing
+#   17 - Where
+#   18 - Theater/Theatre
+#   19 - Story
 def movieHeuristic(listOfVariableValues, extractedDict):
     toBeReturned = 0
     if "Movie" in extractedDict['keywords'] or
@@ -21,8 +45,8 @@ def movieHeuristic(listOfVariableValues, extractedDict):
         "movies" in extractedDict['keywords']:
         toBeReturned += listOfVariableValues[2]
 
-    if e xtractedDict['Proper Nouns']:
-         toBeReturned += listOfVariableValues[3]
+    if extractedDict['Proper Nouns']:
+        toBeReturned += listOfVariableValues[3]
 
     if "actor" in extractedDict['keywords'] or
         "acted" in extractedDict['keywords'] or
@@ -70,32 +94,45 @@ def movieHeuristic(listOfVariableValues, extractedDict):
         "wrote" in extractedDict['keywords']:
         toBeReturned += listOfVariableValues[11]
 
+    if "Ticket" in extractedDict['keywords'] or
+        "ticket" in extractedDict['keywords']:
+        toBeReturned += listOfVariableValues[12]
+
+    if "Purchase" in extractedDict['keywords'] or
+        "purchase" in extractedDict['keywords'] or
+        "Buy" in extractedDict['keywords'] or
+        "buy" in extractedDict['keywords']:
+        toBeReturned += listOfVariableValues[13]
+
+    if "Time" in extractedDict['keywords'] or
+        "time" in extractedDict['keywords']:
+        toBeReturned += listOfVariableValues[14]
+
+    if "Showing" in extractedDict['keywords'] or
+        "showing" in extractedDict['keywords']:
+        toBeReturned += listOfVariableValues[15]
+
+    if "Playing" in extractedDict['keywords'] or
+        "playing" in extractedDict['keywords']:
+        toBeReturned += listOfVariableValues[16]
+
+    if "Where" in extractedDict['keywords'] or
+        "where" in extractedDict['keywords']:
+        toBeReturned += listOfVariableValues[17]
+
+    if "Theater" in extractedDict['keywords'] or
+        "theater" in extractedDict['keywords'] or
+        "Theatre" in extractedDict['keywords'] or
+        "theatre" in extractedDict['keywords']:
+        toBeReturned += listOfVariableValues[18]
+
+    if "Story" in extractedDict['keywords'] or
+        "story" in extractedDict['keywords']:
+        toBeReturned += listOfVariableValues[19]
+
+    return toBeReturned
 
 
-
-
-
-# listOfVariableValues
-#   0  - Movie
-#   1  - Film
-#   2  - Movies
-#   3  - hasProperNouns
-#   4  - actor/acted/actress
-#   5  - Released
-#   6  - Rating/Review
-#   7  - Plot
-#   8  - lead/leads
-#   9  - Genre
-#   10 - Produce*
-#   11 - Writer/Written/Wrote
-#   12 - Ticket
-#   13 - Purchase/Buy
-#   14 - Time
-#   15 - Showing
-#   16 - Playing
-#   17 - Where
-#   18 - Theater/Theatre
-#   19 - Story
 
 
 # Hill climbing in a nutshell
