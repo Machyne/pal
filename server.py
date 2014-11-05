@@ -72,7 +72,7 @@ class Server(Resource):
         except MissingKeyException as e:
             abort(404, message=str(e))
 
-        nlp_data = StandardNLP.preprocess(req['quest'])
+        nlp_data = StandardNLP.process(req['quest'])
         features = FeatureExtractor.extract_features(nlp_data)
         services = self.filter.filter(
             req['client'],

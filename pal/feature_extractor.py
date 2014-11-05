@@ -19,6 +19,8 @@ except:
 class FeatureExtractor(Resource):
     _stops = stopwords.words('english')
     _count_data = None
+    PRESENT_TAGS = ['VB', 'VBG', 'VBP', 'VBZ']
+    PAST_TAGS = ['VBD', 'VBN']
 
     @classmethod
     def is_good_word(cls, w):
@@ -70,6 +72,13 @@ class FeatureExtractor(Resource):
         return [x for x in counts if counts[x] > THRESHOLD]
 
     @classmethod
+    def tense_from_pos(cls, pos):
+        present_count = len([True for x in pos if x[1] in cls.PRESENT_TAGS])
+        past_count = len([True for x in pos if x[1] in cls.PAST_TAGS])
+        print present_count, past_count
+        return 'past' if past_count >= present_count else 'present'
+
+    @classmethod
     def is_question(cls, tokens):
         start_words = ['who', 'what', 'when', 'where', 'why', 'how', 'is',
                        'can', 'does', 'do']
@@ -90,7 +99,7 @@ class FeatureExtractor(Resource):
         keywords = cls.find_keywords(processed_data['tokens'])
         features = {'keywords': keywords,
                     'nouns': nouns,
-                    'tense': 'past',
+                    'tense': cls.tense_from_pos(processed_data['pos']),
                     'isQuestion': cls.is_question(processed_data['tokens']),
                     'questionType': 'quantity'}
         return features
