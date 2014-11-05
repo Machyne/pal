@@ -2,10 +2,9 @@
 # Takes a feature extraction dictionary and returns a numerical value
 # for the hueristic.
 
-# Movie heuristic
+import Value_List
 
-# if dict.contains(keyword)
-#     toBeReturned += var
+# Movie heuristic
 
 # Returns a heuristic value for an extracted dict, given a list of
 # variable values.
@@ -132,6 +131,39 @@ def movieHeuristic(listOfVariableValues, extractedDict):
 
     return toBeReturned
 
+# Climbs hills towards better variables. Takes a
+def hill_climb(posDict, negDict, duration):
+    INITIAL_VALUES = [75, 75, 75, 50, 60, 40, 60, 50, 50, 40, 40, 50, -50, -50,
+                        -75, -60, -60, -90, -25, 30]
+
+    # Create baseline
+    list_of_values = Value_List()
+    list_of_values.set_list_of_magnitudes(INITIAL_VALUES)
+    best = [list_of_values, get_score(posDict, negDict, list_of_values.get_magnitudes)]
+    replaced = False
+
+    # do the hill climbing
+    while count <= duration:
+        totalScore = get_score(posDict, negDict, list_of_values.get_magnitudes)
+        if totalScore > best[1]:
+            best[0] = list_of_values
+            best[1] = totalScore
+            replaced = True
+        list_of_values.generate_variables(replaced)
+        replaced = False
+        count += 1
+    return best
+
+
+# Gets the total heuristic value for a given list of variables, and
+# positive and negative dicts
+def get_score(posDict, negDict, list_of_variables):
+    toBeReturned = 0
+    for extractedDict in posDict:
+        toBeReturned += movieHeuristic(list_of_variables, extractedDict)
+    for extractedDict in negDict:
+        toBeReturned += -1 * movieHeuristic(list_of_variables, extractedDict)
+    return toBeReturned
 
 
 
