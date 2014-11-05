@@ -1,17 +1,22 @@
 import random
 class Value_List:
-    list_of_magnitudes = []
-    list_of_directions = []
+
+    def __init__(self,num_values):
+        self.list_of_magnitudes = [0] * num_values
+        self.list_of_directions = [0] * num_values
 
     def generate_variables(self,replaced):
         # If the last one was a new best, go in the same direction again
         if not replaced:
-            for slot in self.list_of_directions:
-                slot = random.randint(-1,1)
+            print "NEW directions"
+            print self.list_of_directions
+            for slot in xrange(len(self.list_of_directions)):
+                self.list_of_directions[slot] = random.randint(-1,1)
+            print self.list_of_directions
 
         # Generate new values
         SCALE_EFFECT = 1
-        for item in xrange(self.list_of_magnitudes):
+        for item in xrange(len(self.list_of_magnitudes)):
             self.list_of_magnitudes[item] += (self.list_of_directions[item] *
                                                 SCALE_EFFECT)
 
