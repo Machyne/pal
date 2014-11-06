@@ -1,0 +1,3 @@
+[submodule "Stalkernet-Scraper"]
+	path = Stalkernet-Scraper
+	url = git@github.com:charmquark/Stalkernet-Scraper.git
