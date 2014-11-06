@@ -15,8 +15,8 @@ Examples:
      ('in', 'IN'),
      ('?', '.')]
     
-    { keywords: ["movie"],
-      nouns: [("person", "Tom Hanks")],
+    { keywords: ["movies"],
+      nouns: [("movies", "NNS"), ("Tom Hanks", "PERSON")],
       tense: "past",
       isQuestion: true,
       questionType: "quantity" }
@@ -30,8 +30,8 @@ Examples:
      ('Starbucks', 'NNP'),
      ('?', '.')]    
     
-    { keywords: ["starbucks", "nearest"],
-      nouns: [("place", "Starbucks")],
+    { keywords: ["nearest", "starbucks"],
+      nouns: [("Starbucks", "NNP")],
       tense: "present",
       isQuestion: true,
       questionType: "location" }
@@ -95,7 +95,7 @@ Examples:
       isQuestion: true,
       questionType: "boolean" }
 
-**"Do electric sheep dream of androids?" (only on iPhone)**
+**"Do electric sheep dream of androids?"**
 
     [('Do', 'NNP'),
      ('electric', 'JJ'),

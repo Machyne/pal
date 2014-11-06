@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import math
 import re
+import os
 
 import nltk
 from nltk.corpus import brown
@@ -36,7 +37,7 @@ class FeatureExtractor(Resource):
         for corpus in corpora:
             for fileid in corpus.fileids():
                 if verbose:
-                    print corpus, fileid
+                    print fileid
                 for sent in corpus.sents(fileid):
                     words = [w.lower() for w in sent if cls.is_good_word(w)]
                     for w in words:
@@ -47,15 +48,18 @@ class FeatureExtractor(Resource):
         return vocab
 
     @classmethod
-    def _load_count_data(cls):
+    def _load_count_data(cls, verbose=False):
         if cls._count_data is not None:
             return
         try:
-            with open('data/counts.dat', 'rb') as f:
+            data_file = os.path.abspath(
+                os.path.join(os.path.dirname( __file__ ),
+                '..', 'data', 'counts.dat'))
+            with open(data_file, 'rb') as f:
                 cls._count_data = pickle.load(f)
         except Exception:
-            cls._count_data = cls._make_count_data()
-            with open('data/counts.dat', 'wb+') as f:
+            cls._count_data = cls._make_count_data(verbose)
+            with open(data_file, 'wb+') as f:
                 pickle.dump(cls._count_data, f)
 
     @classmethod
@@ -96,7 +100,7 @@ class FeatureExtractor(Resource):
                 for token in tree]
         nouns = [token for token in tree
                  if 'NN' in token[1] or ' ' in token[0]]
-        keywords = cls.find_keywords(processed_data['tokens'])
+        keywords = cls.find_keywords(set(x[0] for x in tree if ' ' not in x[0]))
         features = {'keywords': keywords,
                     'nouns': nouns,
                     'tense': cls.tense_from_pos(processed_data['pos']),
