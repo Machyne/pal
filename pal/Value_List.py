@@ -34,4 +34,3 @@ class Value_List:
     def get_directions(self):
         return self.list_of_directions
 
-
