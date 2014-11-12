@@ -1,3 +1,6 @@
+# Value_lists contain a list of magnitudes and a direction for each
+# magnitude.
+
 import random
 class Value_List:
 
@@ -8,11 +11,8 @@ class Value_List:
     def generate_variables(self,replaced):
         # If the last one was a new best, go in the same direction again
         if not replaced:
-            print "NEW directions"
-            print self.list_of_directions
             for slot in xrange(len(self.list_of_directions)):
                 self.list_of_directions[slot] = random.randint(-1,1)
-            print self.list_of_directions
 
         # Generate new values
         SCALE_EFFECT = 1
