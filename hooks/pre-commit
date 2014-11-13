@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # Check all of the files changed and returns
 # a non-zero status if there's a problem.
+#
+# Author: Alex Simonides
+# TODO:
+# - Fix the way we get changes so that we only
+#   see what's going to be committed
+# - Assert that any new dependencies have been added to the requirements file
 
 
 import os

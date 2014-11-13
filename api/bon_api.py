@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 #
+# An API to the Bon Appetit food service data
 #
 # Author: Alex Simonides
+# TODO:
+# - Add support for caching data with pickle
+# - Decide on a naming scheme for cached data
+# - Implement a way to clear the cache as
 
 import re
 import datetime
