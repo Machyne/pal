@@ -37,7 +37,7 @@ SNAKE_PATTERN = r"(?:_{0,2}[a-z]%s(?:_[a-z]%s)*_{0,2})|_" % (
 
 CLASS_PATTERN = r"( {4})*class (?P<name>%s)\(" % CAMEL_PATTERN
 FUNCTION_PATTERN = r"( {4})*def (?P<name>%s)\(" % SNAKE_PATTERN
-LOCAL_VAR_PATTERN = r"( {4})+(?:self.)?(?P<name>%s) =" % SNAKE_PATTERN
+LOCAL_VAR_PATTERN = r"( {4})+(?:self.)?(?P<name>%s)(?:\[[^\] ]+\])* =" % SNAKE_PATTERN
 GLOBAL_VAR_PATTERN = r"(?P<name>[A-Z][A-Z_]*) ="
 
 
