@@ -7,7 +7,8 @@
 # TODO:
 # - Add support for caching data with pickle
 # - Decide on a naming scheme for cached data
-# - Implement a way to clear the cache as
+# - Implement a way to clear the cache as it becomes irrelevant 
+# - Add a CI job to cache data every morning/evening
 
 import re
 import datetime
