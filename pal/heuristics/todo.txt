@@ -1,0 +1,10 @@
+training lists
+hillclimbing that isn't ± 1 of what the value was before
+Initial values for dining halls and stalkernet
+
+add types to movies
+add types to stalkernet
+make code to turn hill climbed values into service selection
+
+
+climb them hills (over all services (requires all training lists if not heurisitics))
