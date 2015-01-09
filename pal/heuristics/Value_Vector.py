@@ -14,6 +14,7 @@ class Value_Vector:
     def __init__(self,num_values):
         self.list_of_magnitudes = [0] * num_values
         self.list_of_directions = [0] * num_values
+        self.itr_count = 0
 
     def __repr__(self):
         if has_color:
@@ -37,12 +38,17 @@ class Value_Vector:
                     str(self.list_of_directions[item]) + ')' + ', '
             return return_string
 
+    # Updates the magnitudes with new ones. "replaced" is true when the
+    # previous step was in a direction that led to a higher heuristic
+    # value. Otherwise, it is false. If "replaced" is true, then
+    # climbing continues in the same direction. Otherwise, random
+    # directions are generated.
     def generate_variables(self,replaced):
         # If the last one was a new best, go in the same direction again
         if not replaced:
             for slot in xrange(len(self.list_of_directions)):
                 self.list_of_directions[slot] = random.randint(-1,1)
-
+        self.itr_count += 1
         # Generate new values
         SCALE_EFFECT = 1
         for item in xrange(len(self.list_of_magnitudes)):
@@ -62,6 +68,7 @@ class Value_Vector:
 
     def get_directions(self):
         return self.list_of_directions
+
 
 if __name__ == '__main__':
     main()
