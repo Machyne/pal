@@ -6,6 +6,7 @@ import os
 import nltk
 from nltk.corpus import brown
 from nltk.corpus import gutenberg
+from nltk.corpus import qc
 from nltk.corpus import reuters
 from nltk.corpus import stopwords
 from flask import request
@@ -19,7 +20,8 @@ except:
 
 class FeatureExtractor(Resource):
     _stops = stopwords.words('english')
-    _count_data = None
+    _keyword_data = None
+    _qtype_data = None
     PRESENT_TAGS = ['VB', 'VBG', 'VBP', 'VBZ']
     PAST_TAGS = ['VBD', 'VBN']
 
@@ -31,7 +33,7 @@ class FeatureExtractor(Resource):
         return not_stop and good
 
     @classmethod
-    def _make_count_data(cls, verbose=False):
+    def _make_keyword_data(cls, verbose=False):
         vocab = {}
         corpora = [gutenberg, brown, reuters]
         for corpus in corpora:
@@ -48,38 +50,135 @@ class FeatureExtractor(Resource):
         return vocab
 
     @classmethod
-    def _load_count_data(cls, verbose=False):
-        if cls._count_data is not None:
+    def _load_keyword_data(cls, verbose=False):
+        if cls._keyword_data is not None:
             return
+        data_file = os.path.abspath(
+            os.path.join(os.path.dirname( __file__ ),
+            '..', 'data', 'counts.dat'))
         try:
-            data_file = os.path.abspath(
-                os.path.join(os.path.dirname( __file__ ),
-                '..', 'data', 'counts.dat'))
             with open(data_file, 'rb') as f:
-                cls._count_data = pickle.load(f)
+                cls._keyword_data = pickle.load(f)
         except Exception:
-            cls._count_data = cls._make_count_data(verbose)
+            cls._keyword_data = cls._make_keyword_data(verbose)
             with open(data_file, 'wb+') as f:
-                pickle.dump(cls._count_data, f)
+                pickle.dump(cls._keyword_data, f)
 
     @classmethod
     def find_keywords(cls, tokens):
         THRESHOLD = -5  # TODO : tune this
         tokens = map(lambda x: x.lower(), tokens)
         tokens = filter(cls.is_good_word, tokens)
-        cls._load_count_data()
+        cls._load_keyword_data()
         counts = {x: tokens.count(x) for x in set(tokens)}
         counts = {
             x: math.log(counts[x]) -
-               math.log(cls._count_data[x] if x in cls._count_data else 1)
+               math.log(cls._keyword_data[x] if x in cls._keyword_data else 1)
             for x in counts}
         return [x for x in counts if counts[x] > THRESHOLD]
+
+    @classmethod
+    def _make_qtype_data(cls, verbose=False):
+        data = {}
+        for fileid in qc.fileids():
+            if verbose:
+                print fileid
+            for type_, sent in qc.tuples(fileid):
+                if type_ not in data:
+                    data[type_] = {0: 0}
+                counts = data[type_]
+                tokens = ['^^'] + sent.lower().split(' ')
+                for i, t in enumerate(tokens):
+                    counts[0] += 1
+                    if t not in counts:
+                        counts[t] = {0: 0}
+                    counts[t][0] += 1
+                    if i + 1 < len(tokens):
+                        if tokens[i + 1] not in counts[t]:
+                            counts[t][tokens[i + 1]] = {0: 0}
+                        counts[t][tokens[i + 1]][0] += 1
+                    if i + 2 < len(tokens):
+                        if tokens[i + 2] not in counts[t][tokens[i + 1]]:
+                            counts[t][tokens[i + 1]][tokens[i + 2]] = 0
+                        counts[t][tokens[i + 1]][tokens[i + 2]] += 1
+        return data
+
+    @classmethod
+    def _load_qtype_data(cls, verbose=False):
+        if cls._qtype_data is not None:
+            return
+        data_file = os.path.abspath(
+            os.path.join(os.path.dirname( __file__ ),
+            '..', 'data', 'qtypes.dat'))
+        try:
+            with open(data_file, 'rb') as f:
+                cls._qtype_data = pickle.load(f)
+        except Exception:
+            cls._qtype_data = cls._make_qtype_data(verbose)
+            with open(data_file, 'wb+') as f:
+                pickle.dump(cls._qtype_data, f)
+
+    @classmethod
+    def _prob(cls, counts, w1, w2=None, w3=None):
+        if w3 is None:
+            if w2 is None:
+                if (w1 not in counts):
+                    return 0.0
+                if counts[w1][0] == 0:
+                    return 0.0
+                else:
+                    return float(counts[w1][0]) / counts[0]
+            else:
+                if (w1 not in counts) or (w2 not in counts[w1]):
+                    return 0.0
+                if counts[w1][w2][0] == 0:
+                    return 0.0
+                else:
+                    return float(counts[w1][w2][0]) / counts[w1][0]
+        else:
+            if ((w1 not in counts) or (w2 not in counts[w1]) or
+                (w3 not in counts[w1][w2])):
+                return 0.0
+            if counts[w1][w2][w3] == 0:
+                return 0.0
+            else:
+                return float(counts[w1][w2][w3]) / counts[w1][w2][0]
+
+    @classmethod
+    def _prob_star(cls, counts, w1, w2, w3):
+        # Magic numbers chosen empirically via testing.
+        lmbd3 = 0.7
+        lmbd2 = 0.22
+        lmbd1 = 0.075
+        lmbd0 = 0.005
+        # calculations done in log probabilities
+        return math.log(lmbd3 * cls._prob(counts, w1, w2, w3) +
+                        lmbd2 * cls._prob(counts, w1, w2) +
+                        lmbd1 * cls._prob(counts, w1) + lmbd0)
+
+    @classmethod
+    def _get_perplexity(cls, model, tokens):
+        prob = 0.0
+        token_list = ['^^'] + map(str.lower, tokens)
+        for i, t in enumerate(token_list[:-2]):
+            prob += cls._prob_star(model, t, token_list[i + 1], token_list[i + 2])
+        return math.pow(math.e, prob * (-1.0 / len(tokens)))
+
+    @classmethod
+    def classify_question(cls, tokens):
+        cls._load_qtype_data()
+        min_perplex = ('fakename', 9999999999999)
+        for type_, model in cls._qtype_data.iteritems():
+            p = cls._get_perplexity(model, tokens)
+            if p < min_perplex[1]:
+                min_perplex = (type_, p)
+        return str(min_perplex[0])
 
     @classmethod
     def tense_from_pos(cls, pos):
         present_count = len([True for x in pos if x[1] in cls.PRESENT_TAGS])
         past_count = len([True for x in pos if x[1] in cls.PAST_TAGS])
-        print present_count, past_count
+        # print present_count, past_count
         return 'past' if past_count >= present_count else 'present'
 
     @classmethod
@@ -105,7 +204,8 @@ class FeatureExtractor(Resource):
                     'nouns': nouns,
                     'tense': cls.tense_from_pos(processed_data['pos']),
                     'isQuestion': cls.is_question(processed_data['tokens']),
-                    'questionType': 'quantity'}
+                    'questionType': cls.classify_question(
+                        processed_data['tokens'])}
         return features
 
     @swagger.operation(
@@ -137,5 +237,6 @@ class FeatureExtractor(Resource):
 if __name__ == '__main__':
     # preprocess training data
     print 'ensuring that the count data exists'
-    FeatureExtractor._load_count_data(True)
+    FeatureExtractor._load_keyword_data(True)
+    FeatureExtractor._load_qtype_data(True)
     print 'complete'
