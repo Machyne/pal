@@ -78,16 +78,25 @@ class FeatureExtractor(Resource):
         return [x for x in counts if counts[x] > THRESHOLD]
 
     @classmethod
+    def _qtype_tokens(cls, tokens):
+        pos = nltk.pos_tag(tokens)
+        tokens = map(lambda x: x[1] if 'NN' in x[1] else x[0].lower(), pos)
+        tokens = map(lambda x: 'NN' if 'NN' in x and x != 'NNP' else x, tokens)
+        return ['^^'] + tokens + ['?']
+
+
+    @classmethod
     def _make_qtype_data(cls, verbose=False):
         data = {}
         for fileid in qc.fileids():
             if verbose:
                 print fileid
             for type_, sent in qc.tuples(fileid):
+                type_ = type_.split(':')[0]
                 if type_ not in data:
                     data[type_] = {0: 0}
                 counts = data[type_]
-                tokens = ['^^'] + sent.lower().split(' ')
+                tokens = cls._qtype_tokens(sent.split(' '))
                 for i, t in enumerate(tokens):
                     counts[0] += 1
                     if t not in counts:
@@ -147,9 +156,9 @@ class FeatureExtractor(Resource):
     @classmethod
     def _prob_star(cls, counts, w1, w2, w3):
         # Magic numbers chosen empirically via testing.
-        lmbd3 = 0.7
-        lmbd2 = 0.22
-        lmbd1 = 0.075
+        lmbd3 = 0.3
+        lmbd2 = 0.35
+        lmbd1 = 0.345
         lmbd0 = 0.005
         # calculations done in log probabilities
         return math.log(lmbd3 * cls._prob(counts, w1, w2, w3) +
@@ -159,7 +168,7 @@ class FeatureExtractor(Resource):
     @classmethod
     def _get_perplexity(cls, model, tokens):
         prob = 0.0
-        token_list = ['^^'] + map(str.lower, tokens)
+        token_list = cls._qtype_tokens(tokens)
         for i, t in enumerate(token_list[:-2]):
             prob += cls._prob_star(model, t, token_list[i + 1], token_list[i + 2])
         return math.pow(math.e, prob * (-1.0 / len(tokens)))
@@ -172,13 +181,14 @@ class FeatureExtractor(Resource):
             p = cls._get_perplexity(model, tokens)
             if p < min_perplex[1]:
                 min_perplex = (type_, p)
+        if min_perplex[1] > 25.0:
+            return 'UNK'
         return str(min_perplex[0])
 
     @classmethod
     def tense_from_pos(cls, pos):
         present_count = len([True for x in pos if x[1] in cls.PRESENT_TAGS])
         past_count = len([True for x in pos if x[1] in cls.PAST_TAGS])
-        # print present_count, past_count
         return 'past' if past_count >= present_count else 'present'
 
     @classmethod

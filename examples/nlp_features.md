@@ -19,7 +19,7 @@ Examples:
       nouns: [("movies", "NNS"), ("Tom Hanks", "PERSON")],
       tense: "past",
       isQuestion: true,
-      questionType: "NUM:count" }
+      questionType: "NUM" }
 
 **"Where is the nearest Starbucks?"**
 
@@ -34,7 +34,7 @@ Examples:
       nouns: [("Starbucks", "NNP")],
       tense: "present",
       isQuestion: true,
-      questionType: "location" }
+      questionType: "LOC" }
 
 **"Find me an expensive coffee."**
 
@@ -49,7 +49,7 @@ Examples:
       nouns: [("person", "me"), ("thing", "coffee")],
       tense: "present",
       isQuestion: false,
-      actionType: "location" }
+      actionType: "LOC" }
 
 **"Is there a Starbucks nearby?"**
 
@@ -64,7 +64,7 @@ Examples:
       nouns: [("place", "Starbucks")],
       tense: "present",
       isQuestion: true,
-      questionType: "boolean" }
+      questionType: "ENTY" }
 
 **"Do dogs dream?"**
 
@@ -77,7 +77,7 @@ Examples:
       nouns: [("thing", "dogs")],
       tense: "present",
       isQuestion: true,
-      questionType: "boolean" }
+      questionType: "UNK" }
 
 **"Do androids dream of electric sheep?"**
 
@@ -93,7 +93,7 @@ Examples:
       nouns: [("thing", "androids"), ("thing", "sheep")],
       tense: "present",
       isQuestion: true,
-      questionType: "boolean" }
+      questionType: "ENTY" }
 
 **"Do electric sheep dream of androids?"**
 
@@ -109,7 +109,7 @@ Examples:
       nouns: [("thing", "androids"), ("thing", "sheep")],
       tense: "present",
       isQuestion: true,
-      questionType: "boolean" }
+      questionType: "NUM" }
 
 **"Call Jenny."**
 
@@ -121,7 +121,7 @@ Examples:
       nouns: [("Person", "Jenny")],
       tense: "present",
       isQuestion: false,
-      actionType: "phone" }
+      questionType: "DESC" }
 
 **"Is the Moon closer to Earth than the Sun?"**
 
@@ -140,7 +140,7 @@ Examples:
       nouns: [("place", "moon"), ("place", "earth"), ("place", "sun")],
       tense: "present",
       isQuestion: true,
-      questionType: "boolean" }
+      questionType: "NUM" }
 
 **"Where does Matt Cotter live?"**
 
@@ -155,7 +155,7 @@ Examples:
       nouns: [("person", "Matt Cotter")],
       tense: "present",
       isQuestion: true,
-      questionType: "location" }
+      questionType: "LOC" }
 
 **"What is Matt Cotter's address?"**
 
@@ -171,7 +171,7 @@ Examples:
       nouns: [("person", "Matt Cotter"), ("thing", "address")],
       tense: "present",
       isQuestion: true,
-      questionType: "LOC:other" }
+      questionType: "ABBR" }
 
 **"Is Hogan Brothers a good place to eat?"**
 
@@ -189,7 +189,7 @@ Examples:
       nouns: [("place", "Hogan Brothers"), ("place", "place")],
       tense: "present",
       isQuestion: true,
-      questionType: "boolean" }
+      questionType: "LOC" }
 
 **"Which is better, The Dark Knight, or The Empire Strikes Back?"**
 
@@ -212,4 +212,4 @@ Examples:
       nouns: [("title", "The Dark Knight"), ("title", "The Empire Strikes Back")],
       tense: "present",
       isQuestion: true,
-      questionType: "choice" }
+      questionType: "ENTY" }
