@@ -1,0 +1,46 @@
+* {
+  font-family: Helvetica, Arial, sans-serif;
+  color: #333;
+}
+html, body, .page {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+.center {
+  position: relative;
+  top: calc(50% - 25px);
+  text-align: center;
+  transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.prompt {
+  height: 36px;
+  width: 348px;
+  border-radius: 3px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  outline: none;
+  text-align: center;
+  transition: 0.6s ease border-color;
+  -o-transition: 0.6s ease border-color;
+  -moz-transition: 0.6s ease border-color;
+  -webkit-transition: 0.6s ease border-color;
+}
+.prompt:focus {
+  border-color: rgb(81, 203, 238);
+}
+.result {
+  margin: 20px 0;
+  font-size: 16px;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+}
