@@ -3,6 +3,7 @@ from flask import Flask
 from flask import redirect
 from flask import Blueprint
 from flask import request
+from flask import render_template
 from flask.ext.restful import abort
 from flask.ext.restful import Api
 from flask.ext.restful import Resource
@@ -100,7 +101,7 @@ def docs():
 
 @app.route('/')
 def index():
-    return 'CI WORKS 2!'
+    return render_template('home.html')
 
 # main doesn't run in wsgi
 app.register_blueprint(pal_blueprint, url_prefix='/api')
