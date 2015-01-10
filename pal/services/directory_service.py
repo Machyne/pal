@@ -34,7 +34,7 @@ class DirectoryService(AbstractService):
             matching_people = directory.find_people(
                 first_name=first_name, last_name=last_name)
 
-            noun_words = [x[0] for x in nouns if x[1] != 'PERSON']
+            noun_words = [x[0].lower() for x in nouns if x[1] != 'PERSON']
 
             # answer where a student lives
             room_keywords = set(['room', 'dorm', 'house', 'hall'])
