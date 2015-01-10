@@ -50,7 +50,7 @@ class Value_Vector:
                 self.list_of_directions[slot] = random.randint(-1,1)
         self.itr_count += 1
         # Generate new values
-        SCALE_EFFECT = 1
+        SCALE_EFFECT = self.get_scaling()
         for item in xrange(len(self.list_of_magnitudes)):
             self.list_of_magnitudes[item] += (self.list_of_directions[item] *
                                                 SCALE_EFFECT)
@@ -69,6 +69,9 @@ class Value_Vector:
     def get_directions(self):
         return self.list_of_directions
 
+    # generates an interger to use for the scaling effect?
+    def get_scaling(self):
+        return 1
 
 if __name__ == '__main__':
     main()
