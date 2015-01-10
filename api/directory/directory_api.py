@@ -37,6 +37,12 @@ class Directory(object):
             raise IDNotFoundException(
                 "ID not found for {0} named {1}".format(ORMClass.__name__, name))
 
+    def get_name_for_id(self, ORMClass, id):
+        """ Get the human-readable name given an id and an ORM class """
+        query = self.session.query(ORMClass).filter(
+            ORMClass.id.__eq__(id))
+        return query[0].name
+
     def find_people(self, first_name=None, last_name=None, email=None, phones=None, building=None, room=None, major=None, department=None):
         """
         Query the database to find people with specific attributes.
@@ -55,7 +61,7 @@ class Directory(object):
             department: name of department for faculty/staff
 
         Return: 
-            The return of this fucntion is a dictionary with two keys: 'studnets' and 'facstaff'.
+            The return of this fucntion is a dictionary with two keys: 'students' and 'facstaff'.
             Each key corresponds to a list of either Student or FacStaff objects.
         """
 
