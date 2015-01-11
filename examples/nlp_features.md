@@ -19,7 +19,7 @@ Examples:
       nouns: [("movies", "NNS"), ("Tom Hanks", "PERSON")],
       tense: "past",
       isQuestion: true,
-      questionType: "quantity" }
+      questionType: "NUM:count" }
 
 **"Where is the nearest Starbucks?"**
 
@@ -157,11 +157,13 @@ Examples:
       isQuestion: true,
       questionType: "location" }
 
-**"What is Matt Cotter’s address?"**
+**"What is Matt Cotter's address?"**
 
     [('What', 'WP'),
      ('is', 'VBZ'),
-     ('Matt Cotter', 'NNP'), ("'s", 'POS'),
+     ('Matt', 'NNP'),
+     ('Cotter', 'NNP'),
+     ("'s", 'POS'),
      ('address', 'NN'),
      ('?', '.')]
     
@@ -169,7 +171,7 @@ Examples:
       nouns: [("person", "Matt Cotter"), ("thing", "address")],
       tense: "present",
       isQuestion: true,
-      questionType: "location" }
+      questionType: "LOC:other" }
 
 **"Is Hogan Brothers a good place to eat?"**
 
