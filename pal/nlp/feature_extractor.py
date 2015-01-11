@@ -1,27 +1,27 @@
 #!/usr/bin/env python
 import math
-import re
 import os
+import re
 
 import nltk
 from nltk.corpus import brown
 from nltk.corpus import gutenberg
-from nltk.corpus import qc
 from nltk.corpus import reuters
 from nltk.corpus import stopwords
 from flask import request
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 try:
-   import cPickle as pickle
+    import cPickle as pickle
 except:
-   import pickle
+    import pickle
+
+from .question_classifier import classify_question
 
 
 class FeatureExtractor(Resource):
     _stops = stopwords.words('english')
     _keyword_data = None
-    _qtype_data = None
     PRESENT_TAGS = ['VB', 'VBG', 'VBP', 'VBZ']
     PAST_TAGS = ['VBD', 'VBN']
 
@@ -54,8 +54,9 @@ class FeatureExtractor(Resource):
         if cls._keyword_data is not None:
             return
         data_file = os.path.abspath(
-            os.path.join(os.path.dirname( __file__ ),
-            '..', '..', 'data', 'counts.dat'))
+            os.path.join(
+                os.path.dirname(__file__),
+                '..', '..', 'data', 'counts.dat'))
         try:
             with open(data_file, 'rb') as f:
                 cls._keyword_data = pickle.load(f)
@@ -73,117 +74,9 @@ class FeatureExtractor(Resource):
         counts = {x: tokens.count(x) for x in set(tokens)}
         counts = {
             x: math.log(counts[x]) -
-               math.log(cls._keyword_data[x] if x in cls._keyword_data else 1)
+            math.log(cls._keyword_data[x] if x in cls._keyword_data else 1)
             for x in counts}
         return [x for x in counts if counts[x] > THRESHOLD]
-
-    @classmethod
-    def _qtype_tokens(cls, tokens):
-        pos = nltk.pos_tag(tokens)
-        tokens = map(lambda x: x[1] if 'NN' in x[1] else x[0].lower(), pos)
-        tokens = map(lambda x: 'NN' if 'NN' in x and x != 'NNP' else x, tokens)
-        return ['^^'] + tokens + ['?']
-
-
-    @classmethod
-    def _make_qtype_data(cls, verbose=False):
-        data = {}
-        for fileid in qc.fileids():
-            if verbose:
-                print fileid
-            for type_, sent in qc.tuples(fileid):
-                type_ = type_.split(':')[0]
-                if type_ not in data:
-                    data[type_] = {0: 0}
-                counts = data[type_]
-                tokens = cls._qtype_tokens(sent.split(' '))
-                for i, t in enumerate(tokens):
-                    counts[0] += 1
-                    if t not in counts:
-                        counts[t] = {0: 0}
-                    counts[t][0] += 1
-                    if i + 1 < len(tokens):
-                        if tokens[i + 1] not in counts[t]:
-                            counts[t][tokens[i + 1]] = {0: 0}
-                        counts[t][tokens[i + 1]][0] += 1
-                    if i + 2 < len(tokens):
-                        if tokens[i + 2] not in counts[t][tokens[i + 1]]:
-                            counts[t][tokens[i + 1]][tokens[i + 2]] = 0
-                        counts[t][tokens[i + 1]][tokens[i + 2]] += 1
-        return data
-
-    @classmethod
-    def _load_qtype_data(cls, verbose=False):
-        if cls._qtype_data is not None:
-            return
-        data_file = os.path.abspath(
-            os.path.join(os.path.dirname( __file__ ),
-            '..', '..', 'data', 'qtypes.dat'))
-        try:
-            with open(data_file, 'rb') as f:
-                cls._qtype_data = pickle.load(f)
-        except Exception:
-            cls._qtype_data = cls._make_qtype_data(verbose)
-            with open(data_file, 'wb+') as f:
-                pickle.dump(cls._qtype_data, f)
-
-    @classmethod
-    def _prob(cls, counts, w1, w2=None, w3=None):
-        if w3 is None:
-            if w2 is None:
-                if (w1 not in counts):
-                    return 0.0
-                if counts[w1][0] == 0:
-                    return 0.0
-                else:
-                    return float(counts[w1][0]) / counts[0]
-            else:
-                if (w1 not in counts) or (w2 not in counts[w1]):
-                    return 0.0
-                if counts[w1][w2][0] == 0:
-                    return 0.0
-                else:
-                    return float(counts[w1][w2][0]) / counts[w1][0]
-        else:
-            if ((w1 not in counts) or (w2 not in counts[w1]) or
-                (w3 not in counts[w1][w2])):
-                return 0.0
-            if counts[w1][w2][w3] == 0:
-                return 0.0
-            else:
-                return float(counts[w1][w2][w3]) / counts[w1][w2][0]
-
-    @classmethod
-    def _prob_star(cls, counts, w1, w2, w3):
-        # Magic numbers chosen empirically via testing.
-        lmbd3 = 0.3
-        lmbd2 = 0.35
-        lmbd1 = 0.345
-        lmbd0 = 0.005
-        # calculations done in log probabilities
-        return math.log(lmbd3 * cls._prob(counts, w1, w2, w3) +
-                        lmbd2 * cls._prob(counts, w1, w2) +
-                        lmbd1 * cls._prob(counts, w1) + lmbd0)
-
-    @classmethod
-    def _get_perplexity(cls, model, tokens):
-        prob = 0.0
-        token_list = cls._qtype_tokens(tokens)
-        for i, t in enumerate(token_list[:-2]):
-            prob += cls._prob_star(model, t, token_list[i + 1], token_list[i + 2])
-        return math.pow(math.e, prob * (-1.0 / len(tokens)))
-
-    @classmethod
-    def classify_question(cls, tokens):
-        cls._load_qtype_data()
-        min_perplex = ('fakename', 9999999999999)
-        for type_, model in cls._qtype_data.iteritems():
-            p = cls._get_perplexity(model, tokens)
-            if p < min_perplex[1]:
-                min_perplex = (type_, p)
-        if min_perplex[1] > 25.0:
-            return 'UNK'
-        return str(min_perplex[0])
 
     @classmethod
     def tense_from_pos(cls, pos):
@@ -209,12 +102,13 @@ class FeatureExtractor(Resource):
                 for token in tree]
         nouns = [token for token in tree
                  if 'NN' in token[1] or ' ' in token[0]]
-        keywords = cls.find_keywords(set(x[0] for x in tree if ' ' not in x[0]))
+        keywords = cls.find_keywords(
+            set(x[0] for x in tree if ' ' not in x[0]))
         features = {'keywords': keywords,
                     'nouns': nouns,
                     'tense': cls.tense_from_pos(processed_data['pos']),
                     'isQuestion': cls.is_question(processed_data['tokens']),
-                    'questionType': cls.classify_question(
+                    'questionType': classify_question(
                         processed_data['tokens'])}
         return features
 
@@ -248,5 +142,4 @@ if __name__ == '__main__':
     # preprocess training data
     print 'ensuring that the count data exists'
     FeatureExtractor._load_keyword_data(True)
-    FeatureExtractor._load_qtype_data(True)
     print 'complete'
