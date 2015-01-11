@@ -55,7 +55,7 @@ class FeatureExtractor(Resource):
             return
         data_file = os.path.abspath(
             os.path.join(os.path.dirname( __file__ ),
-            '..', 'data', 'counts.dat'))
+            '..', '..', 'data', 'counts.dat'))
         try:
             with open(data_file, 'rb') as f:
                 cls._keyword_data = pickle.load(f)
@@ -118,7 +118,7 @@ class FeatureExtractor(Resource):
             return
         data_file = os.path.abspath(
             os.path.join(os.path.dirname( __file__ ),
-            '..', 'data', 'qtypes.dat'))
+            '..', '..', 'data', 'qtypes.dat'))
         try:
             with open(data_file, 'rb') as f:
                 cls._qtype_data = pickle.load(f)
