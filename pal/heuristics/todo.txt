@@ -1,6 +1,4 @@
-training lists
-hillclimbing that isn't ± 1 of what the value was before
-Initial values for dining halls and stalkernet
+pep8 and pyflakes on all of heuristic
 
 add types to movies
 add types to stalkernet
