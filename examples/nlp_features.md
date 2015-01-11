@@ -49,7 +49,7 @@ Examples:
       nouns: [("person", "me"), ("thing", "coffee")],
       tense: "present",
       isQuestion: false,
-      actionType: "LOC" }
+      questionType: "LOC" }
 
 **"Is there a Starbucks nearby?"**
 

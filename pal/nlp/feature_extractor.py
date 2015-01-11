@@ -6,6 +6,7 @@ from flask_restful_swagger import swagger
 
 from .question_classifier import classify_question
 from .keyword_finder import find_keywords
+from .question_detector import is_question
 
 
 class FeatureExtractor(Resource):
@@ -17,12 +18,6 @@ class FeatureExtractor(Resource):
         present_count = len([True for x in pos if x[1] in cls.PRESENT_TAGS])
         past_count = len([True for x in pos if x[1] in cls.PAST_TAGS])
         return 'past' if past_count >= present_count else 'present'
-
-    @classmethod
-    def is_question(cls, tokens):
-        start_words = ['who', 'what', 'when', 'where', 'why', 'how', 'is',
-                       'can', 'does', 'do']
-        return tokens[0].lower() in start_words or tokens[-1] == '?'
 
     @classmethod
     def extract_features(cls, processed_data):
@@ -40,7 +35,7 @@ class FeatureExtractor(Resource):
         features = {'keywords': keywords,
                     'nouns': nouns,
                     'tense': cls.tense_from_pos(processed_data['pos']),
-                    'isQuestion': cls.is_question(processed_data['tokens']),
+                    'isQuestion': is_question(processed_data['tokens']),
                     'questionType': classify_question(
                         processed_data['tokens'])}
         return features
