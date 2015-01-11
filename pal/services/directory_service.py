@@ -1,5 +1,4 @@
-import sys
-from api.directory.models import Building, Major, Student, Department, FacStaff
+from api.directory.models import Building
 from api.directory.directory_api import Directory
 
 from .abstract_service import AbstractService
@@ -126,5 +125,3 @@ class DirectoryService(AbstractService):
 
         directory.cleanup()
         return
-
-        # return {'response': "Tom Hanks was in 1 movies."}
