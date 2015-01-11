@@ -2,7 +2,7 @@
 # Takes a feature extraction dictionary and returns a numerical value
 # for the hueristic.
 
-from Value_Vector import *
+from value_vector import ValueVector
 
 
 # Climbs hills towards better variables. Takes a list of extracted
@@ -11,7 +11,7 @@ from Value_Vector import *
 # to hill climb.
 def hill_climb(posDict, negDict, duration, init_values, service):
     # Create baseline
-    vector_of_values = Value_Vector(len(init_values))
+    vector_of_values = ValueVector(len(init_values))
     vector_of_values.set_list_of_magnitudes(init_values)
     best = [vector_of_values, get_score(posDict, negDict,
             vector_of_values.get_magnitudes(), service)]
@@ -40,6 +40,6 @@ def get_score(posDict, negDict, list_of_variables, service):
         toBeReturned += service.run_heuristic(list_of_variables,
                                               extractedDict)
     for extractedDict in negDict:
-        toBeReturned += -1 * service.run_heuristic(list_of_variables,
-                                                   extractedDict)
+        toBeReturned -= service.run_heuristic(list_of_variables,
+                                              extractedDict)
     return toBeReturned

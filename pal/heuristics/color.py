@@ -18,6 +18,3 @@ class Colors(object):
     reverse = "\x1b[7m"
     normal = "\x1b[0m"
     reset = normal
-
-if __name__ == '__main__':
-    main()

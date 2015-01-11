@@ -285,7 +285,7 @@ class Stalkernet_Heuristic(object):
         if "Rice" in extracted_dict['keywords']:
             toBeReturned += list_of_variable_values[15]
 
-        if "ill Campus Center" in extracted_dict['keywords']:
+        if "Sayles-Hill Campus Center" in extracted_dict['keywords']:
             toBeReturned += list_of_variable_values[15]
 
         if "Sayles" in extracted_dict['keywords']:
