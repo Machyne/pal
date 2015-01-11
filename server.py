@@ -86,7 +86,7 @@ class Server(Resource):
 
 
 ##
-# Actually setup the Api resource routing here
+# Actually setup the api resource routing here
 ##
 api_pal.add_resource(Server, '/pal')
 api_pal.add_resource(StandardNLP, '/preprocess')

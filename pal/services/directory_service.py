@@ -34,15 +34,19 @@ class DirectoryService(AbstractService):
             matching_people = directory.find_people(
                 first_name=first_name, last_name=last_name)
 
+            lenstudents = len(matching_people['students'])
+            lenfacstaff = len(matching_people['facstaff'])
+            if ((lenstudents > 0 and lenfacstaff > 0) or
+                    (lenstudents > 1 or lenfacstaff > 1)):
+                raise NotEnoughInformationException(
+                    "Too many matches found for name: {0} {1}".format(first_name, last_name))
+
             noun_words = [x[0].lower() for x in nouns if x[1] != 'PERSON']
 
             # answer where a student lives
             room_keywords = set(['room', 'dorm', 'house', 'hall'])
             if len(room_keywords.intersection(set(noun_words))) or len(room_keywords.intersection(set(keywords))) > 0:
                 matching_students = matching_people['students']
-                if len(matching_students) > 1:
-                    raise NotEnoughInformationException(
-                        "Too many matches found for name: {0} {1}".format(first_name, last_name))
                 student = matching_students[0]
                 building_name = directory.get_name_for_id(
                     Building, student.building_id)
@@ -52,10 +56,7 @@ class DirectoryService(AbstractService):
             office_keywords = set(['office'])
             if len(office_keywords.intersection(set(noun_words))) or len(room_keywords.intersection(set(keywords))) > 0:
                 matching_facstaff = matching_people['facstaff']
-                if len(matching_facstaff) > 1:
-                    raise NotEnoughInformationException(
-                        "Too many matches found for name: {0} {1}".format(first_name, last_name))
-                elif len(matching_facstaff) == 0:
+                if len(matching_facstaff) == 0:
                     raise NotEnoughInformationException(
                         "Could not find {0} {1}".format(first_name, last_name))
                 facstaff = matching_facstaff[0]
@@ -67,12 +68,9 @@ class DirectoryService(AbstractService):
             phone_keywords = set(['phone', 'number', 'call'])
             if len(phone_keywords.intersection(noun_words)) > 0 or len(phone_keywords.intersection(set(keywords))):
                 phones = []
-                if len(matching_people['students']) > 0 and len(matching_people['facstaff']) > 0:
-                    raise NotEnoughInformationException(
-                        "Too many matches found for name: {0} {1}".format(first_name, last_name))
-                elif len(matching_people['students']) > 0:
+                if lenstudents > 0:
                     phones = matching_people['students'][0].phones
-                elif len(matching_people['facstaff']) > 0:
+                elif lenfacstaff > 0:
                     phones = matching_people['facstaff'][0].phones
                 else:
                     raise NotEnoughInformationException(
@@ -85,17 +83,13 @@ class DirectoryService(AbstractService):
                 else:
                     return{'response': "{0} {1}'s phone numbers are {2}".format(first_name, last_name, ', '.join([str(phone) for phone in phones]))}
 
-
             # answer email questions
             email_keywords = set(['email', 'e-mail', 'mail'])
             if len(email_keywords.intersection(noun_words)) > 0 or len(email_keywords.intersection(set(keywords))):
                 email = ''
-                if len(matching_people['students']) > 0 and len(matching_people['facstaff']) > 0:
-                    raise NotEnoughInformationException(
-                        "Too many matches found for name: {0} {1}".format(first_name, last_name))
-                elif len(matching_people['students']) > 0:
+                if lenstudents > 0:
                     email = matching_people['students'][0].email
-                elif len(matching_people['facstaff']) > 0:
+                elif lenfacstaff > 0:
                     email = matching_people['facstaff'][0].email
                 else:
                     raise NotEnoughInformationException(
