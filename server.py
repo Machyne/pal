@@ -16,6 +16,8 @@ from pal.nlp.standard_nlp import StandardNLP
 from pal.nlp.keyword_finder import KeywordFinder
 from pal.nlp.noun_finder import NounFinder
 from pal.nlp.question_classifier import QuestionClassifier
+from pal.nlp.question_detector import QuestionDetector
+from pal.nlp.tense_classifier import TenseClassifier
 from pal.services.abstract_service import AbstractService
 
 app = Flask(__name__)
@@ -98,6 +100,8 @@ api_pal.add_resource(FeatureExtractor, '/features')
 api_pal.add_resource(KeywordFinder, '/keywords')
 api_pal.add_resource(NounFinder, '/nouns')
 api_pal.add_resource(QuestionClassifier, '/qtype')
+api_pal.add_resource(QuestionDetector, '/is_question')
+api_pal.add_resource(TenseClassifier, '/tense')
 
 
 @app.route('/docs')
