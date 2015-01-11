@@ -3,10 +3,15 @@ import os
 
 import nltk
 from nltk.corpus import qc
+from flask import request
+from flask.ext.restful import Resource
+from flask_restful_swagger import swagger
 try:
     import cPickle as pickle
 except:
     import pickle
+
+from .standard_nlp import StandardNLP
 
 _QTYPE_DATA = None
 
@@ -119,6 +124,26 @@ def classify_question(tokens):
     if min_perplex[1] > 25.0:
         return 'UNK'
     return str(min_perplex[0])
+
+
+class QuestionClassifier(Resource):
+    """docstring for QuestionClassifier"""
+    @swagger.operation(
+        notes='Classifies Question Type',
+        nickname='qtype',
+        parameters=[
+            {
+                'name': 'question',
+                'description': 'The question to classify.',
+                'required': True,
+                'allowMultiple': False,
+                'dataType': 'string',
+                'paramType': 'form'
+            }
+        ])
+    def post(self):
+        processed_data = StandardNLP.process(request.form['question'])
+        return classify_question(processed_data['tokens'])
 
 if __name__ == '__main__':
     # create and serialize model

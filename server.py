@@ -15,6 +15,7 @@ from pal.nlp.feature_extractor import FeatureExtractor
 from pal.nlp.standard_nlp import StandardNLP
 from pal.nlp.keyword_finder import KeywordFinder
 from pal.nlp.noun_finder import NounFinder
+from pal.nlp.question_classifier import QuestionClassifier
 from pal.services.abstract_service import AbstractService
 
 app = Flask(__name__)
@@ -96,6 +97,7 @@ api_pal.add_resource(StandardNLP, '/preprocess')
 api_pal.add_resource(FeatureExtractor, '/features')
 api_pal.add_resource(KeywordFinder, '/keywords')
 api_pal.add_resource(NounFinder, '/nouns')
+api_pal.add_resource(QuestionClassifier, '/qtype')
 
 
 @app.route('/docs')
