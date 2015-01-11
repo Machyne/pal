@@ -1,4 +1,6 @@
 pep8 and pyflakes on all of heuristic
+Change in individual heuristics INITIAL_VALUES to a dictionary
+    - Also, add regex to clarify ifelse
 
 add types to movies
 add types to stalkernet

@@ -9,9 +9,10 @@ try:
 except ImportError:
     pass
 
-class Value_Vector:
 
-    def __init__(self,num_values):
+class ValueVector(object):
+
+    def __init__(self, num_values):
         self.list_of_magnitudes = [0] * num_values
         self.list_of_directions = [0] * num_values
         self.itr_count = 0
@@ -43,24 +44,24 @@ class Value_Vector:
     # value. Otherwise, it is false. If "replaced" is true, then
     # climbing continues in the same direction. Otherwise, random
     # directions are generated.
-    def generate_variables(self,replaced):
+    def generate_variables(self, replaced):
         # If the last one was a new best, go in the same direction again
         if not replaced:
             for slot in xrange(len(self.list_of_directions)):
-                self.list_of_directions[slot] = random.randint(-1,1)
+                self.list_of_directions[slot] = random.randint(-1, 1)
         self.itr_count += 1
         # Generate new values
         SCALE_EFFECT = self.get_scaling()
         for item in xrange(len(self.list_of_magnitudes)):
             self.list_of_magnitudes[item] += (self.list_of_directions[item] *
-                                                SCALE_EFFECT)
+                                              SCALE_EFFECT)
 
     # Sets self.list_of_magnitudes to be equal to magnitudes
     def set_list_of_magnitudes(self, magnitudes):
         self.list_of_magnitudes = magnitudes
 
     # Sets self.list_of_directions to be equal to directions
-    def set_list_of_directions(self,directions):
+    def set_list_of_directions(self, directions):
         self.list_of_directions = directions
 
     def get_magnitudes(self):
@@ -75,6 +76,7 @@ class Value_Vector:
 
 if __name__ == '__main__':
     main()
+
 
 def main():
     test = Value_Vector(5)

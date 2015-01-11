@@ -4,16 +4,17 @@
 
 from Value_Vector import *
 
-# Climbs hills towards better variables. Takes a list of processed
-# queries (should be dictionaries) that are affirmative, a second list
+
+# Climbs hills towards better variables. Takes a list of extracted
+# features (should be dictionaries) that are affirmative, a second list
 # that contains negative queries, a duration for the number of times
 # to hill climb.
 def hill_climb(posDict, negDict, duration, init_values, service):
-     # Create baseline
+    # Create baseline
     vector_of_values = Value_Vector(len(init_values))
     vector_of_values.set_list_of_magnitudes(init_values)
     best = [vector_of_values, get_score(posDict, negDict,
-            vector_of_values.get_magnitudes(),service)]
+            vector_of_values.get_magnitudes(), service)]
     replaced = False
 
     # do the hill climbing

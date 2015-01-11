@@ -11,6 +11,7 @@ from movie_heuristic import *
 #     movie_heuristic.movieHeuristic()
 #     if curValues > best:
 #         best = cur
+# asdf
 
 dummyDict = {'keywords': ['Movie', 'actor'], 'Proper Nouns': ['Tom Hanks']}
 dummyEVILDict = {'keywords': ['time', 'theatre'],
@@ -18,12 +19,14 @@ dummyEVILDict = {'keywords': ['time', 'theatre'],
 
 myHeuristic = Movie_Heuristic()
 temp = hill_climb([dummyDict], [dummyEVILDict], 50, [75, 75, 75, 50, 60, 40,
-            60, 50, 50, 40, 40, 50, -50,-50,-75, -60, -60, -90, -25, 30], \
-            myHeuristic)
+                                                     60, 50, 50, 40, 40, 50,
+                                                     -50, -50, -75, -60, -60,
+                                                     -90, -25, 30],
+                  myHeuristic)
 
 print temp[0].get_magnitudes()
 
-temp = hill_climb([dummyDict], [dummyEVILDict], 50, temp[0].get_magnitudes(),\
-    myHeuristic)
+temp = hill_climb([dummyDict], [dummyEVILDict], 50, temp[0].get_magnitudes(),
+                  myHeuristic)
 
 print temp[0].get_magnitudes()

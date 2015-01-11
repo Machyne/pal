@@ -1,6 +1,7 @@
 # This is the abstract class for a heuristic
 
-from Value_Vector import *
+from value_vector import ValueVector
+
 
 class Heuristic(object):
     # Takes a list of initial values, and creates a heuristic object

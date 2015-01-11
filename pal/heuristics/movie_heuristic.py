@@ -1,11 +1,12 @@
 # Movie heuristic
 from Heuristic import Heuristic
-class Movie_Heuristic(Heuristic):
+
+
+class MovieHeuristic(Heuristic):
     def __init__(self):
         INITIAL_VALUES = [75, 75, 75, 50, 60, 40, 60, 50, 50, 40, 40, 50, -50,
                             -50,-75, -60, -60, -90, -25, 30]
         super(Movie_Heuristic, self).__init__(INITIAL_VALUES)
-
 
     # Returns a heuristic value for an extracted dict, given a list of
     # variable values.
