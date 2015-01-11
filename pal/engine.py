@@ -7,7 +7,7 @@ from .exceptions import MissingKeyException
 from .filter import Filter
 from nlp.feature_extractor import FeatureExtractor
 from nlp.standard_nlp import StandardNLP
-from services.abstract_service import AbstractService
+from services import ALL_SERVICES
 
 
 class Engine(Resource):
@@ -22,14 +22,12 @@ class Engine(Resource):
 
     @classmethod
     def end_to_end(cls, query, client):
-        # Not sure what this is for
-        all_services = AbstractService.magic('more magic')
-        filter_ = Filter(all_services)
         # 1. Preprocess
         nlp_data = StandardNLP.process(query)
         # 2. Feature extraction
         features = FeatureExtractor.extract_features(nlp_data)
         # 3. Service classification
+        filter_ = Filter(ALL_SERVICES)
         services = filter_.filter(
             client,
             (features['questionType'] if 'questionType' in features
