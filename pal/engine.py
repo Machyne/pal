@@ -13,6 +13,10 @@ from services import ALL_SERVICES
 class Engine(Resource):
 
     REQUIRED_KEYS = ['query', 'client']
+    NO_RESPONSE = {
+        'response_code': 1,
+        'response': "Sorry, I'm not sure what you mean."
+    }
 
     @classmethod
     def validate(cls, request):
@@ -41,7 +45,8 @@ class Engine(Resource):
                        for service in services}
         chosen_service = max(conf_levels, key=conf_levels.get)
         # 4. Service execution
-        return chosen_service.go(features)
+        response = chosen_service.go(features)
+        return response if response else cls.NO_RESPONSE
 
     @swagger.operation(
         notes='End-to-end processing from query to response',
