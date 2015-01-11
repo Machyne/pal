@@ -30,7 +30,7 @@ Examples:
      ('Starbucks', 'NNP'),
      ('?', '.')]    
     
-    { keywords: ["nearest", "starbucks"],
+    { keywords: ["nearest"],
       nouns: [("Starbucks", "NNP")],
       tense: "present",
       isQuestion: true,
@@ -45,7 +45,7 @@ Examples:
      ('coffee', 'NN'),
      ('.', '.')]
     
-    { keywords: ["find", "coffee"],
+    { keywords: ["find"],
       nouns: [("person", "me"), ("thing", "coffee")],
       tense: "present",
       isQuestion: false,
@@ -60,7 +60,7 @@ Examples:
      ('nearby', 'NN'),
      ('?', '.')]
     
-    { keywords: ["starbucks", "nearby"],
+    { keywords: ["nearby"],
       nouns: [("place", "Starbucks")],
       tense: "present",
       isQuestion: true,
@@ -73,7 +73,7 @@ Examples:
      ('dream', 'VB'),
      ('?', '.')]
     
-    { keywords: ["dogs", "dream"],
+    { keywords: [],
       nouns: [("thing", "dogs")],
       tense: "present",
       isQuestion: true,
@@ -89,7 +89,7 @@ Examples:
      ('sheep', 'NN'),
      ('?', '.')]
     
-    { keywords: ["androids", "dream", "sheep"],
+    { keywords: [],
       nouns: [("thing", "androids"), ("thing", "sheep")],
       tense: "present",
       isQuestion: true,
@@ -105,7 +105,7 @@ Examples:
      ('androids', 'NNS'),
      ('?', '.')]
     
-    { keywords: ["androids", "dream", "sheep"],
+    { keywords: [],
       nouns: [("thing", "androids"), ("thing", "sheep")],
       tense: "present",
       isQuestion: true,
@@ -136,7 +136,7 @@ Examples:
      ('Sun', 'NNP'),
      ('?', '.')]
     
-    { keywords: ["moon", "closer", "earth", "sun"],
+    { keywords: [],
       nouns: [("place", "moon"), ("place", "earth"), ("place", "sun")],
       tense: "present",
       isQuestion: true,
@@ -151,7 +151,7 @@ Examples:
      ('live', 'JJ'),
      ('?', '.')]
     
-    { keywords: ["where", "Matt Cotter", "live"],
+    { keywords: ["where", "live"],
       nouns: [("person", "Matt Cotter")],
       tense: "present",
       isQuestion: true,
@@ -185,7 +185,7 @@ Examples:
      ('eat', 'VB'),
      ('?', '.')]
     
-    { keywords: ["Hogan Brothers", "good", "eat"],
+    { keywords: ["eat"],
       nouns: [("place", "Hogan Brothers"), ("place", "place")],
       tense: "present",
       isQuestion: true,
@@ -208,7 +208,7 @@ Examples:
      ('Back', 'NNP'),
      ('?', '.')]
     
-    { keywords: ["better", "The Dark Knight", "The Empire Strikes Back"],
+    { keywords: [],
       nouns: [("title", "The Dark Knight"), ("title", "The Empire Strikes Back")],
       tense: "present",
       isQuestion: true,
