@@ -99,5 +99,5 @@ class KeywordFinder(Resource):
 if __name__ == '__main__':
     # preprocess training data
     print 'ensuring that the count data exists'
-    FeatureExtractor._load_keyword_data(True)
+    _load_keyword_data(True)
     print 'complete'
