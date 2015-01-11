@@ -1,82 +1,16 @@
 #!/usr/bin/env python
-import math
-import os
-import re
-
 import nltk
-from nltk.corpus import brown
-from nltk.corpus import gutenberg
-from nltk.corpus import reuters
-from nltk.corpus import stopwords
 from flask import request
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
-try:
-    import cPickle as pickle
-except:
-    import pickle
 
 from .question_classifier import classify_question
+from .keyword_finder import find_keywords
 
 
 class FeatureExtractor(Resource):
-    _stops = stopwords.words('english')
-    _keyword_data = None
     PRESENT_TAGS = ['VB', 'VBG', 'VBP', 'VBZ']
     PAST_TAGS = ['VBD', 'VBN']
-
-    @classmethod
-    def is_good_word(cls, w):
-        w = w.lower()
-        not_stop = w not in cls._stops
-        good = re.match(r'[a-z\'\-.]{2,}|[a-z]', w) is not None
-        return not_stop and good
-
-    @classmethod
-    def _make_keyword_data(cls, verbose=False):
-        vocab = {}
-        corpora = [gutenberg, brown, reuters]
-        for corpus in corpora:
-            for fileid in corpus.fileids():
-                if verbose:
-                    print fileid
-                for sent in corpus.sents(fileid):
-                    words = [w.lower() for w in sent if cls.is_good_word(w)]
-                    for w in words:
-                        if w in vocab:
-                            vocab[w] += 1
-                        else:
-                            vocab[w] = 1
-        return vocab
-
-    @classmethod
-    def _load_keyword_data(cls, verbose=False):
-        if cls._keyword_data is not None:
-            return
-        data_file = os.path.abspath(
-            os.path.join(
-                os.path.dirname(__file__),
-                '..', '..', 'data', 'counts.dat'))
-        try:
-            with open(data_file, 'rb') as f:
-                cls._keyword_data = pickle.load(f)
-        except Exception:
-            cls._keyword_data = cls._make_keyword_data(verbose)
-            with open(data_file, 'wb+') as f:
-                pickle.dump(cls._keyword_data, f)
-
-    @classmethod
-    def find_keywords(cls, tokens):
-        THRESHOLD = -5  # TODO : tune this
-        tokens = map(lambda x: x.lower(), tokens)
-        tokens = filter(cls.is_good_word, tokens)
-        cls._load_keyword_data()
-        counts = {x: tokens.count(x) for x in set(tokens)}
-        counts = {
-            x: math.log(counts[x]) -
-            math.log(cls._keyword_data[x] if x in cls._keyword_data else 1)
-            for x in counts}
-        return [x for x in counts if counts[x] > THRESHOLD]
 
     @classmethod
     def tense_from_pos(cls, pos):
@@ -102,8 +36,7 @@ class FeatureExtractor(Resource):
                 for token in tree]
         nouns = [token for token in tree
                  if 'NN' in token[1] or ' ' in token[0]]
-        keywords = cls.find_keywords(
-            set(x[0] for x in tree if ' ' not in x[0]))
+        keywords = find_keywords(set(x[0] for x in tree if ' ' not in x[0]))
         features = {'keywords': keywords,
                     'nouns': nouns,
                     'tense': cls.tense_from_pos(processed_data['pos']),
@@ -137,9 +70,3 @@ class FeatureExtractor(Resource):
         pos = map(tuple, eval(request.form['postags']))
         tokens = eval(request.form['tokens'])
         return self.extract_features({"pos": pos, "tokens": tokens})
-
-if __name__ == '__main__':
-    # preprocess training data
-    print 'ensuring that the count data exists'
-    FeatureExtractor._load_keyword_data(True)
-    print 'complete'
