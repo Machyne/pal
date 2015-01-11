@@ -7,6 +7,7 @@ from .keyword_finder import find_keywords
 from .noun_finder import find_nouns
 from .question_classifier import classify_question
 from .question_detector import is_question
+from .standard_nlp import StandardNLP
 from .tense_classifier import get_tense
 
 
@@ -31,16 +32,8 @@ class FeatureExtractor(Resource):
         nickname='features',
         parameters=[
             {
-                'name': 'postags',
-                'description': 'Part of Speech Tagged sentence',
-                'required': True,
-                'allowMultiple': False,
-                'dataType': 'string',
-                'paramType': 'form'
-            },
-            {
-                'name': 'tokens',
-                'description': 'Tokenized sentence',
+                'name': 'sentence',
+                'description': 'The sentence from which to extract features.',
                 'required': True,
                 'allowMultiple': False,
                 'dataType': 'string',
@@ -48,6 +41,5 @@ class FeatureExtractor(Resource):
             }
         ])
     def post(self):
-        pos = map(tuple, eval(request.form['postags']))
-        tokens = eval(request.form['tokens'])
-        return self.extract_features({"pos": pos, "tokens": tokens})
+        processed_data = StandardNLP.process(request.form['sentence'])
+        return self.extract_features(processed_data)

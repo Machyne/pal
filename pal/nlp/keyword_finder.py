@@ -2,6 +2,9 @@ import math
 import os
 import re
 
+from flask import request
+from flask.ext.restful import Resource
+from flask_restful_swagger import swagger
 import nltk
 from nltk.corpus import brown
 from nltk.corpus import gutenberg
@@ -11,6 +14,8 @@ try:
     import cPickle as pickle
 except:
     import pickle
+
+from .standard_nlp import StandardNLP
 
 _KEYWORD_DATA = None
 _STOPS = stopwords.words('english')
@@ -70,6 +75,26 @@ def find_keywords(tokens):
         math.log(_KEYWORD_DATA[x] if x in _KEYWORD_DATA else 1)
         for x in counts}
     return [x for x in counts if counts[x] > THRESHOLD]
+
+
+class KeywordFinder(Resource):
+    """docstring for KeywordFinder"""
+    @swagger.operation(
+        notes='Finds Keywords',
+        nickname='keywords',
+        parameters=[
+            {
+                'name': 'sentence',
+                'description': 'The sentence from which to find keywords.',
+                'required': True,
+                'allowMultiple': False,
+                'dataType': 'string',
+                'paramType': 'form'
+            }
+        ])
+    def post(self):
+        processed_data = StandardNLP.process(request.form['sentence'])
+        return find_keywords(processed_data['tokens'])
 
 if __name__ == '__main__':
     # preprocess training data

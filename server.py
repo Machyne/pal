@@ -12,7 +12,8 @@ from flask_restful_swagger import swagger
 from pal.exceptions import MissingKeyException
 from pal.filter import Filter
 from pal.nlp.feature_extractor import FeatureExtractor
-from pal.nlp.preprocessing import StandardNLP
+from pal.nlp.standard_nlp import StandardNLP
+from pal.nlp.keyword_finder import KeywordFinder
 from pal.services.abstract_service import AbstractService
 
 app = Flask(__name__)
@@ -92,6 +93,7 @@ class Server(Resource):
 api_pal.add_resource(Server, '/pal')
 api_pal.add_resource(StandardNLP, '/preprocess')
 api_pal.add_resource(FeatureExtractor, '/features')
+api_pal.add_resource(KeywordFinder, '/keywords')
 
 
 @app.route('/docs')
