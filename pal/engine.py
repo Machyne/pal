@@ -4,18 +4,19 @@ from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 
 from .exceptions import MissingKeyException
-from services.abstract_service import AbstractService
+from .filter import Filter
 from nlp.feature_extractor import FeatureExtractor
 from nlp.standard_nlp import StandardNLP
-from .filter import Filter
+from services.abstract_service import AbstractService
 
 
 class Engine(Resource):
 
     EXPECTED_KEYS = ['query', 'client']
 
-    def validate(self, request):
-        for x in Engine.EXPECTED_KEYS:
+    @classmethod
+    def validate(cls, request):
+        for x in cls.EXPECTED_KEYS:
             if x not in request:
                 raise MissingKeyException(x)
 
@@ -26,7 +27,7 @@ class Engine(Resource):
         filter_ = Filter(all_services)
         # 1. Preprocess
         nlp_data = StandardNLP.process(query)
-        # 2. Freature extraction
+        # 2. Feature extraction
         features = FeatureExtractor.extract_features(nlp_data)
         # 3. Service classification
         services = filter_.filter(
