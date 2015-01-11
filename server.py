@@ -17,6 +17,7 @@ from pal.nlp.tense_classifier import TenseClassifier
 
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 pal_blueprint = Blueprint('pal_blueprint', __name__)
 api_pal = swagger.docs(Api(pal_blueprint), apiVersion='0.1',
                        basePath='http://localhost:5000',
