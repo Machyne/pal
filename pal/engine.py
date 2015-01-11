@@ -12,16 +12,21 @@ from services import ALL_SERVICES
 
 class Engine(Resource):
 
-    EXPECTED_KEYS = ['query', 'client']
+    REQUIRED_KEYS = ['query', 'client']
 
     @classmethod
     def validate(cls, request):
-        for x in cls.EXPECTED_KEYS:
+        """ Raises an exception if a request doesnt contain all required keys.
+        """
+        for x in cls.REQUIRED_KEYS:
             if x not in request:
                 raise MissingKeyException(x)
 
     @classmethod
     def end_to_end(cls, query, client):
+        """ Processes a query "from end to end" doing all steps including
+            NLP, feature extraction, service selection, and service execution.
+        """
         # 1. Preprocess
         nlp_data = StandardNLP.process(query)
         # 2. Feature extraction
