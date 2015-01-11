@@ -3,7 +3,7 @@ var queryPAL = function(query, callback) {
     type: 'POST',
     url: '/api/pal',
     data: {
-      quest: query,
+      query: query,
       client: 'web'
     },
     success: function (response) {

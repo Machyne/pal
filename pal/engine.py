@@ -3,11 +3,11 @@ from flask.ext.restful import abort
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 
-from pal.exceptions import MissingKeyException
-from pal.services.abstract_service import AbstractService
-from pal.feature_extractor import FeatureExtractor
-from pal.standard_nlp import StandardNLP
-from pal.filter import Filter
+from .exceptions import MissingKeyException
+from services.abstract_service import AbstractService
+from nlp.feature_extractor import FeatureExtractor
+from nlp.standard_nlp import StandardNLP
+from .filter import Filter
 
 
 class Engine(Resource):
