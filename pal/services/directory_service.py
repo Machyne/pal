@@ -23,6 +23,7 @@ class DirectoryService(AbstractService):
         nouns = features['nouns']
         keywords = features['keywords']
         full_names = [x for x in nouns if x[1] == 'PERSON']
+        question_type = features['questionType']
 
         if len(full_names) == 1:
             # these types of questions only pertain to 1 person
@@ -46,7 +47,8 @@ class DirectoryService(AbstractService):
             # answer where a student lives
             room_keywords = set(['room', 'dorm', 'house', 'hall'])
             if (len(room_keywords.intersection(set(noun_words))) or
-                    len(room_keywords.intersection(set(keywords))) > 0):
+                    len(room_keywords.intersection(set(keywords))) > 0 or
+                    question_type == 'LOC'):
                 matching_students = matching_people['students']
                 student = matching_students[0]
                 building_name = directory.get_name_for_id(
