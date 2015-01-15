@@ -118,6 +118,8 @@ class CommitChecker(object):
         return ('symbolic' in self.mimetype or
                 self.filename.endswith('.md') or
                 self.filename.endswith('.txt') or
+                self.filename.endswith('.html') or
+                self.filename.endswith('.css') or
                 os.path.isdir(self.filename))
 
     def get_errors(self):
