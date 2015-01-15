@@ -7,7 +7,7 @@
 # TODO:
 # - Add support for caching data with pickle
 # - Decide on a naming scheme for cached data
-# - Implement a way to clear the cache as it becomes irrelevant 
+# - Implement a way to clear the cache as it becomes irrelevant
 # - Add a CI job to cache data every morning/evening
 
 import re
@@ -46,6 +46,8 @@ class BonAPI(object):
     meal_key = u'dayparts'
     entree_key = u'menu_items'
     base_fields = [u'id', u'label']
+    cafes = {"east-hall", "burton-hall",
+             "sayles-hill-cafe", "weitz-cafe"}
 
     def __init__(self):
         self.cafe = None
@@ -63,17 +65,10 @@ class BonAPI(object):
                 self.meal_key: self.meals}
         return data
 
-    def get_data(self, cafe='all', day=datetime.date.today()):
-        cafes = {
-            'ldc': "east-hall",
-            'burton': "burton-hall",
-            'sayles': "sayles-hill-cafe",
-            'weitz': "weitz-cafe"
-        }
+    def get_data(self, cafe, day):
 
-        url = "%s/%s" % (self.base_url,
-                         cafes.get(cafe.lower(), "")
-                         ) if cafe else self.base_url
+        url = "%s/%s" % (self.base_url, cafe
+                         ) if cafe in self.cafes else self.base_url
         url += "/" + day.isoformat()  # ex: '2015-01-01'
         try:
             page, resources = self.ghost.open(url)
@@ -84,6 +79,7 @@ class BonAPI(object):
                 if self.food_choices is None or len(self.food_choices):
                     print "Bad data, retrying"
                     return self.get_data(cafe, day)
+                self.ghost.exit()
                 return self.data
         except TimeoutError as t:
             print t
@@ -166,7 +162,7 @@ def profile(runs=1):
     for i in range(runs):
         start = datetime.datetime.now()
         bon_api = BonAPI()
-        bon_api.get_data("ldc")
+        bon_api.get_data("east-hall", datetime.date.today())
         delta = datetime.datetime.now() - start
         print delta
         deltas.append(delta)
@@ -174,7 +170,6 @@ def profile(runs=1):
 
 
 if __name__ == '__main__':
-    start = datetime.datetime.now()
     bon_api = BonAPI()
-    data = bon_api.get_data("ldc")
-    pprint(data)
+    pprint(bon_api.get_data("east-hall",
+                            datetime.date.today()))
