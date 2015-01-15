@@ -15,7 +15,7 @@ def get_tense(pos):
 
 
 class TenseClassifier(Resource):
-    """docstring for TenseClassifier"""
+    """Swagger resource for TenseClassifier"""
     @swagger.operation(
         notes='Classifies Tenses',
         nickname='tense',

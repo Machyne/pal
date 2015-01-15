@@ -78,7 +78,7 @@ def find_keywords(tokens):
 
 
 class KeywordFinder(Resource):
-    """docstring for KeywordFinder"""
+    """Swagger resource for KeywordFinder"""
     @swagger.operation(
         notes='Finds Keywords',
         nickname='keywords',

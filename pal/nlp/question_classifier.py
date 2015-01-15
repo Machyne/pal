@@ -127,7 +127,7 @@ def classify_question(tokens):
 
 
 class QuestionClassifier(Resource):
-    """docstring for QuestionClassifier"""
+    """Swagger resource for QuestionClassifier"""
     @swagger.operation(
         notes='Classifies Question Type',
         nickname='qtype',

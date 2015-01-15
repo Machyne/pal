@@ -12,7 +12,7 @@ def is_question(tokens):
 
 
 class QuestionDetector(Resource):
-    """docstring for QuestionDetector"""
+    """Swagger resource for QuestionDetector"""
     @swagger.operation(
         notes='Detects Questions',
         nickname='is_question',

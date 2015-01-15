@@ -18,7 +18,7 @@ def find_nouns(pos_tokens):
 
 
 class NounFinder(Resource):
-    """docstring for NounFinder"""
+    """Swagger resource for NounFinder"""
     @swagger.operation(
         notes='Finds Nouns',
         nickname='nouns',
