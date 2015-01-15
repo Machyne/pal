@@ -1,7 +1,7 @@
-from .abstract_service import AbstractService
+from .service import Service
 
 
-class OMDBService(AbstractService):
+class OMDBService(Service):
 
     def applies_to_me(self, client, feature_request_type):
         return True

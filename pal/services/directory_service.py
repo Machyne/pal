@@ -1,14 +1,14 @@
 from api.directory.models import Building
 from api.directory.directory_api import Directory
 
-from .abstract_service import AbstractService
+from .service import Service
 
 
 class NotEnoughInformationException(Exception):
     pass
 
 
-class DirectoryService(AbstractService):
+class DirectoryService(Service):
 
     def applies_to_me(self, client, feature_request_type):
         return True
