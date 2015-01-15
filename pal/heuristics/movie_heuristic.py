@@ -1,5 +1,5 @@
 # Movie heuristic
-from Heuristic import Heuristic
+from pal.heuristics.heuristic import Heuristic
 
 
 class MovieHeuristic(Heuristic):

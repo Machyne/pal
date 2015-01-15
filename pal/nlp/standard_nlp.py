@@ -7,19 +7,19 @@ from flask_restful_swagger import swagger
 
 class StandardNLP(Resource):
     @classmethod
-    def process(cls, data):
+    def process(cls, params):
         """Extract syntactic and semantic data using standard NLP."""
-        tokens = nltk.word_tokenize(data)
+        tokens = nltk.word_tokenize(params['query'])
         pos = nltk.pos_tag(tokens)
-        processed_data = {'tokens': tokens, 'pos': pos}
-        return processed_data
+        params['tokens'] = tokens
+        params['pos'] = pos
 
     @swagger.operation(
         notes='Tokenize and Tag Parts of Speach',
-        nickname='process',
+        nickname='standard_nlp',
         parameters=[
             {
-                'name': 'sentence',
+                'name': 'query',
                 'description': 'Your question or command.',
                 'required': True,
                 'allowMultiple': False,
@@ -28,4 +28,6 @@ class StandardNLP(Resource):
             }
         ])
     def post(self):
-        return self.process(request.form['sentence'])
+        params = {x: request.form[x] for x in request.form}
+        StandardNLP.process(params)
+        return params

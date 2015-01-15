@@ -2,8 +2,8 @@
 # Takes a feature extraction dictionary and returns a numerical value
 # for the hueristic.
 
-from hill_climb_heuristic import hill_climb
-from movie_heuristic import MovieHeuristic
+from pal.heuristics.hill_climb_heuristic import hill_climb
+from pal.heuristics.movie_heuristic import MovieHeuristic
 
 # Hill climbing in a nutshell
 # while True:

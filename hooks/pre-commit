@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # Check all of the files changed and returns
 # a non-zero status if there's a problem.
-#
-# Author: Alex Simonides
 # TODO:
 # - Fix the way we get changes so that we only
 #   see what's going to be committed
@@ -43,9 +41,8 @@ SNAKE_PATTERN = r"(?:_{0,2}[a-z]%s(?:_[a-z]%s)*_{0,2})|_" % (
 
 CLASS_PATTERN = r"( {4})*class (?P<name>%s)\(" % CAMEL_PATTERN
 FUNCTION_PATTERN = r"( {4})*def (?P<name>%s)\(" % SNAKE_PATTERN
-LOCAL_VAR_PATTERN = r"( {4})+(?:self.)?(?P<name>%s)(?:\[[^\] ]+\])* =" % (
-                    SNAKE_PATTERN)
-GLOBAL_VAR_PATTERN = r"(?P<name>[A-Z][A-Z_]*) ="
+LOCAL_VAR_PATTERN = r"( {4})*(?:self\.|cls\.)?(?P<name>%s) =" % SNAKE_PATTERN
+GLOBAL_VAR_PATTERN = r"(?P<name>[A-Z_]+) ="
 
 
 def extract_name(line):
@@ -58,7 +55,8 @@ def extract_name(line):
     elif " = " in line:
         assignments = line.split(" = ")[0]
         if ', ' in assignments:
-            return assignments.split(', ')
+            assignments = assignments.split(', ')
+        return assignments
     else:
         return ''
 
@@ -124,6 +122,8 @@ class CommitChecker(object):
         return ('symbolic' in self.mimetype or
                 self.filename.endswith('.md') or
                 self.filename.endswith('.txt') or
+                self.filename.endswith('.html') or
+                self.filename.endswith('.css') or
                 os.path.isdir(self.filename))
 
     def get_errors(self):
@@ -234,7 +234,7 @@ class CommitChecker(object):
         for num, line in enumerate(self.lines):
             def match_and_check(regex, format_insertions, fallback_re=None):
                 error_message = ("%(type)s name '%(name)s' isn't in %(form)s" +
-                                 " form. (Line %i)" % num)
+                                 " form. (Line %i)" % (num + 1))
                 match = regex.search(line)
                 if fallback_re and not match:
                     match = fallback_re.search(line)
@@ -244,6 +244,7 @@ class CommitChecker(object):
                     for name in format_insertions['name']:
                         match = re.match(SNAKE_PATTERN, name)
                         if not match:
+                            format_insertions['name'] = name
                             break
 
                 if match is None:
@@ -263,7 +264,7 @@ class CommitChecker(object):
                                 {'type': 'Function',
                                  'name': extract_name(line),
                                  'form': 'snake_case'})
-            elif re.search(r"([^'\"])\s= ", line):
+            elif re.search(r"([^'\"\]])\s= ", line):
                 match_and_check(self.local_re,
                                 {'type': 'Variable',
                                  'name': extract_name(line),

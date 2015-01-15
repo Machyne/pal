@@ -4,7 +4,7 @@
 import random
 has_color = False
 try:
-    import color
+    from pal.heuristics.color import Colors
     has_color = True
 except ImportError:
     pass
@@ -22,14 +22,14 @@ class ValueVector(object):
             color_string = ""
             for item in xrange(len(self.list_of_magnitudes)):
                 if self.list_of_directions[item] == -1:
-                    color_string += color.Colors.red + \
-                        str(self.list_of_magnitudes[item]) + color.Colors.white
+                    color_string += Colors.red + \
+                        str(self.list_of_magnitudes[item]) + Colors.white
                 elif self.list_of_directions[item] == 0:
-                    color_string += color.Colors.white + \
+                    color_string += Colors.white + \
                         str(self.list_of_magnitudes[item])
                 else:
-                    color_string += color.Colors.green + \
-                        str(self.list_of_magnitudes[item]) + color.Colors.white
+                    color_string += Colors.green + \
+                        str(self.list_of_magnitudes[item]) + Colors.white
                 color_string += ', '
             return color_string
         else:
@@ -74,16 +74,16 @@ class ValueVector(object):
     def get_scaling(self):
         return 1
 
-if __name__ == '__main__':
-    main()
-
 
 def main():
-    test = Value_Vector(5)
+    test = ValueVector(5)
     test.generate_variables(False)
     test.generate_variables(True)
     test.generate_variables(True)
     test.generate_variables(True)
     test.generate_variables(True)
-
     print test
+
+
+if __name__ == '__main__':
+    main()
