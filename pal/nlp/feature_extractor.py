@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+from flask import request
+from flask.ext.restful import Resource
+from flask_restful_swagger import swagger
+
+from pal.nlp.keyword_finder import find_keywords
+from pal.nlp.noun_finder import find_nouns
+from pal.nlp.question_classifier import classify_question
+from pal.nlp.question_detector import is_question
+from pal.nlp.standard_nlp import StandardNLP
+from pal.nlp.tense_classifier import get_tense
+
+
+class FeatureExtractor(Resource):
+    @classmethod
+    def extract_features(cls, processed_data):
+        """Does semantic analysis stuff, extracts important information
+        to NLP'd data.
+        """
+        tree, nouns = find_nouns(processed_data['pos'])
+        keywords = find_keywords(set(x[0] for x in tree if ' ' not in x[0]))
+        features = {'keywords': keywords,
+                    'nouns': nouns,
+                    'tense': get_tense(processed_data['pos']),
+                    'isQuestion': is_question(processed_data['tokens']),
+                    'questionType': classify_question(
+                        processed_data['tokens'])}
+        return features
+
+    @swagger.operation(
+        notes='Recognize features',
+        nickname='features',
+        parameters=[
+            {
+                'name': 'sentence',
+                'description': 'The sentence from which to extract features.',
+                'required': True,
+                'allowMultiple': False,
+                'dataType': 'string',
+                'paramType': 'form'
+            }
+        ])
+    def post(self):
+        processed_data = StandardNLP.process(request.form['sentence'])
+        return self.extract_features(processed_data)

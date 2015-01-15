@@ -4,7 +4,8 @@ class Filter(object):
         self.all_services = all_services
 
     def filter(self, client, feature_request_type):
-        """Handle the initial filtering of potentially relevant services.
+        """ Return the subset of all_services that apply to the client and
+            request type.
         """
         key = tuple([client, feature_request_type])
         if key not in self.cache:

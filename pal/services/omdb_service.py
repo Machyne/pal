@@ -1,9 +1,7 @@
-from .abstract_service import AbstractService
-# XXX shouldn't use '.' import, should use 'pal.services.',
-# but that's not working for some reason...
+from pal.services.service import Service
 
 
-class OMDBService(AbstractService):
+class OMDBService(Service):
 
     def applies_to_me(self, client, feature_request_type):
         return True
