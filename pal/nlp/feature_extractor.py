@@ -13,27 +13,27 @@ from pal.nlp.tense_classifier import get_tense
 
 class FeatureExtractor(Resource):
     @classmethod
-    def extract_features(cls, processed_data):
+    def process(cls, params):
         """Does semantic analysis stuff, extracts important information
         to NLP'd data.
         """
-        tree, nouns = find_nouns(processed_data['pos'])
+        tree, nouns = find_nouns(params['pos'])
         keywords = find_keywords(set(x[0] for x in tree if ' ' not in x[0]))
         features = {'keywords': keywords,
                     'nouns': nouns,
-                    'tense': get_tense(processed_data['pos']),
-                    'isQuestion': is_question(processed_data['tokens']),
+                    'tense': get_tense(params['pos']),
+                    'isQuestion': is_question(params['tokens']),
                     'questionType': classify_question(
-                        processed_data['tokens'])}
-        return features
+                        params['tokens'])}
+        params['features'] = features
 
     @swagger.operation(
         notes='Recognize features',
         nickname='features',
         parameters=[
             {
-                'name': 'sentence',
-                'description': 'The sentence from which to extract features.',
+                'name': 'query',
+                'description': 'Your question or command.',
                 'required': True,
                 'allowMultiple': False,
                 'dataType': 'string',
@@ -41,5 +41,7 @@ class FeatureExtractor(Resource):
             }
         ])
     def post(self):
-        processed_data = StandardNLP.process(request.form['sentence'])
-        return self.extract_features(processed_data)
+        params = {x: request.form[x] for x in request.form}
+        StandardNLP.process(params)
+        FeatureExtractor.process(params)
+        return params
