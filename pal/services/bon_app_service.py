@@ -5,10 +5,10 @@ from datetime import date
 from datetime import timedelta
 
 from api.food.bon_api import BonAPI
-from pal.services.abstract_service import AbstractService
+from pal.services.service import Service
 
 
-class BonAppetitService(AbstractService):
+class BonAppetitService(Service):
 
     cafe_keywords = {'ldc': "east-hall",
                      'east': "east-hall",
