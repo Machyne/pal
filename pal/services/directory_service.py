@@ -1,7 +1,7 @@
 from api.directory.models import Building
 from api.directory.directory_api import Directory
 
-from .service import Service
+from pal.services.service import Service
 
 
 class NotEnoughInformationException(Exception):

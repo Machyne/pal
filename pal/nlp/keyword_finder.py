@@ -15,7 +15,7 @@ try:
 except:
     import pickle
 
-from .standard_nlp import StandardNLP
+from pal.nlp.standard_nlp import StandardNLP
 
 _KEYWORD_DATA = None
 _STOPS = stopwords.words('english')

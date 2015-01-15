@@ -2,7 +2,7 @@
 # Takes a feature extraction dictionary and returns a numerical value
 # for the hueristic.
 
-from value_vector import ValueVector
+from pal.heuristics.value_vector import ValueVector
 
 
 # Climbs hills towards better variables. Takes a list of extracted

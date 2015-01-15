@@ -2,7 +2,7 @@ from flask import request
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 
-from .standard_nlp import StandardNLP
+from pal.nlp.standard_nlp import StandardNLP
 
 PRESENT_TAGS = ['VB', 'VBG', 'VBP', 'VBZ']
 PAST_TAGS = ['VBD', 'VBN']

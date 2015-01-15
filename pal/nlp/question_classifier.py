@@ -11,7 +11,7 @@ try:
 except:
     import pickle
 
-from .standard_nlp import StandardNLP
+from pal.nlp.standard_nlp import StandardNLP
 
 _QTYPE_DATA = None
 

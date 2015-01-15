@@ -3,12 +3,12 @@ from flask import request
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 
-from .keyword_finder import find_keywords
-from .noun_finder import find_nouns
-from .question_classifier import classify_question
-from .question_detector import is_question
-from .standard_nlp import StandardNLP
-from .tense_classifier import get_tense
+from pal.nlp.keyword_finder import find_keywords
+from pal.nlp.noun_finder import find_nouns
+from pal.nlp.question_classifier import classify_question
+from pal.nlp.question_detector import is_question
+from pal.nlp.standard_nlp import StandardNLP
+from pal.nlp.tense_classifier import get_tense
 
 
 class FeatureExtractor(Resource):

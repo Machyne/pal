@@ -1,4 +1,4 @@
-from .service import Service
+from pal.services.service import Service
 
 
 class OMDBService(Service):

@@ -1,9 +1,11 @@
-import Heuristic
-class Stalkernet_Heuristic(object):
+from pal.heuristics.heuristic import Heuristic
+
+
+class StalkernetHeuristic(object):
     INITIAL_VALUES = [10, 10, 10, 50, 30, 40, 20, 60, 40, 30, 40, 30, -20, -20,
                       -40, 70]
     def __init__(self, arg):
-        super(Stalkernet_Heuristic, self).__init__(INITIAL_VALUES)
+        super(StalkernetHeuristic, self).__init__(INITIAL_VALUES)
 
     # Returns a heuristic value for an extracted dict, given a list of
     # variable values.
