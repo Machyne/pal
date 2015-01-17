@@ -1,4 +1,4 @@
-from heuristic import Heuristic
+from pal.heuristics.heuristic import Heuristic
 
 
 class StalkernetHeuristic(Heuristic):
