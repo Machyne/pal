@@ -57,8 +57,8 @@ class BonAppetitService(Service):
         formatted_response = "Cafe: {cafe}\n{meals}\n"
         cafe = api_response.get(u'current_cafe', {}).get(u'name', 'cafe')
         formatted_meal = "{meal_name}: {start}-{end}\n{stations}\n"
-        formatted_station = "{title}:\n{items}\n"
-        formatted_item = "{label}\n"
+        formatted_station = "{title}:\n{entrees}\n"
+        formatted_entree = "{label}\n"
         meals = ""
         dayparts = api_response.get(u'dayparts', {})
         for meal, meal_details in dayparts.iteritems():
@@ -69,16 +69,16 @@ class BonAppetitService(Service):
             end = meal_details.get(u'endtime', u'NA')
             stations_dict = meal_details.get(u'stations', {})
             for station, station_details in (stations_dict.iteritems()):
-                items = ""
-                items_list = station_details.get(u'items', [])
-                for item in items_list:
-                    if type(item) == dict:
-                        label = item.get(u'label', u'food item')
-                        items += formatted_item.format(label=label)
-                    # Some items are just ID strings,
+                entrees = ""
+                entrees_list = station_details.get(u'items', [])
+                for entree in entrees_list:
+                    if type(entree) == dict:
+                        label = entree.get(u'label', u'entree')
+                        entrees += formatted_entree.format(label=label)
+                    # Some entrees are just ID strings,
                     # not sure what to do with those.
                 stations += formatted_station.format(title=station,
-                                                     items=items)
+                                                     entrees=entrees)
             meals += formatted_meal.format(meal_name=meal,
                                            start=start,
                                            end=end,
