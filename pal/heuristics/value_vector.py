@@ -10,7 +10,7 @@ except ImportError:
     pass
 
 
-class ValueVector(object):
+class Value_Vector(object):
 
     def __init__(self, num_values):
         self.list_of_magnitudes = [0] * num_values
