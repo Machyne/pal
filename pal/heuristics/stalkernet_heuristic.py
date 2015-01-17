@@ -1,11 +1,11 @@
 from heuristic import Heuristic
 
 
-class Stalkernet_Heuristic(Heuristic):
+class StalkernetHeuristic(Heuristic):
     def __init__(self):
         self.input_list = []
         self.read_input_file()
-        super(Stalkernet_Heuristic, self).__init__(self.input_list)
+        super(StalkernetHeuristic, self).__init__(self.input_list)
 
     # Returns a heuristic value for a list of keywords
     def run_heuristic(self, keywords):
@@ -24,5 +24,5 @@ class Stalkernet_Heuristic(Heuristic):
             self.input_list += [(cur_line[0], int(cur_line[1]))]
 
 if __name__ == '__main__':
-    my_heuristic = Stalkernet_Heuristic()
+    my_heuristic = StalkernetHeuristic()
     print my_heuristic.list_of_values.get_magnitudes()
