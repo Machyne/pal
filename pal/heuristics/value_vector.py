@@ -1,4 +1,4 @@
-# Value_Vectors contain a list of magnitudes and a direction for each
+# ValueVectors contain a list of magnitudes and a direction for each
 # magnitude.
 
 import random
