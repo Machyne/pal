@@ -15,7 +15,7 @@ Contact,-20
 Eat,-40
 Allen,70
 Alumni Guest,70
-Arb Offic,70
+Arb Office,70
 Benton,70
 Berg,70
 Bird,70
