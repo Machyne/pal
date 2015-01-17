@@ -1,10 +1,1 @@
-pep8 and pyflakes on all of heuristic
-Change in individual heuristics INITIAL_VALUES to a dictionary
-    - Also, add regex to clarify ifelse
-
-add types to movies
-add types to stalkernet
-make code to turn hill climbed values into service selection
-
-
-climb them hills (over all services (requires all training lists if not heurisitics))
+climb them hills (over all services)
