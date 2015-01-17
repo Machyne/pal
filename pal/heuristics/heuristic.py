@@ -1,13 +1,13 @@
 # This is the abstract class for a heuristic
 
-from value_vector import Value_Vector
+from value_vector import ValueVector
 
 
 class Heuristic(object):
     # Takes a list of lists  of keyword, value pairs. Then  creates a
     # heuristic object
     def __init__(self, value_list):
-        self.list_of_values = Value_Vector(len(value_list))
+        self.list_of_values = ValueVector(len(value_list))
         magnitude_list = []
         for item in value_list:
             magnitude_list += [item[1]]
@@ -19,5 +19,5 @@ class Heuristic(object):
         return 0
 
 if __name__ == '__main__':
-    my_heur = Heuristic([["a",1],["b",2],["c",3]])
+    my_heur = Heuristic([["a", 1], ["b", 2], ["c", 3]])
     print my_heur.list_of_values.get_magnitudes()

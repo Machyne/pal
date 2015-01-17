@@ -1,4 +1,4 @@
-# Value_Vectors contain a list of magnitudes and a direction for each
+# ValueVectors contain a list of magnitudes and a direction for each
 # magnitude.
 
 import random
@@ -10,7 +10,7 @@ except ImportError:
     pass
 
 
-class Value_Vector(object):
+class ValueVector(object):
 
     def __init__(self, num_values):
         self.list_of_magnitudes = [0] * num_values
