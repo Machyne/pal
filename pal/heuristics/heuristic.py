@@ -69,7 +69,7 @@ class Heuristic(object):
         return file_
 
 if __name__ == '__main__':
-    my_heur = Heuristic('movie_values.txt')
+    my_heur = Heuristic('movie')
     print my_heur.get_input_list_keywords()
-    my_heur = Heuristic('stalkernet_values.txt')
+    my_heur = Heuristic('stalkernet')
     print my_heur.get_input_list_keywords()

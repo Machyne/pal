@@ -14,3 +14,5 @@ dummy_evil_dict = {'keywords': ['time', 'theatre'],
 if __name__ == '__main__':
     heuristic = Heuristic('movie')
     hill_climb([dummy_dict], [dummy_evil_dict], 100, heuristic)
+    heuristic = Heuristic('stalkernet')
+    hill_climb([dummy_dict], [dummy_evil_dict], 100, heuristic)

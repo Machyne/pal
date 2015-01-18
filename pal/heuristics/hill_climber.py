@@ -36,7 +36,7 @@ def hill_climb(pos_dict, neg_dict, duration, heuristic):
             if isinstance(key, str):
                 output_file.writelines('{}, {}\n'.format(key, val))
             else:
-                kws = map(lambda k: ' ' * 4 + k, key).join('\n')
+                kws = '\n'.join(map(lambda k: ' ' * 4 + k, key))
                 output_file.writelines('[\n{}\n], {}\n'.format(kws, val))
 
 
