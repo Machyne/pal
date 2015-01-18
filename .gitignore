@@ -67,3 +67,5 @@ data/*
 # sublime
 *.sublime-project
 *.sublime-workspace
+
+pal/heuristics/climbed_*_values.txt
