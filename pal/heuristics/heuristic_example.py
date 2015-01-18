@@ -3,23 +3,16 @@
 # for the hueristic.
 
 from pal.heuristics.hill_climber import hill_climb
-from pal.heuristics.movie_heuristic import MovieHeuristic
-
-# Hill climbing in a nutshell
-# while True:
-#     step listOfVariableValues
-#     movie_heuristic.movieHeuristic()
-#     if curValues > best:
-#         best = cur
-
-dummyDict = {'keywords': ['Movie', 'actor'], 'Proper Nouns': ['Tom Hanks']}
-dummyEVILDict = {'keywords': ['time', 'theatre'],
-                 'Proper Nouns': ['SATAN', 'Satin']}
+from pal.heuristics.heuristic import Heuristic
 
 
-myHeuristic = MovieHeuristic()
-keywords = myHeuristic.get_input_list_keywords()
+dummy_dict = {'keywords': ['Movie', 'actor'], 'Proper Nouns': ['Tom Hanks']}
+dummy_evil_dict = {'keywords': ['time', 'theatre'],
+                   'Proper Nouns': ['SATAN', 'Satin']}
 
-hill_climb([dummyDict], [dummyEVILDict], 100,
-           myHeuristic.get_input_list_values(), myHeuristic,
-           keywords, 'climbed_movie_values.txt')
+
+if __name__ == '__main__':
+    heuristic = Heuristic('movie')
+    hill_climb([dummy_dict], [dummy_evil_dict], 100, heuristic)
+    heuristic = Heuristic('stalkernet')
+    hill_climb([dummy_dict], [dummy_evil_dict], 100, heuristic)

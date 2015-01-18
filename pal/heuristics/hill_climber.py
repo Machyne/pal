@@ -1,6 +1,5 @@
-# Runs an example heuristic
 # Takes a feature extraction dictionary and returns a numerical value
-# for the hueristic.
+# for the heuristic.
 
 from pal.heuristics.value_vector import ValueVector
 
@@ -8,23 +7,20 @@ from pal.heuristics.value_vector import ValueVector
 # Climbs hills towards better variables. Takes a list of extracted
 # features (should be dictionaries) that are affirmative, a second list
 # that contains negative queries, a duration for the number of times
-# to hill climb. Also takes a list of keywords and an output file name,
-# which are only used for printing hill climbed values with the
-# associated variables in a new file.
-def hill_climb(posDict, negDict, duration, init_values, service,
-               keywords, output_file_name):
+# to hill climb, and the heuristic to use.
+def hill_climb(pos_dict, neg_dict, duration, heuristic):
     # Create baseline
-    vector_of_values = ValueVector(len(init_values))
-    vector_of_values.set_list_of_magnitudes(init_values)
-    best = [vector_of_values, get_score(posDict, negDict,
-            service)]
+    magnitude_list = heuristic.get_input_list_values()
+    vector_of_values = ValueVector(len(magnitude_list))
+    vector_of_values.set_list_of_magnitudes(magnitude_list)
+
+    best = [vector_of_values, _get_score(pos_dict, neg_dict, heuristic)]
     replaced = False
 
     # do the hill climbing
     count = 0
     while count <= duration:
-        totalScore = get_score(posDict, negDict,
-                               service)
+        totalScore = _get_score(pos_dict, neg_dict, heuristic)
         if totalScore > best[1]:
             best[0] = vector_of_values
             best[1] = totalScore
@@ -34,20 +30,19 @@ def hill_climb(posDict, negDict, duration, init_values, service,
         count += 1
 
     output_values = vector_of_values.get_magnitudes()
-    output_file = open(output_file_name, 'wb')
-    for line_number in xrange(len(keywords)):
-        str_to_add = str(keywords[line_number]) + ','
-        str_to_add += str(output_values[line_number]) + "\n"
-        output_file.writelines(str_to_add)
+    with open(heuristic.climb_file_name(), 'wb+') as output_file:
+        for i, key in enumerate(heuristic.get_input_list_keywords()):
+            val = output_values[i]
+            if isinstance(key, str):
+                output_file.writelines('{}, {}\n'.format(key, val))
+            else:
+                kws = '\n'.join(map(lambda k: ' ' * 4 + k, key))
+                output_file.writelines('[\n{}\n], {}\n'.format(kws, val))
 
 
 # Gets the total heuristic value for a given list of variables, and
 # positive and negative dicts
-def get_score(posDict, negDict, service):
-    toBeReturned = 0
-    for extractedDict in posDict:
-        toBeReturned += service.run_heuristic(extractedDict)
-    for extractedDict in negDict:
-        toBeReturned -= service.run_heuristic(list_of_variables,
-                                              extractedDict)
-    return toBeReturned
+def _get_score(pos_dict, neg_dict, heuristic):
+    score = sum(heuristic.run_heuristic(dict_) for dict_ in pos_dict)
+    score -= sum(heuristic.run_heuristic(dict_) for dict_ in neg_dict)
+    return score

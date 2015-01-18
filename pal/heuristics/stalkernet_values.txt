@@ -1,143 +1,145 @@
-Where,10
-Who,10
-Which,10
-hasProperNouns,50
-Major,30
-Live,40
-Office,20
-Roommate,60
-Graduate,40
-Faculty,30
-Department,40
-Building,30
-Call,-20
-Contact,-20
-Eat,-40
-Allen,70
-Alumni Guest,70
-Arb Office,70
-Benton,70
-Berg,70
-Bird,70
-Boliou,70
-Brooks,70
-Burton,70
-Cassat,70
-Center for Math & Computing,70
-CMC,70
-Chaney,70
-Clader,70
-College Warehouse,70
-Collier,70
-Colwell,70
-Cowling Gymnasium,70
-Dacie Moses,70
-Davis,70
-Dixon,70
-Douglas,70
-Dow,70
-Eugster,70
-Evans,70
-Facilities Building,70
-Faculty Club,70
-Faculty Club Annex,70
-Fac Club,70
-Farm,70
-Geffert,70
-Goodhue,70
-Goodsell,70
-Goodsell Observatory,70
-Library,70
-Libe,70
-Gould Library,70
-Grounds Garage/Warehouse,70
-Hall,70
-Headley Cottage,70
-Headley,70
-Henrickson,70
-Henry,70
-Hill,70
-Hilton,70
-Hoppin,70
-Hulings,70
-Hunt Cottage,70
-Hunt,70
-Huntington,70
-James,70
-Jewett,70
-Johnson,70
-Jones,70
-Laird,70
-Laird Stadium,70
-Stadium,70
-Language & Dining Center,70
-LDC,70
-Leighton,70
-Mudd,70
-Music & Drama Center,70
-Music,70
-Musser,70
-Myers,70
-Nason,70
-Nourse,70
-Nutting,70
-Olin,70
-Owens,70
-Page,70
-Parish,70
-Parr,70
-Pollock,70
-Prairie Warehouse,70
-Prentice,70
-Rayment,70
-Rec,70
-Recreation Center,70
-Rice,70
-Rogers,70
-Ryberg,70
-Sayles,70
-Sayles-Hill Campus Center,70
-Scott,70
-Scoville,70
-Severance,70
-Chapel,70
-Skinner Memorial Chapel,70
-Sperry,70
-Stimson,70
-Strong,70
-Water Tower,70
-Watson,70
-Weitz,70
-Weitz Center for Creativity,70
-West Gymnasium,70
-Whittier,70
-Williams,70
-Willis,70
-Wilson,70
-Bald Spot,70
-Baseball Field,70
-Softball Field,70
-Bell Field,70
-Hill of Three Oaks,70
-Hillside Prairie,70
-Kettle Hole Marsh,70
-Mini Bald Spot,70
-Little Bald Spot,70
-Lyman Lake,70
-Mai Fete Island,70
-Oxbow Pond,70
-Postage Stamp Prairie,70
-Sand Volleyball Court,70
-Spring Creek,70
-Stewsie Island,70
-The Council Ring,70
-The Druid Circle,70
-The Japanese Garden,70
-The Wind Turbine,70
-Turtle Pond,70
-West Field,70
-Bell Field,70
-Cowling Gymnasium,70
-West Field,70
-West Gym,70
-West Gymnasium,70
+Where, 10
+Who, 10
+Which, 10
+hasProperNouns, 50
+Major, 30
+Live, 40
+Office, 20
+Roommate, 60
+Graduate, 40
+Faculty, 30
+Department, 40
+Building, 30
+Call, -20
+Contact, -20
+Eat, -40
+[
+    Allen
+    Alumni Guest
+    Arb Office
+    Benton
+    Berg
+    Bird
+    Boliou
+    Brooks
+    Burton
+    Cassat
+    Center for Math & Computing
+    CMC
+    Chaney
+    Clader
+    College Warehouse
+    Collier
+    Colwell
+    Cowling Gymnasium
+    Dacie Moses
+    Davis
+    Dixon
+    Douglas
+    Dow
+    Eugster
+    Evans
+    Facilities Building
+    Faculty Club
+    Faculty Club Annex
+    Fac Club
+    Farm
+    Geffert
+    Goodhue
+    Goodsell
+    Goodsell Observatory
+    Library
+    Libe
+    Gould Library
+    Grounds Garage/Warehouse
+    Hall
+    Headley Cottage
+    Headley
+    Henrickson
+    Henry
+    Hill
+    Hilton
+    Hoppin
+    Hulings
+    Hunt Cottage
+    Hunt
+    Huntington
+    James
+    Jewett
+    Johnson
+    Jones
+    Laird
+    Laird Stadium
+    Stadium
+    Language & Dining Center
+    LDC
+    Leighton
+    Mudd
+    Music & Drama Center
+    Music
+    Musser
+    Myers
+    Nason
+    Nourse
+    Nutting
+    Olin
+    Owens
+    Page
+    Parish
+    Parr
+    Pollock
+    Prairie Warehouse
+    Prentice
+    Rayment
+    Rec
+    Recreation Center
+    Rice
+    Rogers
+    Ryberg
+    Sayles
+    Sayles-Hill Campus Center
+    Scott
+    Scoville
+    Severance
+    Chapel
+    Skinner Memorial Chapel
+    Sperry
+    Stimson
+    Strong
+    Water Tower
+    Watson
+    Weitz
+    Weitz Center for Creativity
+    West Gymnasium
+    Whittier
+    Williams
+    Willis
+    Wilson
+    Bald Spot
+    Baseball Field
+    Softball Field
+    Bell Field
+    Hill of Three Oaks
+    Hillside Prairie
+    Kettle Hole Marsh
+    Mini Bald Spot
+    Little Bald Spot
+    Lyman Lake
+    Mai Fete Island
+    Oxbow Pond
+    Postage Stamp Prairie
+    Sand Volleyball Court
+    Spring Creek
+    Stewsie Island
+    The Council Ring
+    The Druid Circle
+    The Japanese Garden
+    The Wind Turbine
+    Turtle Pond
+    West Field
+    Bell Field
+    Cowling Gymnasium
+    West Field
+    West Gym
+    West Gymnasium
+], 70
