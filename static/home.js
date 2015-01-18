@@ -7,7 +7,7 @@ var queryPAL = function(query, callback) {
       client: 'web'
     },
     success: function (response) {
-      callback(response.response);
+      callback(response.result.response);
     }
   });
 }

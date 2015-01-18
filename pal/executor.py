@@ -48,7 +48,8 @@ class Executor(Resource):
     def process(cls, params):
         service = get_service_by_name(params['service'])
         if service:
-            params['result'] = service.go(params['features'])
+            params['result'] = service.go(params['features']) \
+                or cls.NO_RESPONSE
         else:
             params['error'] = '[Executor] Invalid service'
-            params['result'] = NO_RESPONSE
+            params['result'] = cls.NO_RESPONSE
