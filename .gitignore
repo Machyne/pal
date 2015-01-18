@@ -71,3 +71,5 @@ data/*
 pal/heuristics/climbed_*_values.txt
 *.log
 
+# API keys
+config.py
