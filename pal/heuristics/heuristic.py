@@ -51,16 +51,26 @@ class Heuristic(object):
                     self._variables[cur_line[0]] = int(cur_line[1])
 
     def get_input_list_values(self):
-        return filter(lambda x: isinstance(x, int), self._variables.values())
+        return filter(lambda x: isinstance(x, int),
+                      self._variables.itervalues())
 
     def _get_keys_from_value(self, val):
-        return [k for k, v in self._variables.items() if v == val]
+        return [k for k, v in self._variables.iteritems() if v == val]
+
+    def _get_key_or_list(self, key):
+        """ if the input key is a valid key, return it, else if it is
+            invalid (starts with dummy_var_), return all keys that have
+            the value of that dummy_var.
+        """
+        if not key.startswith('dummy_var_'):
+            return key
+        return self._get_keys_from_value(key)
 
     def get_input_list_keywords(self):
-        keys = filter(lambda x: isinstance(x[1], int), self._variables.items())
-        return map(
-            lambda x: (x[0] if not x[0].startswith('dummy_var_') else
-                       self._get_keys_from_value(x[0])), keys)
+        items = filter(lambda x: isinstance(x[1], int),
+                       self._variables.iteritems())
+        keys = map(lambda i: i[0], items)
+        return map(self._get_key_or_list, keys)
 
     def climb_file_name(self):
         file_ = os.path.join(
