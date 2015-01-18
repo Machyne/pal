@@ -30,7 +30,7 @@ def hill_climb(pos_dict, neg_dict, duration, heuristic):
         count += 1
 
     output_values = vector_of_values.get_magnitudes()
-    with open(heuristic.climb_file_name(), 'wb+') as output_file:
+    with open(heuristic.climb_file_name, 'wb+') as output_file:
         for i, key in enumerate(heuristic.get_input_list_keywords()):
             val = output_values[i]
             if isinstance(key, str):

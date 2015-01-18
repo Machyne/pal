@@ -1,4 +1,4 @@
-import os
+from os import path
 from collections import OrderedDict
 
 
@@ -22,33 +22,41 @@ class Heuristic(object):
     def read_input_file(self):
         # read input file into dictionary with keyword as key and
         # heuristic score as value
-        file_ = os.path.join(
-            *(os.path.split(os.path.realpath(__file__))[:-1] +
-              (self._name + '_values.txt',)))
-        with open(file_, 'rb') as input_file:
-            dummy_count = 0
-            in_list = False
-            for i, line in enumerate(input_file):
-                line = line.strip()
-                if line.startswith('['):
-                    if in_list:
-                        raise SyntaxError(
-                            'File "{}", line {}, nested lists not supported'
-                            .format(input_file, i))
-                    in_list = True
-                    dummy_count += 1
+        file_ = path.realpath(
+            path.join(
+                path.dirname(__file__),
+                self._name + '_values.txt'))
+        lines = []
+        try:
+            with open(self.climb_file_name, 'rb') as input_file:
+                lines = input_file.readlines()
+            file_ = self.climb_file_name
+        except Exception:
+            with open(file_, 'rb') as input_file:
+                lines = input_file.readlines()
+        dummy_count = 0
+        in_list = False
+        for i, line in enumerate(lines):
+            line = line.strip()
+            if line.startswith('['):
+                if in_list:
+                    raise SyntaxError(
+                        'File "{}", line {}, nested lists not supported'
+                        .format(file_, i))
+                in_list = True
+                dummy_count += 1
 
-                elif line.startswith(']'):
-                    val = int(line.split(',')[1].strip())
-                    self._variables['dummy_var_{}'.format(dummy_count)] = val
+            elif line.startswith(']'):
+                val = int(line.split(',')[1].strip())
+                self._variables['dummy_var_{}'.format(dummy_count)] = val
 
-                elif in_list:
-                    key = line.split(',')[0].strip()
-                    self._variables[key] = 'dummy_var_{}'.format(dummy_count)
+            elif in_list:
+                key = line.split(',')[0].strip()
+                self._variables[key] = 'dummy_var_{}'.format(dummy_count)
 
-                elif ',' in line:
-                    cur_line = map(str.strip, line.split(','))
-                    self._variables[cur_line[0]] = int(cur_line[1])
+            elif ',' in line:
+                cur_line = map(str.strip, line.split(','))
+                self._variables[cur_line[0]] = int(cur_line[1])
 
     def get_input_list_values(self):
         return filter(lambda x: isinstance(x, int),
@@ -72,11 +80,12 @@ class Heuristic(object):
         keys = map(lambda i: i[0], items)
         return map(self._get_key_or_list, keys)
 
+    @property
     def climb_file_name(self):
-        file_ = os.path.join(
-            *(os.path.split(os.path.realpath(__file__))[:-1] +
-              ('climbed_{}_values.txt'.format(self._name),)))
-        return file_
+        return path.realpath(
+            path.join(
+                path.dirname(__file__),
+                'climbed_{}_values.txt'.format(self._name)))
 
 if __name__ == '__main__':
     my_heur = Heuristic('movie')

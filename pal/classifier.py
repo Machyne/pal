@@ -61,4 +61,5 @@ class Classifier(Resource):
         conf_levels = {service_name: get_service_by_name(service_name)
                        .get_confidence(features)
                        for service_name in service_names}
+        params['confidences'] = conf_levels
         params['service'] = max(conf_levels, key=conf_levels.get)
