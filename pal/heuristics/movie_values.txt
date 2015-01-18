@@ -1,29 +1,29 @@
-Movie,75
-Film,75
-Movies,75
-hasProperNouns,50
-actor,60
-acted,60
-actress,60
-Released,40
-Rating,60
-Review,50
-Plot,50
-lead,50
-leads,50
-Genre,40
-Produce,40
-Produced,40
-Writer,50
-Written,50
-Wrote,50
-Ticket,-50
-Purchase,-50
-Buy,-50
-Time,-75
-Showing,-60
-Playing,-60
-Where,-90
-Theater,-25
-Theatre,-25
-Story,30
+movie, 75
+film, 75
+movies, 75
+hasProperNouns, 50
+actor, 60
+acted, 60
+actress, 60
+released, 40
+rating, 60
+review, 50
+plot, 50
+lead, 50
+leads, 50
+genre, 40
+produce, 40
+produced, 40
+writer, 50
+written, 50
+wrote, 50
+ticket, -50
+purchase, -50
+buy, -50
+time, -75
+showing, -60
+playing, -60
+where, -90
+theater, -25
+theatre, -25
+story, 30
