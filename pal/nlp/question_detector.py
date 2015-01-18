@@ -18,7 +18,7 @@ class QuestionDetector(Resource):
         nickname='is_question',
         parameters=[
             {
-                'name': 'sentence',
+                'name': 'query',
                 'description': 'A sentence that might be a question.',
                 'required': True,
                 'allowMultiple': False,
@@ -27,5 +27,6 @@ class QuestionDetector(Resource):
             }
         ])
     def post(self):
-        processed_data = StandardNLP.process(request.form['sentence'])
-        return is_question(processed_data['tokens'])
+        params = {x: request.form[x] for x in request.form}
+        StandardNLP.process(params)
+        return is_question(params['tokens'])

@@ -133,7 +133,7 @@ class QuestionClassifier(Resource):
         nickname='qtype',
         parameters=[
             {
-                'name': 'question',
+                'name': 'query',
                 'description': 'The question to classify.',
                 'required': True,
                 'allowMultiple': False,
@@ -142,8 +142,9 @@ class QuestionClassifier(Resource):
             }
         ])
     def post(self):
-        processed_data = StandardNLP.process(request.form['question'])
-        return classify_question(processed_data['tokens'])
+        params = {x: request.form[x] for x in request.form}
+        StandardNLP.process(params)
+        return classify_question(params['tokens'])
 
 if __name__ == '__main__':
     # create and serialize model
