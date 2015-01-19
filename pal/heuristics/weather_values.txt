@@ -1,0 +1,19 @@
+weather, 80
+temperature, 70
+cold, 50
+hot, 50
+high, 30
+low, 30
+warm, 50
+hasProperNouns, 40
+forecast, 80
+[
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday,
+    Tomorrow
+], 30
