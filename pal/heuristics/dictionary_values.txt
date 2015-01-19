@@ -1,0 +1,17 @@
+what, 30
+[
+    define
+    definition
+    meaning
+    mean
+    means
+], 70
+[
+    synonym
+    similar
+    same
+], 65
+[
+    antonym
+    opposite
+], 65
