@@ -9,9 +9,7 @@ from pal.services.service import Service
 
 
 def wrap_response(func):
-    def wrapped(features):
-        return {'response': func(features)}
-    return wrapped
+    return lambda *args: {'response': func(*args)}
 
 BURTON = 'burton-hall'
 LDC = 'east-hall'
@@ -35,7 +33,7 @@ class BonAppetitService(Service):
         """ Given a day string, return a corresponding python date object """
         date_word = date_word.lower()
         current_date = date.today()
-        if date_word == "today" or date_word is None:
+        if date_word == "today":
             return current_date
         if date_word == "tomorrow":
             tomorrow = current_date + timedelta(days=1)
@@ -104,18 +102,18 @@ class BonAppetitService(Service):
         extracted_keywords = set(nouns + keywords)
 
         def matching_keywords(my_keyword_set):
-            return my_keyword_set.intersection(extracted_keywords) or None
+            return my_keyword_set.intersection(extracted_keywords)
 
         day_matches = matching_keywords(self.date_keywords)
         if len(day_matches) > 1:
             return "I can only display results for a single day."
-        day = self.infer_date(day_matches[0] if day_matches else None)
+        day = self.infer_date(day_matches.pop() if day_matches else "today")
 
         cafe_matches = matching_keywords(set(self.cafe_keywords.keys()))
         if len(cafe_matches) != 1:
             return ("I can only display results for "
                     "a single Bon Appetit location.")
-        cafe = self.infer_cafe(cafe_matches[0])
+        cafe = self.infer_cafe(cafe_matches.pop())
 
         meal_matches = matching_keywords(self.meal_keywords)
 
