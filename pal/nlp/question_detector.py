@@ -29,4 +29,4 @@ class QuestionDetector(Resource):
     def post(self):
         params = {x: request.form[x] for x in request.form}
         StandardNLP.process(params)
-        return is_question(params['tokens'])
+        return is_question(params['features']['tokens'])

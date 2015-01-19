@@ -144,7 +144,7 @@ class QuestionClassifier(Resource):
     def post(self):
         params = {x: request.form[x] for x in request.form}
         StandardNLP.process(params)
-        return classify_question(params['tokens'])
+        return classify_question(params['features']['tokens'])
 
 if __name__ == '__main__':
     # create and serialize model

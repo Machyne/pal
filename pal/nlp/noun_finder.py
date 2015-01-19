@@ -35,4 +35,4 @@ class NounFinder(Resource):
     def post(self):
         params = {x: request.form[x] for x in request.form}
         StandardNLP.process(params)
-        return find_nouns(params['pos'])[1]
+        return find_nouns(params['features']['pos'])[1]

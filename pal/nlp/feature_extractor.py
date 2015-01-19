@@ -17,14 +17,17 @@ class FeatureExtractor(Resource):
         """Does semantic analysis stuff, extracts important information
         to NLP'd data.
         """
-        tree, nouns = find_nouns(params['pos'])
+        tree, nouns = find_nouns(params['features']['pos'])
         keywords = find_keywords(set(x[0] for x in tree if ' ' not in x[0]))
         features = {'keywords': keywords,
+                    'pos': params['features']['pos'],
+                    'tokens': params['features']['tokens'],
+                    'tree': tree,
                     'nouns': nouns,
-                    'tense': get_tense(params['pos']),
-                    'isQuestion': is_question(params['tokens']),
+                    'tense': get_tense(params['features']['pos']),
+                    'isQuestion': is_question(params['features']['tokens']),
                     'questionType': classify_question(
-                        params['tokens'])}
+                        params['features']['tokens'])}
         params['features'] = features
 
     @swagger.operation(
