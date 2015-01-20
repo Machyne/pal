@@ -20,7 +20,7 @@ from helper import filter_dict_by_keys
 
 # Constants for scraping the cafe pages
 _CAFE_URL = 'http://carleton.cafebonappetit.com/cafe/{cafe_name}/{date}/'
-_CAFE_NAMES = ['burton', 'east-hall', 'sayles-hill-cafe', 'weitz-cafe']
+_CAFE_NAMES = ['burton-hall', 'east-hall', 'sayles-hill-cafe', 'weitz-cafe']
 _RE_NAME = r'Bamco.current_cafe\s+=\s+(?:[^;]+)name:\s+\'(.*?)\'(?:[^;]+);'
 _RE_MENU = r'Bamco.menu_items\s+=\s+([^;]+);'
 _RE_DAYPARTS = r'Bamco.dayparts\[\'(\d+)\'\]\s+=\s+([^;]+);'
@@ -37,16 +37,14 @@ _MEAL_STATION_FIELDS = _BASE_FIELDS + [u'items']
 
 
 def _get_page_for_cafe(cafe_name, day):
-    ''' Returns the HTML page for the given cafe and date.
-    '''
+    """ Returns the HTML page for the given cafe and date."""
     url = _CAFE_URL.format(cafe_name=cafe_name, date=day.isoformat())
     response = requests.get(url)
     return response.text
 
 
 def _get_raw_data_for_cafe(cafe_name, day):
-    ''' Returns the name, menu, and dayparts for the given cafe and date.
-    '''
+    """ Returns the name, menu, and dayparts for the given cafe and date."""
     page = _get_page_for_cafe(cafe_name, day)
     name_matches = re.findall(_RE_NAME, page)
     name = name_matches[0]
@@ -61,8 +59,9 @@ def _get_raw_data_for_cafe(cafe_name, day):
 
 
 def get_menu_for_cafe(cafe_name, day):
-    ''' Returns a cleaned version of the menu info for the given cafe and date.
-    '''
+    """ Returns a cleaned version of the menu info for
+        the given cafe and date.
+    """
     _, menu, _ = _get_raw_data_for_cafe(cafe_name, day)
     if not menu:
         return None
@@ -76,8 +75,9 @@ def get_menu_for_cafe(cafe_name, day):
 
 
 def get_meals_for_cafe(cafe_name, day):
-    ''' Returns a cleaned version of the meals info for the given cafe and date.
-    '''
+    """ Returns a cleaned version of the meals info for
+        the given cafe and date.
+    """
     menu = get_menu_for_cafe(cafe_name, day)
     _, _, dayparts = _get_raw_data_for_cafe(cafe_name, day)
     if not dayparts:
@@ -101,26 +101,15 @@ def get_meals_for_cafe(cafe_name, day):
 
 
 def _use_labels_as_keys(collection):
-    ''' Given a list or dict of items, returns a dict with items' labels for keys.
-    '''
+    """ Given a list or dict of items, returns a dict
+        with items' labels for keys.
+    """
     if type(collection) == dict:
         return {all_info.pop(u'label'): all_info
                 for (old_id, all_info) in collection.iteritems()}
     elif type(collection) == list:
         return {all_info.pop(u'label'): all_info
                 for all_info in collection}
-
-
-# def profile(runs=1):
-#     deltas = []
-#     for i in range(runs):
-#         start = datetime.datetime.now()
-#         bon_api = BonAPI()
-#         bon_api.get_data("east-hall", datetime.date.today())
-#         delta = datetime.datetime.now() - start
-#         print delta
-#         deltas.append(delta)
-#     print "Average: ", (sum(deltas, datetime.timedelta())/runs)
 
 
 # if __name__ == '__main__':
