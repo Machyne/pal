@@ -1,11 +1,11 @@
 #!usr/bin/env python
 # A service for the dining hall menus
 
-from datetime import date
-from datetime import timedelta
 
 from api.food.bon_api import BonAPI
 from pal.services.service import Service
+from pal.utils import infer_date
+from pal.utils import weekdays
 
 
 def wrap_response(func):
@@ -25,24 +25,7 @@ class BonAppetitService(Service):
                      'sayles-hill': SAYLES,
                      'weitz': "weitz-cafe"}
     meal_keywords = {'breakfast', 'brunch', 'lunch', 'dinner'}
-    weekdays = ['monday', 'tuesday', 'wednesday', 'thursday',
-                'friday', 'saturday', 'sunday']
     date_keywords = {'today', 'tomorrow'}.union(set(weekdays))
-
-    def infer_date(self, date_word):
-        """ Given a day string, return a corresponding python date object """
-        date_word = date_word.lower()
-        current_date = date.today()
-        if date_word == "today":
-            return current_date
-        if date_word == "tomorrow":
-            tomorrow = current_date + timedelta(days=1)
-            return tomorrow
-        if date_word in self.weekdays:
-            desired_day = self.weekdays.index(date_word)
-            current_day = current_date.weekday()
-            days_in_future = (desired_day - current_day) % 7
-            return current_date + timedelta(days=days_in_future)
 
     def infer_cafe(self, colloquial):
         """ Maps the colloquial cafe names to Bon Appetit's names """
@@ -107,7 +90,7 @@ class BonAppetitService(Service):
         day_matches = matching_keywords(self.date_keywords)
         if len(day_matches) > 1:
             return "I can only display results for a single day."
-        day = self.infer_date(day_matches.pop() if day_matches else "today")
+        day = infer_date(day_matches.pop() if day_matches else "today")
 
         cafe_matches = matching_keywords(set(self.cafe_keywords.keys()))
         if len(cafe_matches) != 1:
