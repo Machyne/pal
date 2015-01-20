@@ -208,6 +208,8 @@ class CommitChecker(object):
             assert not output, "Pyflakes failed:\n%s" % output
 
     def _check_pep8(self):
+        if 'python script' not in self.mimetype:
+            return
         if self.pep8 is None:
             self.pep8 = pep8.StyleGuide()
         self.pep8.init_report(DelayedReport)
