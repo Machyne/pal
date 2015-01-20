@@ -42,13 +42,14 @@ class Heuristic(object):
                 if in_list:
                     raise SyntaxError(
                         'File "{}", line {}, nested lists not supported'
-                        .format(file_, i))
+                        .format(file_, i+1))
                 in_list = True
                 dummy_count += 1
 
             elif line.startswith(']'):
                 val = int(line.split(',')[1].strip())
                 self._variables['dummy_var_{}'.format(dummy_count)] = val
+                in_list = False
 
             elif in_list:
                 key = line.split(',')[0].strip()

@@ -54,10 +54,9 @@ class WeatherService(Service):
             response_json = response.json()
 
             # try to find day
-            noun_words = [noun[0].lower() for noun in nouns]
             days = set(['monday', 'tuesday', 'wednesday', 'thursday', 'friday',
                         'saturday', 'sunday', 'tomorrow'])
-            intersect = days.intersection(set(noun_words))
+            intersect = days.intersection(set(features['keywords']))
 
             # remember if the user asked about today/tomorrow for more natural
             # result output language

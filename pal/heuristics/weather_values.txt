@@ -1,29 +1,31 @@
-weather, 80
 temperature, 70
 [
-    cold,
+    weather
+    forecast
+], 80
+[   
+    cold
     cool
 ], 50
 [
-    hot, 
+    hot
     warm
 ], 50
 [ 
-    high,
+    high
     low
 ], 30
 [
-    snow,
+    snow
     rain
 ], 70
-forecast, 80
 [
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday,
-    Sunday,
+    monday
+    tuesday
+    wednesday
+    thursday
+    friday
+    saturday
+    sunday
     Tomorrow
 ], 30
