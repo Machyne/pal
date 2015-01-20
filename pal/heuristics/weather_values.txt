@@ -1,13 +1,21 @@
 weather, 80
 temperature, 70
-cold, 50
-hot, 50
-cool, 50
-high, 30
-low, 30
-warm, 50
-snow, 70
-rain, 70
+[
+    cold,
+    cool
+], 50
+[
+    hot, 
+    warm
+], 50
+[ 
+    high,
+    low
+], 30
+[
+    snow,
+    rain
+], 70
 forecast, 80
 [
     Monday,

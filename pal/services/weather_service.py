@@ -1,6 +1,6 @@
-import requests
-import json
 import datetime
+
+import requests
 
 from pal.services.service import Service
 
@@ -17,17 +17,8 @@ class WeatherService(Service):
 
         # Why are there so many types of things that a location can be tagged
         # as? GPE = Geo-Political Entity; GSP = "Geo-Socio-Political group"
-        places = [place[0] for place in features['tree'] if place[1] == 'GPE']
-        if len(places) == 0:
-            places = [place[0] for place in features['tree']
-                      if place[1] == 'GSP']
-        if len(places) == 0:
-            places = [place[0] for place in features['tree']
-                      if place[1] == 'LOCATION']
-        if len(places) == 0:
-            # last ditch effort, maybe it got tagged as a person
-            places = [place[0] for place in features['tree']
-                      if place[1] == 'PERSON']
+        places = [place[0] for place in features['tree'] if place[1] in
+                  ['GPE', 'GSP', 'LOCATION', 'PERSON']]
         orgs = [org[0] for org in features['tree'] if org[1] == 'ORGANIZATION']
         nouns = features['nouns']
         tokens = set([t[0].lower() for t in features['tree']])
@@ -60,7 +51,7 @@ class WeatherService(Service):
 
             payload = {'q': yql_query, 'format': 'json'}
             response = requests.post(baseurl, params=payload)
-            response_json = json.loads(response.text)
+            response_json = response.json()
 
             # try to find day
             noun_words = [noun[0].lower() for noun in nouns]
@@ -100,6 +91,7 @@ class WeatherService(Service):
                     forecasts = forecasts[0]
                 forecasts = forecasts['item']['forecast']
             except Exception, e:
+                # TODO: different response once we have an error spec up
                 return {'response': "Error fetching weather information"}
 
             yahoo_day = yahoo_days[day]
