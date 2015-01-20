@@ -16,3 +16,8 @@
     antonym
     opposite
 ], 65
+pronounce, -50
+[
+    word
+    words
+], 30
