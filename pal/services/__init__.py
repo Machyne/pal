@@ -1,9 +1,11 @@
 from pal.services.directory_service import DirectoryService
 from pal.services.omdb_service import OMDBService
+from pal.services.weather_service import WeatherService
 
 _SERVICES = {
     'directory': DirectoryService('stalkernet'),
-    'ombd': OMDBService('movie')
+    'ombd': OMDBService('movie'),
+    'weather': WeatherService('weather')
 }
 
 

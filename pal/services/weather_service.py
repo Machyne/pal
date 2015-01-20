@@ -31,6 +31,7 @@ class WeatherService(Service):
         orgs = [org[0] for org in features['tree'] if org[1] == 'ORGANIZATION']
         nouns = features['nouns']
         tokens = set([t[0].lower() for t in features['tree']])
+
         if len(places) == 1:
             city = places[0]
 
@@ -144,17 +145,17 @@ class WeatherService(Service):
             response = ""
             if 'high' in tokens:
                 response = ("The high for {0} in {1} will "
-                            "be {2} degrees").format(day_str, loc, high_temp)
+                            "be {2} degrees.").format(day_str, loc, high_temp)
             elif 'low' in tokens:
                 response = ("The low for {0} in {1} will "
-                            "be {2} degrees").format(day_str, loc, low_temp)
+                            "be {2} degrees.").format(day_str, loc, low_temp)
             elif 'rain' in tokens:
                 # see https://developer.yahoo.com/weather/documentation.html
                 # for list of all weather condition codes
                 rain_codes = set([1, 2, 3, 4, 5, 8, 9, 10, 11, 12,
                                   35, 37, 38, 39, 40, 45, 47])
                 if weather_code in rain_codes:
-                    response = ("It looks like there will be {0} {1}{2}"
+                    response = ("It looks like there will be {0} {1}{2}."
                                 ).format(weather_descript,
                                          preposition, day_str)
                 else:
@@ -163,39 +164,39 @@ class WeatherService(Service):
             elif 'snow' in tokens:
                 snow_codes = set([5, 7, 13, 14, 15, 16, 41, 42, 43, 46])
                 if weather_code in snow_codes:
-                    response = ("It looks like there will be {0} {1}{2}"
+                    response = ("It looks like there will be {0} {1}{2}."
                                 ).format(weather_descript,
                                          preposition, day_str)
                 else:
-                    response = ("I don't see snow in the forecast {0}{1}"
+                    response = ("I don't see snow in the forecast {0}{1}."
                                 ).format(preposition, day_str)
             elif len(cold_words.intersection(tokens)) > 0:
                 cold_threshold = 40
-                if int(high_temp) < cold_threshold:
-                    response = ("It looks cold to me. Only up to {0} degrees"
-                                ).format(high_temp)
+                if int(low_temp) < cold_threshold:
+                    response = ("It looks cold to me. Down to {0} degrees."
+                                ).format(low_temp)
                 else:
                     response = ("It doesn't look cold. The high will be "
-                                "{0} degrees"
+                                "{0} degrees."
                                 ).format(high_temp)
             elif len(warm_words.intersection(tokens)) > 0:
                 warm_threshold = 69
                 if int(high_temp) > warm_threshold:
-                    response = ("It looks warm to me. Up to {0} degrees"
+                    response = ("It looks warm to me. Up to {0} degrees."
                                 ).format(high_temp)
                 else:
-                    response = ("It doesn't look warm. The high will be "
-                                "{0} degrees"
+                    response = ("It doesn't look very warm. The high will be "
+                                "{0} degrees."
                                 ).format(high_temp)
             else:
                 # some generic response
                 response = ("There's going to be {4} {5}{0} in {1}. "
                             "The high will be {2} degrees "
-                            "and the low will be {3} degrees"
+                            "and the low will be {3} degrees."
                             ).format(day_str, loc, high_temp,
                                      low_temp, weather_descript, preposition)
             return {'response': response}
 
         else:
             # more than one or no GPE found... now what?
-            return {'response': 'Unable to parse query'}
+            return None

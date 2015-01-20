@@ -2,10 +2,12 @@ weather, 80
 temperature, 70
 cold, 50
 hot, 50
+cool, 50
 high, 30
 low, 30
 warm, 50
-hasProperNouns, 40
+snow, 70
+rain, 70
 forecast, 80
 [
     Monday,
