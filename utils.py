@@ -21,3 +21,9 @@ def infer_date(date_word):
         current_day = current_date.weekday()
         days_in_future = (desired_day - current_day) % 7
         return current_date + timedelta(days=days_in_future)
+
+
+def filter_dict_by_keys(dict_, field_names):
+    """ Returns a copy of `dict_` with only the fields in `field_names`"""
+    return {key: value for (key, value) in dict_.items()
+            if key in field_names}

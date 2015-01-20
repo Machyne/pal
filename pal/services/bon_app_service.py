@@ -4,8 +4,8 @@
 
 from api.food.bon_api import BonAPI
 from pal.services.service import Service
-from pal.utils import infer_date
-from pal.utils import weekdays
+from utils import infer_date
+from utils import weekdays
 
 
 def wrap_response(func):

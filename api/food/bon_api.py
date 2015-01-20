@@ -16,7 +16,7 @@ import json
 import re
 import requests
 
-from helper import filter_dict_by_keys
+from utils import filter_dict_by_keys
 
 # Constants for scraping the cafe pages
 _CAFE_URL = 'http://carleton.cafebonappetit.com/cafe/{cafe_name}/{date}/'
