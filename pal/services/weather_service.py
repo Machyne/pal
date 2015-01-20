@@ -5,10 +5,6 @@ import datetime
 from pal.services.service import Service
 
 
-class ForeCastNotAvailableException(Exception):
-    pass
-
-
 class WeatherService(Service):
 
     def applies_to_me(self, client, feature_request_type):
@@ -19,10 +15,22 @@ class WeatherService(Service):
 
     def go(self, features):
 
+        # Why are there so many types of things that a location can be tagged
+        # as? GPE = Geo-Political Entity; GSP = "Geo-Socio-Political group"
         places = [place[0] for place in features['tree'] if place[1] == 'GPE']
+        if len(places) == 0:
+            places = [place[0] for place in features['tree']
+                      if place[1] == 'GSP']
+        if len(places) == 0:
+            places = [place[0] for place in features['tree']
+                      if place[1] == 'LOCATION']
+        if len(places) == 0:
+            # last ditch effort, maybe it got tagged as a person
+            places = [place[0] for place in features['tree']
+                      if place[1] == 'PERSON']
         orgs = [org[0] for org in features['tree'] if org[1] == 'ORGANIZATION']
         nouns = features['nouns']
-        keywords = features['keywords']
+        tokens = set([t[0].lower() for t in features['tree']])
         if len(places) == 1:
             city = places[0]
 
@@ -48,11 +56,10 @@ class WeatherService(Service):
                 yql_query = ("select * from weather.forecast where woeid in "
                              "(select woeid from geo.places(1) where "
                              "text=\"{0}\")").format(city)
-            print yql_query
+
             payload = {'q': yql_query, 'format': 'json'}
             response = requests.post(baseurl, params=payload)
             response_json = json.loads(response.text)
-            # print response_json
 
             # try to find day
             noun_words = [noun[0].lower() for noun in nouns]
@@ -87,37 +94,108 @@ class WeatherService(Service):
             try:
                 forecasts = response_json['query']['results']['channel']
                 # 80 char line limit..
+                if type(forecasts) is list:
+                    # 2 ids for some reason, just take first result
+                    forecasts = forecasts[0]
                 forecasts = forecasts['item']['forecast']
             except Exception, e:
-                raise e
+                return {'response': "Error fetching weather information"}
 
             yahoo_day = yahoo_days[day]
             days_forecast = [f for f in forecasts if f['day'] == yahoo_day]
+
+            # pretty format day
+            day_str = ""
+            if isToday:
+                day_str = "today"
+            elif isTomorrow:
+                day_str = "tomorrow"
+            else:
+                day_str = day.title()
+
+            # format the location
+            loc = ""
+            if state is not None:
+                loc = "{0}, {1}".format(city, state)
+            else:
+                loc = city
+
             if len(days_forecast) > 0:
                 day_forecast = days_forecast[0]
             else:
                 return {'response':
                         ("Weather information not available for "
-                         "{0} on {1}").format(city, day.title())}
+                         "{0} on {1}").format(loc, day_str)}
 
+            # extract weather data
             high_temp = day_forecast['high']
             low_temp = day_forecast['low']
+            weather_code = int(day_forecast['code'])
+            weather_descript = day_forecast['text'].lower()
 
+            preposition = ""
+            if not (isToday or isTomorrow):
+                preposition = "on "
+
+            cold_words = set(['cold', 'cool', 'freezing'])
+            warm_words = set(['hot', 'warm'])
+
+            # gen responses
             response = ""
-
-            if 'high' in keywords:
-                response = ("The high for {0} will "
-                            "be {1} degrees").format(day.title(), high_temp)
-            elif 'low' in keywords:
-                response = ("The low for {0} will "
-                            "be {1} degrees").format(day.title(), low_temp)
+            if 'high' in tokens:
+                response = ("The high for {0} in {1} will "
+                            "be {2} degrees").format(day_str, loc, high_temp)
+            elif 'low' in tokens:
+                response = ("The low for {0} in {1} will "
+                            "be {2} degrees").format(day_str, loc, low_temp)
+            elif 'rain' in tokens:
+                # see https://developer.yahoo.com/weather/documentation.html
+                # for list of all weather condition codes
+                rain_codes = set([1, 2, 3, 4, 5, 8, 9, 10, 11, 12,
+                                  35, 37, 38, 39, 40, 45, 47])
+                if weather_code in rain_codes:
+                    response = ("It looks like there will be {0} {1}{2}"
+                                ).format(weather_descript,
+                                         preposition, day_str)
+                else:
+                    response = ("I don't see rain in the forecast {0}{1}"
+                                ).format(preposition, day_str)
+            elif 'snow' in tokens:
+                snow_codes = set([5, 7, 13, 14, 15, 16, 41, 42, 43, 46])
+                if weather_code in snow_codes:
+                    response = ("It looks like there will be {0} {1}{2}"
+                                ).format(weather_descript,
+                                         preposition, day_str)
+                else:
+                    response = ("I don't see snow in the forecast {0}{1}"
+                                ).format(preposition, day_str)
+            elif len(cold_words.intersection(tokens)) > 0:
+                cold_threshold = 40
+                if int(high_temp) < cold_threshold:
+                    response = ("It looks cold to me. Only up to {0} degrees"
+                                ).format(high_temp)
+                else:
+                    response = ("It doesn't look cold. The high will be "
+                                "{0} degrees"
+                                ).format(high_temp)
+            elif len(warm_words.intersection(tokens)) > 0:
+                warm_threshold = 69
+                if int(high_temp) > warm_threshold:
+                    response = ("It looks warm to me. Up to {0} degrees"
+                                ).format(high_temp)
+                else:
+                    response = ("It doesn't look warm. The high will be "
+                                "{0} degrees"
+                                ).format(high_temp)
             else:
-                response = ("The high for {0} will be {1} degrees and the low "
-                            "will be {2} "
-                            "degrees").format(day.title(), high_temp, low_temp)
+                # some generic response
+                response = ("There's going to be {4} {5}{0} in {1}. "
+                            "The high will be {2} degrees "
+                            "and the low will be {3} degrees"
+                            ).format(day_str, loc, high_temp,
+                                     low_temp, weather_descript, preposition)
             return {'response': response}
 
         else:
             # more than one or no GPE found... now what?
-            pass
-        # if place
+            return {'response': 'Unable to parse query'}
