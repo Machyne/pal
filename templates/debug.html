@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PAL Debug Client</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='debug.css') }}">
+  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <script src="{{ url_for('static', filename='debug.js') }}"></script>
+</head>
+<body>
+  <div class="query">
+    <a class="home-link" href="/">Regular view</a>
+    <div class="center">
+      <h1 class="prompt-label">Hi, how can I help you?</h1>
+      <input class="prompt" type="text">
+        <input type="button" class="btn" id="go-btn" value="Go!">
+      <div class="result">&nbsp;</div>
+    </div>
+  </div><div class="history">
+    <div class="title">History</div>
+    <div class="container" style="width:100%;">
+      <div class="row">
+        <div class="col-sm-6">
+          <ul class="history-prompt">
+            <li>test</li>
+          </ul>
+        </div>
+        <div class="col-sm-6">
+          <ul class="history-result">
+            <li>test</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="endpoints">
+    <div class="standard_nlp endpoint">
+      <div class="title">NLP</div>
+      <textarea></textarea>
+      <a href="#" class="send">Send</a>
+    </div><div class="features endpoint">
+      <div class="title">Features</div>
+      <textarea></textarea>
+      <a href="#" class="send">Send</a>
+    </div><div class="classify endpoint">
+      <div class="title">Classification</div>    
+      <textarea></textarea>
+      <a href="#" class="send">Send</a>
+    </div><div class="execute endpoint">
+      <div class="title">Execution</div>
+      <textarea></textarea>
+      <a href="#" class="send">Send</a>
+    </div>
+  </div>
+</body>
+</html>

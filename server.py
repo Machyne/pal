@@ -49,6 +49,11 @@ def docs():
 def index():
     return render_template('home.html')
 
+
+@app.route('/debug')
+def debug():
+    return render_template('debug.html')
+
 # main doesn't run in wsgi
 app.register_blueprint(pal_blueprint, url_prefix='/api')
 

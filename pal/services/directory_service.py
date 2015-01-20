@@ -14,7 +14,7 @@ class DirectoryService(Service):
         return True
 
     def get_confidence(self, features):
-        return 0
+        return super(self.__class__, self).get_confidence(features)
 
     def go(self, features):
         # print features

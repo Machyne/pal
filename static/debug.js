@@ -12,18 +12,36 @@ var queryPAL = function(query, callback) {
   });
 };
 
+var queryEndpoint = function(query, endpoint) {
+  $.ajax({
+    type: 'POST',
+    url: '/api/' + endpoint,
+    data: {
+      query: query,
+      client: 'web'
+    },
+    success: function (response) {
+      $('.' + endpoint + ' textarea').val(JSON.stringify(response));
+      console.log(JSON.stringify(response));
+    }
+  });
+}
+
 $(document).ready(function () {
 
   var showResult = function (result) {
-        $('.result').html(result);
-        $('.history-result').prepend('<li>' + result + '</li>');
+        $('.history-result').append('<li>' + result + '</li>');
       },
       prompt = $('.prompt'),
       sendQuery = function () {
         var query = prompt.val();
         if (query.length > 0) {
           queryPAL(query, showResult);
-          $('.history-prompt').prepend('<li>' + query + '</li>');
+          queryEndpoint(query, 'standard_nlp');
+          queryEndpoint(query, 'features');
+          queryEndpoint(query, 'classify');
+          queryEndpoint(query, 'execute');
+          $('.history-prompt').append('<li>' + query + '</li>');
         }
       };
 

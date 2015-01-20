@@ -21,7 +21,7 @@ class TenseClassifier(Resource):
         nickname='tense',
         parameters=[
             {
-                'name': 'sentence',
+                'name': 'query',
                 'description': 'The sentence to classify.',
                 'required': True,
                 'allowMultiple': False,
@@ -30,5 +30,6 @@ class TenseClassifier(Resource):
             }
         ])
     def post(self):
-        processed_data = StandardNLP.process(request.form['sentence'])
-        return get_tense(processed_data['pos'])
+        params = {x: request.form[x] for x in request.form}
+        StandardNLP.process(params)
+        return get_tense(params['features']['pos'])

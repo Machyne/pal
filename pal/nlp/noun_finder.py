@@ -24,7 +24,7 @@ class NounFinder(Resource):
         nickname='nouns',
         parameters=[
             {
-                'name': 'sentence',
+                'name': 'query',
                 'description': 'The sentence from which to find nouns.',
                 'required': True,
                 'allowMultiple': False,
@@ -33,5 +33,6 @@ class NounFinder(Resource):
             }
         ])
     def post(self):
-        processed_data = StandardNLP.process(request.form['sentence'])
-        return find_nouns(processed_data['pos'])[1]
+        params = {x: request.form[x] for x in request.form}
+        StandardNLP.process(params)
+        return find_nouns(params['features']['pos'])[1]

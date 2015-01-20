@@ -1,0 +1,23 @@
+[
+    define
+    definition
+    meaning
+    mean
+    means
+], 70
+[
+    synonyms
+    synonym
+    similar
+    same
+], 65
+[
+    antonyms
+    antonym
+    opposite
+], 65
+pronounce, -50
+[
+    word
+    words
+], 30
