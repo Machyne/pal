@@ -14,12 +14,11 @@ class DictionaryService(Service):
     def get_confidence(self, features):
         return super(self.__class__, self).get_confidence(features)
 
-    _SYNONYM = set(['synonym', 'similar', 'same'])
+    _SYNONYM = set(['synonyms', 'synonym', 'similar', 'same'])
 
-    _ANTONYM = set(['antonym', 'opposite'])
+    _ANTONYM = set(['antonyms', 'antonym', 'opposite'])
 
     def go(self, features):
-        print 'dict go'
         tokens = map(str.lower, features['tokens'])
         while len(tokens) and (len(tokens[-1]) < 3 or
                                tokens[-1] == 'mean'):
@@ -27,10 +26,26 @@ class DictionaryService(Service):
         if len(tokens):
             word = tokens[-1]
             tokens = set(tokens)
-            if len(self._SYNONYM.intersection(tokens)):
-                print 'syno'
-            elif len(self._ANTONYM.intersection(tokens)):
-                print 'anto'
+            synonym = bool(len(self._SYNONYM.intersection(tokens)))
+            antonym = bool(len(self._ANTONYM.intersection(tokens)))
+            if synonym or antonym:
+                url = 'http://www.thesaurus.com/browse/' + word
+                r = requests.get(url)
+                soup = BeautifulSoup(r.text)
+                big_wrapper = soup.find('div', class_='synonyms')
+
+                wrapper = None
+                if synonym:
+                    wrapper = big_wrapper.find(class_='relevancy-list')
+                else:
+                    wrapper = big_wrapper.find('section', class_='antonyms')
+
+                all_words = wrapper.find_all('span', class_='text')
+                all_words = map(lambda el: el.get_text(), all_words)
+                lead = '{} for "{}": '.format(
+                    'Synonyms' if synonym else 'Antonyms', word)
+                return {'response': lead + ', '.join(all_words[:7]) + '.',
+                        'body': lead + ', '.join(all_words) + '.'}
             else:
                 url = 'http://dictionary.reference.com/browse/' + word
                 r = requests.get(url)
@@ -39,4 +54,6 @@ class DictionaryService(Service):
                 short = soup.find_all(class_='def-content')[0].get_text()
                 for def_list in soup.find_all(class_='def-list'):
                     full_text += def_list.get_text()
+                short = 'Definition of "{}": {}'.format(word, short)
                 return {'response': short, 'body': full_text}
+        return None
