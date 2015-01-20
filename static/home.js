@@ -16,11 +16,14 @@ $(document).ready(function () {
 
   var showResult = function (result) {
         $('.result').html(result);
+        $('.history-result').prepend('<li>' + result + '</li>');
       },
       prompt = $('.prompt'),
       sendQuery = function () {
-        if (prompt.val().length > 0) {
-          queryPAL(prompt.val(), showResult);
+        var query = prompt.val();
+        if (query.length > 0) {
+          queryPAL(query, showResult);
+          $('.history-prompt').prepend('<li>' + query + '</li>');
         }
       };
 
