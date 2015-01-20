@@ -32,4 +32,4 @@ class TenseClassifier(Resource):
     def post(self):
         params = {x: request.form[x] for x in request.form}
         StandardNLP.process(params)
-        return get_tense(params['pos'])
+        return get_tense(params['features']['pos'])

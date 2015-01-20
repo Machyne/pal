@@ -56,4 +56,4 @@ class KeywordFinder(Resource):
     def post(self):
         params = {x: request.form[x] for x in request.form}
         StandardNLP.process(params)
-        return find_keywords(params['tokens'])
+        return find_keywords(params['features']['tokens'])

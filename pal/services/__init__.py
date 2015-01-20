@@ -1,9 +1,9 @@
 from pal.services.directory_service import DirectoryService
-# from pal.services.omdb_service import OMDBService
+from pal.services.omdb_service import OMDBService
 
 _SERVICES = {
-    'directory': DirectoryService()
-    # OMDBService()
+    'directory': DirectoryService('stalkernet'),
+    'ombd': OMDBService('movie')
 }
 
 
