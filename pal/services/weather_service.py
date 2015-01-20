@@ -200,3 +200,14 @@ class WeatherService(Service):
         else:
             # more than one or no GPE found... now what?
             return None
+
+# TOOD/FIXES:
+# 1. Sometimes things like "Rain" and "Weather" are tagged as GPE if they
+# appear first in a sentence and are capitalized
+# 2. International locations without unique names -- given XXXXXXX, YY,
+# YY is assumed to be a state which isn't always true
+# 3. Return HTML/JSON with prettier weather info/clickable to go to full
+# info on 3rd party site
+# 4. More types of questions/more varied responses?
+# 5. Should probably stick a Yahoo logo somewhere otherwise we're violating
+# their ToS (see https://developer.yahoo.com/attribution/).
