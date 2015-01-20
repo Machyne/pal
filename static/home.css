@@ -35,6 +35,11 @@ html, body, .page {
 .prompt:focus {
   border-color: rgb(81, 203, 238);
 }
+#go-btn {
+    height: 36px;
+    width: 36px;
+    font-size: 16px;
+}
 .result {
   margin: 20px 0;
   font-size: 16px;

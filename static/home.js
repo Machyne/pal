@@ -10,18 +10,29 @@ var queryPAL = function(query, callback) {
       callback(response.result.response);
     }
   });
-}
+};
 
 $(document).ready(function () {
 
-  $('.prompt').focus();
-
-  $('.prompt').on('keypress', function (e) {
-    if (e.which == 13) {
-      queryPAL($(this).val(), function (result) {
+  var showResult = function (result) {
         $('.result').html(result);
-      });
+      },
+      prompt = $('.prompt'),
+      sendQuery = function () {
+        if (prompt.val().length > 0) {
+          queryPAL(prompt.val(), showResult);
+        }
+      };
+
+  prompt.focus();
+
+  prompt.on('keypress', function (e) {
+    // 'enter' key
+    if (e.which == 13) {
+      sendQuery();
     }
-  });
+  }).on('change', sendQuery);
+
+  $('#go-btn').on('click', sendQuery);
 
 });
