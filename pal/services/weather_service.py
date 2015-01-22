@@ -192,7 +192,7 @@ class WeatherService(Service):
             # more than one or no GPE found... now what?
             return None
 
-# TOOD/FIXES:
+# TODO/FIXES:
 # 1. Sometimes things like "Rain" and "Weather" are tagged as GPE if they
 # appear first in a sentence and are capitalized
 #
