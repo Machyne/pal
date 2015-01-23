@@ -52,7 +52,7 @@ $(document).ready(function () {
     if (e.which == 13) {
       sendQuery();
     }
-  }).on('change', sendQuery);
+  });
 
   $('#go-btn').on('click', sendQuery);
 
