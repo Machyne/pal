@@ -8,9 +8,8 @@ _SERVICES = {
     'dictionary': DictionaryService('dictionary'),
     'directory': DirectoryService('stalkernet'),
     'ombd': OMDBService('movie'),
-    'weather': WeatherService('weather')
-    'directory': DirectoryService(),
-    'food': BonAppetitService(),
+    'weather': WeatherService('weather'),
+    'food': BonAppetitService('bonapp'),
 }
 
 

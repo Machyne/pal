@@ -11,7 +11,6 @@ from utils import weekdays
 def wrap_response(func):
     return lambda *args: {'response': func(*args)}
 
-BURTON = 'burton-hall'
 LDC = 'east-hall'
 SAYLES = 'sayles-hill-cafe'
 
@@ -20,7 +19,7 @@ class BonAppetitService(Service):
 
     cafe_keywords = {'ldc': LDC,
                      'east': LDC,
-                     'burton': BURTON,
+                     'burton': 'burton',
                      'sayles': SAYLES,
                      'sayles-hill': SAYLES,
                      'weitz': "weitz-cafe"}
@@ -71,7 +70,7 @@ class BonAppetitService(Service):
         return True
 
     def get_confidence(self, features):
-        return 1
+        return super(self.__class__, self).get_confidence(features)
 
     @wrap_response
     def go(self, features):
