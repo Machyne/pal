@@ -118,9 +118,9 @@ FAKE_DATA = {
         u'name': u'East Hall'},
     u'dayparts': {
         u'Breakfast': {
-            u'endtime': u'10: 00',
+            u'endtime': u'10:00',
             u'id': u'1',
-            u'starttime': u'07: 30',
+            u'starttime': u'07:30',
             u'stations': {
                 u'Breakfast': {
                     u'id': u'5774',
@@ -169,9 +169,9 @@ FAKE_DATA = {
                             u'Burrito with Saut\xe9ed Peppers'),
                         u'station': u'Wild Thymes'}]}}},
         u'Dinner': {
-            u'endtime': u'19: 00',
+            u'endtime': u'19:00',
             u'id': u'4',
-            u'starttime': u'16: 45',
+            u'starttime': u'16:45',
             u'stations': {
                 u'American Regional': {
                     u'id': u'774',
@@ -299,9 +299,9 @@ FAKE_DATA = {
                             u'label': u"Shepard's Pie",
                             u'station': u'Wild Thymes'}]}}},
             u'Lunch': {
-                u'endtime': u'14: 00',
+                u'endtime': u'14:00',
                 u'id': u'3',
-                u'starttime': u'11: 30',
+                u'starttime': u'11:30',
                 u'stations': {
                     u'American Regional': {
                         u'id': u'774',
