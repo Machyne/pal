@@ -132,7 +132,7 @@ FAKE_DATA = {
                                 u'Containing Ingredients')},
                         u'description': u'',
                         u'id': u'2941794',
-                        u'label': (u'Scrambled Eggs,\n'
+                        u'label': (u'Scrambled Eggs, '
                                    u'Scrambled Eggs with Cheese'),
                         u'station': u'Breakfast'},
                         {
@@ -143,7 +143,7 @@ FAKE_DATA = {
                                 u'Containing Ingredients')},
                         u'description': u'',
                         u'id': u'2941798',
-                        u'label': u'Bacon,\nVegetarian Sausage',
+                        u'label': u'Bacon, Vegetarian Sausage',
                         u'station': u'Breakfast'}]},
                 u'Cucina': {
                     u'id': u'773',
@@ -178,10 +178,10 @@ FAKE_DATA = {
                     u'items': [{
                         u'cor_icon': [],
                         u'description': (
-                            u'Sloppy Joes,\nGrilled Chicken Breast,\n'
-                            u'House Edamame Burger,\nHouse Chipotle French'
-                            u' Fries,\nSaut\xe9ed Bell Peppers,\n'
-                            u'Saut\xe9ed Onions,\nSaut\xe9ed Mushrooms '
+                            u'Sloppy Joes, Grilled Chicken Breast, '
+                            u'House Edamame Burger, House Chipotle French'
+                            u' Fries, Saut\xe9ed Bell Peppers, '
+                            u'Saut\xe9ed Onions, Saut\xe9ed Mushrooms '
                             u'Roasted Parsnips(WB)'),
                         u'id': u'2969173',
                         u'label': u'Hot Sandwiches etc',
@@ -192,7 +192,7 @@ FAKE_DATA = {
                         u'cor_icon': [],
                         u'description': u'',
                         u'id': u'2969141',
-                        u'label': (u'Steamed Brown Rice,\n'
+                        u'label': (u'Steamed Brown Rice,'
                                    u'Steamed White Rice'),
                         u'station': u'Chopsticks and Woks'},
                         {
@@ -220,13 +220,13 @@ FAKE_DATA = {
                     u'items': [{u'cor_icon': [],
                                 u'description': (
                                 u'Hummus Pizza with Broccoli and Cheddar,'
-                                u'\nItalian Sausage Pizza,\n"Hasting Dairy'
-                                u' Co-Op" Four Cheese(LC),\nMade Without '
+                                u' Italian Sausage Pizza, "Hasting Dairy'
+                                u' Co-Op" Four Cheese(LC), Made Without '
                                 u'Gluten Pizza Available upon Request'),
                                 u'id': u'2969132',
                                 u'label': u'Pizza'},
                                {u'cor_icon': [],
-                                u'description': (u'Pasta,\nSauce Marinara,\n'
+                                u'description': (u'Pasta, Sauce Marinara, '
                                                  u'Alfredo Sauce'),
                                 u'id': u'2941812',
                                 u'label': (u"Chef's choice Pasta with choice "
@@ -260,8 +260,8 @@ FAKE_DATA = {
                             u'cor_icon': [],
                             u'description': (
                                 u'Hummus Pizza with Broccoli and Cheddar,'
-                                u'\nItalian Sausage Pizza,\n"Hasting Dairy'
-                                u' Co-Op" Four Cheese(LC),\nMade Without '
+                                u' Italian Sausage Pizza, "Hasting Dairy'
+                                u' Co-Op" Four Cheese(LC), Made Without '
                                 u'Gluten Pizza Available upon Request'),
                             u'id': u'2969132',
                             u'label': u'Pizza'}]},
@@ -298,103 +298,103 @@ FAKE_DATA = {
                             u'id': u'2969179',
                             u'label': u"Shepard's Pie",
                             u'station': u'Wild Thymes'}]}}},
-            u'Lunch': {
-                u'endtime': u'14:00',
-                u'id': u'3',
-                u'starttime': u'11:30',
-                u'stations': {
-                    u'American Regional': {
-                        u'id': u'774',
-                        u'items': [{
-                            u'cor_icon': [],
-                            u'description': (
-                                u'Sloppy Joes,\nGrilled Chicken Breast,\n'
-                                u'House Edamame Burger,\nHouse Chipotle French'
-                                u' Fries,\nSaut\xe9ed Bell Peppers,\n'
-                                u'Saut\xe9ed Onions,\nSaut\xe9ed Mushrooms '
-                                u'Roasted Parsnips(WB)'),
-                            u'id': u'2969173',
-                            u'label': u'Hot Sandwiches etc',
-                            u'station': u'American Regional'}]},
-                    u'Chopsticks and Woks': {
-                        u'id': u'776',
-                        u'items': [{
-                            u'cor_icon': [],
-                            u'description': u'',
-                            u'id': u'2969141',
-                            u'label': (u'Steamed Brown Rice,\n'
-                                       u'Steamed White Rice'),
-                            u'station': u'Chopsticks and Woks'},
-                            {
-                                u'cor_icon': {
-                                    u'9': (
-                                        u'Made without Gluten-'
-                                        u'Containing Ingredients')},
-                                u'description': u'',
-                                u'id': u'2969146',
-                                u'label': (u'Five Spice Chicken Stir-fry with '
-                                           u'Carrots and Celery '),
-                                u'station': u'Chopsticks and Woks'},
-                            {
-                                u'cor_icon': {
-                                    u'4': u'vegan',
-                                    u'9': (
-                                        u'Made without Gluten-'
-                                        u'Containing Ingredients')},
-                                u'description': u'',
-                                u'id': u'2969147',
-                                u'label': u'Stir-fried Bok Choy and Cabbage ',
-                                u'station': u'Chopsticks and Woks'}]},
-                    u'Cucina': {
-                        u'id': u'773',
-                        u'items': [{
-                            u'cor_icon': [],
-                            u'description': (u'Pasta,\nSauce Marinara,\n'
-                                             u'Alfredo Sauce'),
-                            u'id': u'2941812',
-                            u'label': (u"Chef's choice Pasta with choice "
-                                       u"of sauce"),
-                            u'station': u'Cucina'},
-                            {
-                                u'cor_icon': [],
-                                u'description': u'',
-                                u'id': u'2969121',
-                                u'label': (u'Beef Chow Mein or Vegetarian '
-                                           u'Chow Mein'),
-                                u'station': u'Cucina'}]},
-                    u'Cucina Pizza': {
-                        u'id': u'775',
-                        u'items': [{
-                            u'cor_icon': [],
-                            u'description': (
-                                u'Hummus Pizza with Broccoli and Cheddar,'
-                                u'\nItalian Sausage Pizza,\n"Hasting Dairy'
-                                u' Co-Op" Four Cheese(LC),\nMade Without '
-                                u'Gluten Pizza Available upon Request'),
-                            u'id': u'2969132',
-                            u'label': u'Pizza',
-                            u'station': u'Cucina Pizza'}]},
-                    u'Soup': {
-                        u'id': u'5775',
-                        u'items': [{
+        u'Lunch': {
+            u'endtime': u'14:00',
+            u'id': u'3',
+            u'starttime': u'11:30',
+            u'stations': {
+                u'American Regional': {
+                    u'id': u'774',
+                    u'items': [{
+                        u'cor_icon': [],
+                        u'description': (
+                            u'Sloppy Joes, Grilled Chicken Breast, '
+                            u'House Edamame Burger, House Chipotle French'
+                            u' Fries, Saut\xe9ed Bell Peppers, '
+                            u'Saut\xe9ed Onions, Saut\xe9ed Mushrooms '
+                            u'Roasted Parsnips(WB)'),
+                        u'id': u'2969173',
+                        u'label': u'Hot Sandwiches etc',
+                        u'station': u'American Regional'}]},
+                u'Chopsticks and Woks': {
+                    u'id': u'776',
+                    u'items': [{
+                        u'cor_icon': [],
+                        u'description': u'',
+                        u'id': u'2969141',
+                        u'label': (u'Steamed Brown Rice, '
+                                   u'Steamed White Rice'),
+                        u'station': u'Chopsticks and Woks'},
+                        {
                             u'cor_icon': {
                                 u'9': (
                                     u'Made without Gluten-'
                                     u'Containing Ingredients')},
                             u'description': u'',
-                            u'id': u'2969102',
-                            u'label': u'Santa Fe Chicken and Rice',
-                            u'station': u'Soup'},
-                            {
+                            u'id': u'2969146',
+                            u'label': (u'Five Spice Chicken Stir-fry with '
+                                       u'Carrots and Celery '),
+                            u'station': u'Chopsticks and Woks'},
+                        {
                             u'cor_icon': {
                                 u'4': u'vegan',
                                 u'9': (
                                     u'Made without Gluten-'
                                     u'Containing Ingredients')},
                             u'description': u'',
-                            u'id': u'2969103',
-                            u'label': u'Ginger Carrot and Orange Soup ',
-                            u'station': u'Soup'}]}}}}}
+                            u'id': u'2969147',
+                            u'label': u'Stir-fried Bok Choy and Cabbage ',
+                            u'station': u'Chopsticks and Woks'}]},
+                u'Cucina': {
+                    u'id': u'773',
+                    u'items': [{
+                        u'cor_icon': [],
+                        u'description': (u'Pasta, Sauce Marinara, '
+                                         u'Alfredo Sauce'),
+                        u'id': u'2941812',
+                        u'label': (u"Chef's choice Pasta with choice "
+                                   u"of sauce"),
+                        u'station': u'Cucina'},
+                        {
+                            u'cor_icon': [],
+                            u'description': u'',
+                            u'id': u'2969121',
+                            u'label': (u'Beef Chow Mein or Vegetarian '
+                                       u'Chow Mein'),
+                            u'station': u'Cucina'}]},
+                u'Cucina Pizza': {
+                    u'id': u'775',
+                    u'items': [{
+                        u'cor_icon': [],
+                        u'description': (
+                            u'Hummus Pizza with Broccoli and Cheddar,'
+                            u' Italian Sausage Pizza, "Hasting Dairy'
+                            u' Co-Op" Four Cheese(LC), Made Without '
+                            u'Gluten Pizza Available upon Request'),
+                        u'id': u'2969132',
+                        u'label': u'Pizza',
+                        u'station': u'Cucina Pizza'}]},
+                u'Soup': {
+                    u'id': u'5775',
+                    u'items': [{
+                        u'cor_icon': {
+                            u'9': (
+                                u'Made without Gluten-'
+                                u'Containing Ingredients')},
+                        u'description': u'',
+                        u'id': u'2969102',
+                        u'label': u'Santa Fe Chicken and Rice',
+                        u'station': u'Soup'},
+                        {
+                        u'cor_icon': {
+                            u'4': u'vegan',
+                            u'9': (
+                                u'Made without Gluten-'
+                                u'Containing Ingredients')},
+                        u'description': u'',
+                        u'id': u'2969103',
+                        u'label': u'Ginger Carrot and Orange Soup ',
+                        u'station': u'Soup'}]}}}}}
 
 
 class BonAPI(object):

@@ -34,11 +34,13 @@ class BonAppetitService(Service):
         """ Builds a human-readable string from the API response dictionary """
         if requested_meals is None:
             requested_meals = self.meal_keywords
-        formatted_response = "Cafe: {cafe}\n{meals}\n"
-        cafe = api_response.get(u'current_cafe', {}).get(u'name', 'cafe')
-        formatted_meal = "{meal_name}: {start}-{end}\n{stations}\n"
-        formatted_station = "{title}:\n{entrees}\n"
-        formatted_entree = "{label}\n"
+        # FIXME: This html is hopefully temporary
+        formatted_response = "Location: {cafe}<ul>{meals}</ul>"
+        cafe = api_response.get(u'current_cafe', {}).get(u'name', 'Unknown')
+        formatted_meal = ("<li>{meal_name}: {start}-{end}"
+                          "<ul>{stations}</ul></li>")
+        formatted_station = "<li>{title}:<ul>{entrees}</ul></li>"
+        formatted_entree = "<li>{label}</li>"
         meals = ""
         dayparts = api_response.get(u'dayparts', {})
         for meal, meal_details in dayparts.iteritems():
