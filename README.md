@@ -2,7 +2,15 @@
 ---------
 
 ## Services
-- Directory
+- Dictionary/Thesaurus (actively scraped from [dictionary]
+        (http://dictionary.reference.com/browse/) or [thesaurus]
+        (http://www.thesaurus.com/browse/))
+    - [x] Definitions
+    - [x] Synonyms
+    - [x] Antonyms
+    
+- Directory (pre-scraped from [Carleton campus directory]
+        (http://apps.carleton.edu/campus/directory/))
     - Single-person queries
         - [x] Professor offices / Student rooms
         - [x] email addresses (both)
@@ -15,11 +23,7 @@
         - [ ] All professors in a department
         - [ ] "Show me all the Brians on campus"
     
-- Weather
+- Weather (requests to [Yahoo weather API]
+        (https://query.yahooapis.com/v1/public/yql?))
     - [x] High/low temperatures
     - [x] Snow/rain
-    
-- Dictionary/Thesaurus
-    - [x] Definitions
-    - [x] Synonyms
-    - [x] Antonyms
