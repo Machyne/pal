@@ -2,7 +2,7 @@
 # A service for the dining hall menus
 
 
-from api.food.bon_api import BonAPI
+from api.bonapp.bon_api import BonAPI
 from pal.services.service import Service
 from utils import infer_date
 from utils import weekdays

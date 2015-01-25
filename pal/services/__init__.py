@@ -1,6 +1,6 @@
 from pal.services.dictionary_service import DictionaryService
 from pal.services.directory_service import DirectoryService
-from pal.services.bon_app_service import BonAppetitService
+from pal.services.bonapp_service import BonAppetitService
 from pal.services.omdb_service import OMDBService
 from pal.services.weather_service import WeatherService
 
