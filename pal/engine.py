@@ -1,3 +1,5 @@
+import logging
+
 from flask import request
 from flask.ext.restful import abort
 from flask.ext.restful import Resource
@@ -12,6 +14,8 @@ from pal.sanitizer import Sanitizer
 
 
 class Engine(Resource):
+    LOGGER = logging.getLogger('PAL Engine')
+
     @swagger.operation(
         notes='End-to-end processing from query to response',
         nickname='engine',
@@ -42,9 +46,12 @@ class Engine(Resource):
     def process(cls, params):
         Validator.process(params)
         if 'error' in params:
+            cls.LOGGER.error(message=params['error'])
             abort(404, message=params['error'])
         StandardNLP.process(params)
         FeatureExtractor.process(params)
         Classifier.process(params)
         Executor.process(params)
+        # Log the whole process
+        cls.LOGGER.info(params)
         Sanitizer.process(params)
