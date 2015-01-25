@@ -42,6 +42,8 @@ class BonAppetitService(Service):
 
     def _parse_string_from_response(self, api_response, requested_meals):
         """ Builds a human-readable string from the API response dictionary """
+        # TODO: if the user asks for lunch on the weekend,
+        # give them the brunch data
         if requested_meals is None:
             requested_meals = self.meal_keywords
         # FIXME: This html is hopefully temporary
