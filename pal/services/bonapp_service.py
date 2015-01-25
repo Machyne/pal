@@ -44,18 +44,17 @@ class BonAppetitService(Service):
         """ Builds a human-readable string from the API response dictionary """
         # TODO: if the user asks for lunch on the weekend,
         # give them the brunch data
-        if requested_meals is None:
+        if requested_meals is None or len(requested_meals) == 0:
             requested_meals = self.meal_keywords
         # FIXME: This html is hopefully temporary
         formatted_response = "Location: {cafe}<ul>{meals}</ul>"
-        cafe = self.requested_cafe.capitalize()
+        cafe = self.reverse_lookup_cafes[self.requested_cafe]
         formatted_meal = ("<li>{meal_name}: {hours}"
                           "<ul>{stations}</ul></li>")
         formatted_station = "<li>{title}:<ul>{entrees}</ul></li>"
         formatted_entree = "<li>{label}</li>"
         meals = ""
-        dayparts = api_response.get(u'dayparts', {})
-        for meal, meal_details in dayparts.iteritems():
+        for meal, meal_details in api_response.iteritems():
             if meal.lower() not in requested_meals:
                 continue
             stations = ""
@@ -108,7 +107,7 @@ class BonAppetitService(Service):
                     "a single Bon Appetit location.")
         cafe = self.infer_cafe(cafe_matches.pop())
 
-        meal_matches = matching_keywords(self.meal_keywords)
+        meal_matches = matching_keywords(self.meal_keywords) or set()
 
         try:
             api_response = get_meals_for_cafe(cafe, day)
@@ -129,6 +128,11 @@ class BonAppetitService(Service):
                             "East Hall (LDC) on Saturday.")
                 if day.weekday() == 6:
                     return "Breakfast isn't served on Sunday."
+            if "lunch" in meal_matches and day.weekday() < 5:
+                # If the user is asking for lunch on the weekend, assume
+                # brunch data will satisfy them
+                meal_matches.remove("lunch")
+                meal_matches.add("brunch")
 
         return self._parse_string_from_response(api_response,
                                                 meal_matches)
