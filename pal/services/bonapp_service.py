@@ -16,8 +16,7 @@ SAYLES = "sayles-hill-cafe"
 WEITZ = "weitz-cafe"
 
 
-class BonAppetitService(Service):
-    name = 'bonapp'
+class BonAppService(Service):
 
     cafe_keywords = {'ldc': LDC,
                      'east': LDC,

@@ -1,12 +1,13 @@
+import re
+
 from pal.heuristics.heuristic import Heuristic
 
 
 class Service(object):
-    name = 'abstract_service'
 
     def __init__(self):
         """ We need the name later for heuristic stuff """
-        self.heuristic = Heuristic(self.name)
+        self.heuristic = Heuristic(self.__class__.short_name())
 
     def applies_to_me(self, client, feature_request_type):
         """ Returns true if this service is a potentially relevant to the
@@ -25,3 +26,8 @@ class Service(object):
             exernal APIs as needed.
         """
         raise NotImplementedError()
+
+    @classmethod
+    def short_name(cls):
+        name = cls.__name__
+        return re.match('(\w+)Service', name).group(1).lower()

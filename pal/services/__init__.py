@@ -1,13 +1,13 @@
 from pal.services.dictionary_service import DictionaryService
 from pal.services.directory_service import DirectoryService
-from pal.services.bonapp_service import BonAppetitService
-from pal.services.movies_service import MoviesService
+from pal.services.bonapp_service import BonAppService
+from pal.services.movie_service import MovieService
 from pal.services.weather_service import WeatherService
 
 
-_SERVICE_CLASSES = [DictionaryService, DirectoryService, MoviesService,
-                    WeatherService, BonAppetitService]
-_SERVICES = {cls.name: cls() for cls in _SERVICE_CLASSES}
+_SERVICE_CLASSES = [DictionaryService, DirectoryService, MovieService,
+                    WeatherService, BonAppService]
+_SERVICES = {cls.short_name(): cls() for cls in _SERVICE_CLASSES}
 
 
 def get_all_service_names():
