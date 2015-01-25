@@ -1,8 +1,8 @@
 #!usr/bin/env python
 # A service for the dining hall menus
 
-
-from api.bonapp.bon_api import BonAPI
+from api import DataNotAvailableException
+from api.bonapp.bon_api import get_meals_for_cafe
 from pal.services.service import Service
 from utils import infer_date
 from utils import weekdays
@@ -11,33 +11,43 @@ from utils import weekdays
 def wrap_response(func):
     return lambda *args: {'response': func(*args)}
 
-LDC = 'east-hall'
-SAYLES = 'sayles-hill-cafe'
-
+LDC = "east-hall"
+BURTON = "burton"
+SAYLES = "sayles-hill-cafe"
+WEITZ = "weitz-cafe"
 
 class BonAppetitService(Service):
 
     cafe_keywords = {'ldc': LDC,
                      'east': LDC,
-                     'burton': 'burton',
+                     'burton': BURTON,
                      'sayles': SAYLES,
                      'sayles-hill': SAYLES,
-                     'weitz': "weitz-cafe"}
+                     'weitz': WEITZ}
+    reverse_lookup_cafes = {
+        LDC: "East Dining Hall",
+        'burton': "Burton Dining Hall",
+        SAYLES: "Sayles-Hill Cafe",
+        WEITZ: "Weitz Cafe"
+    }
     meal_keywords = {'breakfast', 'brunch', 'lunch', 'dinner'}
     date_keywords = {'today', 'tomorrow'}.union(set(weekdays))
+    requested_cafe = None
 
     def infer_cafe(self, colloquial):
         """ Maps the colloquial cafe names to Bon Appetit's names """
-        return self.cafe_keywords[colloquial]
+        inferred = self.cafe_keywords[colloquial]
+        self.requested_cafe = inferred
+        return inferred
 
-    def parse_string_from_response(self, api_response, requested_meals):
+    def _parse_string_from_response(self, api_response, requested_meals):
         """ Builds a human-readable string from the API response dictionary """
         if requested_meals is None:
             requested_meals = self.meal_keywords
         # FIXME: This html is hopefully temporary
         formatted_response = "Location: {cafe}<ul>{meals}</ul>"
-        cafe = api_response.get(u'current_cafe', {}).get(u'name', 'Unknown')
-        formatted_meal = ("<li>{meal_name}: {start}-{end}"
+        cafe = self.requested_cafe.capitalize()
+        formatted_meal = ("<li>{meal_name}: {hours}"
                           "<ul>{stations}</ul></li>")
         formatted_station = "<li>{title}:<ul>{entrees}</ul></li>"
         formatted_entree = "<li>{label}</li>"
@@ -47,8 +57,7 @@ class BonAppetitService(Service):
             if meal.lower() not in requested_meals:
                 continue
             stations = ""
-            start = meal_details.get(u'starttime', u'NA')
-            end = meal_details.get(u'endtime', u'NA')
+            hours = meal_details[u'time_formatted']
             stations_dict = meal_details.get(u'stations', {})
             for station, station_details in (stations_dict.iteritems()):
                 entrees = ""
@@ -62,8 +71,7 @@ class BonAppetitService(Service):
                 stations += formatted_station.format(title=station,
                                                      entrees=entrees)
             meals += formatted_meal.format(meal_name=meal,
-                                           start=start,
-                                           end=end,
+                                           hours=hours,
                                            stations=stations)
 
         return formatted_response.format(cafe=cafe, meals=meals)
@@ -76,7 +84,6 @@ class BonAppetitService(Service):
 
     @wrap_response
     def go(self, features):
-        api = BonAPI()
 
         tagged_nouns = features.get('nouns', [])
         keywords = features.get('keywords', [])
@@ -101,7 +108,13 @@ class BonAppetitService(Service):
 
         meal_matches = matching_keywords(self.meal_keywords)
 
-        api_response = api.get_data(cafe, day)
+        try:
+            api_response = get_meals_for_cafe(cafe, day)
+        except DataNotAvailableException:
+            return ("I'm sorry, Bon Appetit doesn't appear to have data for "
+                    "{cafe} on {date_} right now, try again later!".format(
+                        cafe=self.reverse_lookup_cafes[cafe],
+                        date_=day.strftime("%d/%m/%y")))
 
         if meal_matches is not None:
             # Handle some edge cases for meal/cafe/day combinations
@@ -115,5 +128,5 @@ class BonAppetitService(Service):
                 if day.weekday() == 6:
                     return "Breakfast isn't served on Sunday."
 
-        return self.parse_string_from_response(api_response,
-                                               meal_matches)
+        return self._parse_string_from_response(api_response,
+                                                meal_matches)
