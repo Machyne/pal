@@ -14,9 +14,20 @@ var queryPAL = function(query, callback) {
 
 $(document).ready(function () {
 
+  // show speak checkbox only if browser supports tts
+  if ('SpeechSynthesisUtterance' in window) {
+    $("#speak").show();
+    $("#speak-check").attr("checked", true);
+  }
+
   var showResult = function (result) {
         $('.result').html(result);
         $('.history-result').prepend('<li>' + result + '</li>');
+        if($('#speak-check').is(':checked')) {
+          var utterance = new SpeechSynthesisUtterance(result);
+          utterance.rate = 1.3;
+          window.speechSynthesis.speak(utterance);
+        }
       },
       prompt = $('.prompt'),
       sendQuery = function () {
