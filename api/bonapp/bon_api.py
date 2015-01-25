@@ -16,6 +16,7 @@ import re
 
 import requests
 
+from api import DataNotAvailableException
 from utils import filter_dict_by_keys
 
 # Constants for scraping the cafe pages
@@ -46,14 +47,17 @@ def _get_page_for_cafe(cafe_name, date_):
 def _get_raw_data_from_page(page):
     """ Scrapes the name, menu, and dayparts from the given page."""
     name_matches = re.findall(_RE_NAME, page)
-    name = name_matches[0]
+    name = name_matches[0] if name_matches else None
     menu_matches = re.findall(_RE_MENU, page)
-    dishes = json.loads(menu_matches[0])
+    dishes = json.loads(menu_matches[0]) if menu_matches else None
     dayparts = {}
     dayparts_matches = re.findall(_RE_DAYPARTS, page)
-    for match in dayparts_matches:
-        part_num, dict_ = match
-        dayparts[int(part_num)] = json.loads(dict_)
+    if dayparts_matches:
+        for match in dayparts_matches:
+            part_num, dict_ = match
+            dayparts[int(part_num)] = json.loads(dict_)
+    else:
+        dayparts = None
     return name, dishes, dayparts
 
 
@@ -101,12 +105,16 @@ def _clean_meals_and_merge_dishes(dayparts, dishes):
     return dayparts
 
 
-def get_meals_for_cafe(cafe_name, date):
+def get_meals_for_cafe(cafe_name, date_):
     """ Returns a cleaned version of the meals info for
         the given cafe and date.
     """
-    page = _get_page_for_cafe(cafe_name, date)
+    page = _get_page_for_cafe(cafe_name, date_)
     _, menu, dayparts = _get_raw_data_from_page(page)
+    if menu is None or dayparts is None:
+        raise DataNotAvailableException(
+            "Data was not available for {} on {}".format(cafe_name,
+                                                         date_.weekday()))
     dishes = _clean_menu(menu)
     meals = _clean_meals_and_merge_dishes(dayparts, dishes)
     return meals

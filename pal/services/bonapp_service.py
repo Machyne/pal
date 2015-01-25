@@ -1,7 +1,7 @@
 #!usr/bin/env python
 # A service for the dining hall menus
 
-
+from api import DataNotAvailableException
 from api.bonapp.bon_api import get_meals_for_cafe
 from pal.services.service import Service
 from utils import infer_date
@@ -11,18 +11,25 @@ from utils import weekdays
 def wrap_response(func):
     return lambda *args: {'response': func(*args)}
 
-LDC = 'east-hall'
-SAYLES = 'sayles-hill-cafe'
-
+LDC = "east-hall"
+BURTON = "burton"
+SAYLES = "sayles-hill-cafe"
+WEITZ = "weitz-cafe"
 
 class BonAppetitService(Service):
 
     cafe_keywords = {'ldc': LDC,
                      'east': LDC,
-                     'burton': 'burton',
+                     'burton': BURTON,
                      'sayles': SAYLES,
                      'sayles-hill': SAYLES,
-                     'weitz': "weitz-cafe"}
+                     'weitz': WEITZ}
+    reverse_lookup_cafes = {
+        LDC: "East Dining Hall",
+        'burton': "Burton Dining Hall",
+        SAYLES: "Sayles-Hill Cafe",
+        WEITZ: "Weitz Cafe"
+    }
     meal_keywords = {'breakfast', 'brunch', 'lunch', 'dinner'}
     date_keywords = {'today', 'tomorrow'}.union(set(weekdays))
     requested_cafe = None
@@ -32,7 +39,6 @@ class BonAppetitService(Service):
         inferred = self.cafe_keywords[colloquial]
         self.requested_cafe = inferred
         return inferred
-
 
     def _parse_string_from_response(self, api_response, requested_meals):
         """ Builds a human-readable string from the API response dictionary """
@@ -102,7 +108,13 @@ class BonAppetitService(Service):
 
         meal_matches = matching_keywords(self.meal_keywords)
 
-        api_response = get_meals_for_cafe(cafe, day)
+        try:
+            api_response = get_meals_for_cafe(cafe, day)
+        except DataNotAvailableException:
+            return ("I'm sorry, Bon Appetit doesn't appear to have data for "
+                    "{cafe} on {date_} right now, try again later!".format(
+                        cafe=self.reverse_lookup_cafes[cafe],
+                        date_=day.strftime("%d/%m/%y")))
 
         if meal_matches is not None:
             # Handle some edge cases for meal/cafe/day combinations
