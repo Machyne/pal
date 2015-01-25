@@ -1,5 +1,6 @@
 from pal.services.dictionary_service import DictionaryService
 from pal.services.directory_service import DirectoryService
+from pal.services.bonapp_service import BonAppetitService
 from pal.services.omdb_service import OMDBService
 from pal.services.weather_service import WeatherService
 
@@ -7,7 +8,8 @@ _SERVICES = {
     'dictionary': DictionaryService('dictionary'),
     'directory': DirectoryService('stalkernet'),
     'ombd': OMDBService('movie'),
-    'weather': WeatherService('weather')
+    'weather': WeatherService('weather'),
+    'food': BonAppetitService('bonapp'),
 }
 
 
