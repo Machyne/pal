@@ -1,0 +1,13 @@
+[
+    translate
+    translation
+    language
+], 70
+[
+    english
+    french
+    spanish
+    german
+    portuguese
+    italian
+], 80
