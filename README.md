@@ -27,3 +27,7 @@
         (https://query.yahooapis.com/v1/public/yql?))
     - [x] High/low temperatures
     - [x] Snow/rain
+    
+- Bon Appetit (actively scraped from [Bon Appetit website]
+    (http://carleton.cafebonappetit.com/cafe/))
+    - [x] Single dining hall, single day, any or all meals
