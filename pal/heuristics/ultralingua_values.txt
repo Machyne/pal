@@ -11,3 +11,7 @@
     portuguese
     italian
 ], 80
+[
+    from
+    to
+], 20
