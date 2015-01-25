@@ -111,8 +111,8 @@ class BonAppetitService(Service):
         try:
             api_response = get_meals_for_cafe(cafe, day)
         except DataNotAvailableException:
-            return ("I'm sorry, Bon Appetit doesn't appear to have data for "
-                    "{cafe} on {date_} right now, try again later!".format(
+            return ("I'm sorry, Bon Appetit doesn't appear to have any "
+                    "specials for {cafe} on {date_}.".format(
                         cafe=self.reverse_lookup_cafes[cafe],
                         date_=day.strftime("%d/%m/%y")))
 
