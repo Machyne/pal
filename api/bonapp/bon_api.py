@@ -13,7 +13,6 @@
 
 import json
 import re
-from datetime import date
 
 import requests
 
@@ -37,9 +36,9 @@ _MEAL_FIELDS = _BASE_FIELDS + [u'stations', u'time_formatted']
 _MEAL_STATION_FIELDS = _BASE_FIELDS + [u'items']
 
 
-def _get_page_for_cafe(cafe_name, date):
+def _get_page_for_cafe(cafe_name, date_):
     """ Returns the HTML page for the given cafe and date."""
-    url = _CAFE_URL.format(cafe_name=cafe_name, date=date.isoformat())
+    url = _CAFE_URL.format(cafe_name=cafe_name, date=date_.isoformat())
     response = requests.get(url)
     return response.text
 
@@ -125,4 +124,5 @@ def _use_labels_as_keys(collection):
                 for all_info in collection}
 
 if __name__ == '__main__':
+    from datetime import date
     print get_meals_for_cafe('burton', date.today())
