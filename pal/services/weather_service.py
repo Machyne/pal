@@ -1,11 +1,11 @@
 import datetime
-
 import requests
 
 from pal.services.service import Service
 
 
 class WeatherService(Service):
+    name = 'weather'
 
     def applies_to_me(self, client, feature_request_type):
         return True

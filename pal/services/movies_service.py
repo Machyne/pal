@@ -1,7 +1,10 @@
+# A service for movie info
+
 from pal.services.service import Service
 
 
-class OMDBService(Service):
+class MoviesService(Service):
+    name = 'movies'
 
     def applies_to_me(self, client, feature_request_type):
         return True

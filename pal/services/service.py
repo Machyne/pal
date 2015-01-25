@@ -1,12 +1,12 @@
-# coding: utf-8
 from pal.heuristics.heuristic import Heuristic
 
 
 class Service(object):
-    def __init__(self, name):
-        """ We need the name later for heuristic stuff
-        """
-        self.heuristic = Heuristic(name)
+    name = 'abstract_service'
+
+    def __init__(self):
+        """ We need the name later for heuristic stuff """
+        self.heuristic = Heuristic(self.name)
 
     def applies_to_me(self, client, feature_request_type):
         """ Returns true if this service is a potentially relevant to the

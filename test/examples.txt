@@ -105,7 +105,7 @@ Who's concentrating in ed studies?
 Who's in room 405 of memo hall?
 Who's in Watson 311?
 
-ombd
+movies
 Hom many films has tom hanks acted in
 How many films has tom hanks been in
 How many movies are there with tom hanks
@@ -176,7 +176,7 @@ What's the weather today?
 Will it rain soon?
 Will it rain today?
 
-food
+bonapp
 Did Weitz cafe close?
 How was the food in Burton yesterday?
 How's dinner tonight?

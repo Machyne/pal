@@ -16,7 +16,9 @@ BURTON = "burton"
 SAYLES = "sayles-hill-cafe"
 WEITZ = "weitz-cafe"
 
+
 class BonAppetitService(Service):
+    name = 'bonapp'
 
     cafe_keywords = {'ldc': LDC,
                      'east': LDC,

@@ -7,6 +7,7 @@ from pal.services.service import Service
 
 
 class DictionaryService(Service):
+    name = 'dictionary'
 
     def applies_to_me(self, client, feature_request_type):
         return True
