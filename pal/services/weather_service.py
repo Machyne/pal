@@ -20,7 +20,6 @@ class WeatherService(Service):
         places = [place[0] for place in features['tree'] if place[1] in
                   ['GPE', 'GSP', 'LOCATION', 'PERSON']]
         orgs = [org[0] for org in features['tree'] if org[1] == 'ORGANIZATION']
-        nouns = features['nouns']
         tokens = set([t[0].lower() for t in features['tree']])
 
         if len(places) == 1:
@@ -60,14 +59,14 @@ class WeatherService(Service):
 
             # remember if the user asked about today/tomorrow for more natural
             # result output language
-            isToday = False
-            isTomorrow = False
+            is_today = False
+            is_tomorrow = False
 
             if len(intersect) == 0:
                 # assume the user is asking about today
                 now = datetime.datetime.now()
                 day = now.strftime("%A").lower()
-                isToday = True
+                is_today = True
             else:
                 day = intersect.pop()
 
@@ -76,7 +75,7 @@ class WeatherService(Service):
                 now = datetime.datetime.now()
                 tomorrow = now + datetime.timedelta(days=1)
                 day = tomorrow.strftime("%A").lower()
-                isTomorrow = True
+                is_tomorrow = True
 
             yahoo_days = {"monday": "Mon", "tuesday": "Tue",
                           "wednesday": "Wed", "thursday": "Thu",
@@ -89,7 +88,7 @@ class WeatherService(Service):
                     # 2 ids for some reason, just take first result
                     forecasts = forecasts[0]
                 forecasts = forecasts['item']['forecast']
-            except Exception, e:
+            except Exception:
                 # TODO: different response once we have an error spec up
                 return {'response': "Error fetching weather information"}
 
@@ -98,9 +97,9 @@ class WeatherService(Service):
 
             # pretty format day
             day_str = ""
-            if isToday:
+            if is_today:
                 day_str = "today"
-            elif isTomorrow:
+            elif is_tomorrow:
                 day_str = "tomorrow"
             else:
                 day_str = day.title()
@@ -126,7 +125,7 @@ class WeatherService(Service):
             weather_descript = day_forecast['text'].lower()
 
             preposition = ""
-            if not (isToday or isTomorrow):
+            if not (is_today or is_tomorrow):
                 preposition = "on "
 
             cold_words = set(['cold', 'cool', 'freezing'])

@@ -1,4 +1,3 @@
-#!usr/bin/env python
 # A service for the dining hall menus
 
 from api import DataNotAvailableException

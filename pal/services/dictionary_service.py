@@ -1,4 +1,4 @@
-import re
+# A service for definitions and synonyms
 
 from bs4 import BeautifulSoup
 import requests

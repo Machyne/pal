@@ -15,7 +15,7 @@ class Service(object):
         raise NotImplementedError()
 
     def get_confidence(self, features):
-        """ Returns a number between -∞ and +∞ indicating the confidence of
+        """ Returns a number between -Inf and +Inf indicating the confidence of
             this service that it is relevant to the specified features.
         """
         return self.heuristic.run_heuristic(features['keywords'])

@@ -1,3 +1,5 @@
+# A service for the Carleton directory
+
 from api.directory.models import Building
 from api.directory.directory_api import Directory
 
