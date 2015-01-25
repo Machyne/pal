@@ -42,6 +42,8 @@ class BonAppetitService(Service):
 
     def _parse_string_from_response(self, api_response, requested_meals):
         """ Builds a human-readable string from the API response dictionary """
+        # TODO: if the user asks for lunch on the weekend,
+        # give them the brunch data
         if requested_meals is None:
             requested_meals = self.meal_keywords
         # FIXME: This html is hopefully temporary
@@ -111,8 +113,8 @@ class BonAppetitService(Service):
         try:
             api_response = get_meals_for_cafe(cafe, day)
         except DataNotAvailableException:
-            return ("I'm sorry, Bon Appetit doesn't appear to have data for "
-                    "{cafe} on {date_} right now, try again later!".format(
+            return ("I'm sorry, Bon Appetit doesn't appear to have any "
+                    "specials for {cafe} on {date_}.".format(
                         cafe=self.reverse_lookup_cafes[cafe],
                         date_=day.strftime("%d/%m/%y")))
 
