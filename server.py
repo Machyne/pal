@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import logging
+from logging import Formatter
+
 from flask import Blueprint
 from flask import Flask
 from flask import redirect
@@ -56,6 +59,28 @@ def debug():
 
 # main doesn't run in wsgi
 app.register_blueprint(pal_blueprint, url_prefix='/api')
+
+# configure logging for pal engine
+logger = logging.getLogger('PAL Engine')
+logger.setLevel(logging.DEBUG)
+
+file_handler = logging.FileHandler('flask_pal.log')
+file_handler.setLevel(logging.DEBUG)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+
+# formatter only supports %s formatting
+formatter = Formatter('%(asctime)s - %(name)s %(levelname)s:\n'
+                      '    [in %(pathname)s:%(lineno)d]\n'
+                      '    %(message)s\n'
+                      '----')
+ch.setFormatter(formatter)
+file_handler.setFormatter(formatter)
+
+logger.addHandler(ch)
+logger.addHandler(file_handler)
+
 
 if __name__ == '__main__':
     # app.register_blueprint(pal_blueprint, url_prefix='/api')
