@@ -70,6 +70,7 @@ file_handler.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.ERROR)
 
+# formatter only supports %s formatting
 formatter = Formatter('%(asctime)s - %(name)s %(levelname)s:\n'
                       '    [in %(pathname)s:%(lineno)d]\n'
                       '    %(message)s\n'
