@@ -7,10 +7,21 @@ var queryPAL = function(query, callback) {
       client: 'web'
     },
     success: function (response) {
-      callback(response.result);
+      callback(query, response.result);
+    },
+    error: function () {
+      $('.prompt').removeAttr('disabled');
+      $('#go-btn').removeAttr('disabled');
     }
   });
 };
+
+function expandData (el) {
+  console.log('yolo');
+  console.log($(el));
+  $(el).toggleClass('expanded');
+  return true;
+}
 
 $(document).ready(function () {
 
@@ -20,11 +31,28 @@ $(document).ready(function () {
     $("#speak-check").attr("checked", true);
   }
 
-  var showResult = function (result) {
-        var li = '<li' + (result.response ? '>' : ' class="error">');
-        $('.history-result').prepend(li + result.summary + '</li>');
+  var showResult = function (query, result) {
+        prompt.removeAttr('disabled');
+        $('#go-btn').removeAttr('disabled');
+        if (result.response) {
+          console.log('no error');
+          var data = '';
+          if (result.hasOwnProperty('data')) {
+            data = '<div class="data" onclick="expandData(this);"><br>' +
+                   result.data + '</div>'
+          }
+          $('.history').prepend('<li><div class="query">' + query +
+                                '</div><div class="result">' +
+                                result.summary + '</div>' +
+                                data + '</li>');
+        } else {
+          console.log('error');
+          $('.history').prepend('<li class="error"><div class="query">' +
+                                query + '</div><div class="result">' +
+                                result.summary + '</div></li>');
+        };
         if($('#speak-check').is(':checked')) {
-          var utterance = new SpeechSynthesisUtterance(result);
+          var utterance = new SpeechSynthesisUtterance(result.summary);
           utterance.rate = 1.1;
           window.speechSynthesis.speak(utterance);
         }
@@ -34,6 +62,8 @@ $(document).ready(function () {
       sendQuery = function () {
         var query = prompt.val();
         if (query.length > 0 && query.trim() != lastQuery.trim()) {
+          prompt.attr('disabled', 'disabled');
+          $('#go-btn').attr('disabled', 'disabled');
           lastQuery = query;
           queryPAL(query, showResult);
           $('.history-prompt').prepend('<li>' + query + '</li>');

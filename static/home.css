@@ -43,15 +43,13 @@ html, body {
     height: 36px;
     font-size: 16px;
 }
-.result {
-  margin: 20px 0;
-  font-size: 16px;
-}
-.bottom li {
-  height: 50px;
+.bottom {
+  height: calc(50% - 20px);
 }
 .footer {
-  margin: 0 6px;
+  margin: 0;
+  padding: 0 6px;
+  box-sizing: border-box;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -62,8 +60,90 @@ html, body {
 .footer-left {
   float: left;
 }
-li.error {
+.bottom .container {
+  height: 100%;
+}
+.bottom .row {
+  height: 100%;
+}
+.bottom .col-sm-12 {
+  height: 100%;
+}
+.history {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  height: 100%;
+}
+.history li {
+  margin: 0 20px 10px 20px;
+  padding: 5px;
+  box-sizing: border-box;
+  border: solid 1px #ccc;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px #ccc;
+  width: calc(100% - 40px);
+}
+.history li.error {
   color: red;
+}
+.history li .query {
+  font-size: 18px;
+  color: inherit;
+}
+.history li .query:before {
+  content: "“";
+  color: inherit;
+}
+.history li .query:after {
+  content: "”";
+  color: inherit;
+}
+.history li .result {
+  font-size: 20px;
+  padding: 5px 15px;
+  width: 100%;
+  box-sizing: border-box;
+  color: inherit;
+}
+.history li .data {
+  margin-bottom: 10px;
+  font-style: italic;
+  font-size: 12px;
+  overflow-y: hidden;
+  position: relative;
+  padding-left: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 15px;
+  transition: 0.6s max-height cubic-bezier(0, 1.05, 0, 1);
+  -o-transition: 0.6s max-height cubic-bezier(0, 1.05, 0, 1);
+  -moz-transition: 0.6s max-height cubic-bezier(0, 1.05, 0, 1);
+  -webkit-transition: 0.6s max-height cubic-bezier(0, 1.05, 0, 1);
+}
+.history li .data:before {
+  content: '▼';
+  font-size: 15px;
+  color: #333;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.history li .data.expanded {
+  max-height: 4000px;
+  transition: 0.9s max-height ease;
+  -o-transition: 0.9s max-height ease;
+  -moz-transition: 0.9s max-height ease;
+  -webkit-transition: 0.9s max-height ease;
+}
+.history li .data.expanded:before {
+  content: '▲';
+  font-size: 15px;
+  color: #333;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 @media screen and (max-width: 400px) {
