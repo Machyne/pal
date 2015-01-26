@@ -62,6 +62,9 @@ html, body {
 .footer-left {
   float: left;
 }
+li.error {
+  color: red;
+}
 
 @media screen and (max-width: 400px) {
   .title {

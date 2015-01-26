@@ -90,7 +90,8 @@ class WeatherService(Service):
                 forecasts = forecasts['item']['forecast']
             except Exception:
                 # TODO: different response once we have an error spec up
-                return {'response': "Error fetching weather information"}
+                return {'response': 0,
+                        'summary': "Error fetching weather information"}
 
             yahoo_day = yahoo_days[day]
             days_forecast = [f for f in forecasts if f['day'] == yahoo_day]
@@ -114,9 +115,9 @@ class WeatherService(Service):
             if len(days_forecast) > 0:
                 day_forecast = days_forecast[0]
             else:
-                return {'response':
-                        ("Weather information not available for "
-                         "{0} on {1}").format(loc, day_str)}
+                return {'response': 1,
+                        'summary': "Weather information not available for "
+                                   "{0} on {1}".format(loc, day_str)}
 
             # extract weather data
             high_temp = day_forecast['high']
@@ -185,7 +186,7 @@ class WeatherService(Service):
                             "and the low will be {3} degrees."
                             ).format(day_str, loc, high_temp,
                                      low_temp, weather_descript, preposition)
-            return {'response': response}
+            return {'response': 1, 'summary': response}
 
         else:
             # more than one or no GPE found... now what?

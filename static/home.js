@@ -7,7 +7,7 @@ var queryPAL = function(query, callback) {
       client: 'web'
     },
     success: function (response) {
-      callback(response.result.response);
+      callback(response.result);
     }
   });
 };
@@ -21,8 +21,9 @@ $(document).ready(function () {
   }
 
   var showResult = function (result) {
-        $('.result').html(result);
-        $('.history-result').prepend('<li>' + result + '</li>');
+        // $('.result'+(result.response ? '' : '-error')).html(result.summary);
+        var li = '<li' + (result.response ? '>' : ' class="error">')
+        $('.history-result').prepend(li + result.summary + '</li>');
         if($('#speak-check').is(':checked')) {
           var utterance = new SpeechSynthesisUtterance(result);
           utterance.rate = 1.1;
@@ -30,9 +31,11 @@ $(document).ready(function () {
         }
       },
       prompt = $('.prompt'),
+      lastQuery = '',
       sendQuery = function () {
         var query = prompt.val();
-        if (query.length > 0) {
+        if (query.length > 0 && query.trim() != lastQuery.trim()) {
+          lastQuery = query;
           queryPAL(query, showResult);
           $('.history-prompt').prepend('<li>' + query + '</li>');
         }

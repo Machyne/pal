@@ -8,7 +8,7 @@ from utils import weekdays
 
 
 def wrap_response(func):
-    return lambda *args: {'response': func(*args)}
+    return lambda *args: {'response': 1, 'summary': func(*args)}
 
 LDC = "east-hall"
 BURTON = "burton"

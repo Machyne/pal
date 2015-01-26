@@ -12,4 +12,4 @@ class MovieService(Service):
         return super(self.__class__, self).get_confidence(features)
 
     def go(self, features):
-        return {'response': "Tom Hanks was in 1 movies."}
+        return {'response': 0, 'summary': 'Tom Hanks was in 1 movies.'}

@@ -55,8 +55,10 @@ class DirectoryService(Service):
                 student = matching_students[0]
                 building_name = directory.get_name_for_id(
                     Building, student.building_id)
-                return {'response': "{0} {1} lives in {2} {3}".format(
-                    first_name, last_name, building_name, student.room)}
+                return {'response': 1,
+                        'summary': "{0} {1} lives in {2} {3}".format(
+                            first_name, last_name,
+                            building_name, student.room)}
 
             # answer where a faculty/staff office is
             office_keywords = set(['office'])
@@ -69,8 +71,10 @@ class DirectoryService(Service):
                 facstaff = matching_facstaff[0]
                 building_name = directory.get_name_for_id(
                     Building, facstaff.office_building_id)
-                return {'response': "{0} {1}'s office is {2} {3}".format(
-                    first_name, last_name, building_name, facstaff.office)}
+                return {'response': 1,
+                        'summary': "{0} {1}'s office is {2} {3}".format(
+                            first_name, last_name,
+                            building_name, facstaff.office)}
 
             # answer phone numbers
             phone_keywords = set(['phone', 'number', 'call'])
@@ -86,19 +90,22 @@ class DirectoryService(Service):
                         "Could not find {0} {1}".format(first_name, last_name))
 
                 if len(phones) == 0:
-                    return {'response': "{0} {1} doesn't seem to have any "
-                                        "phone numbers listed".format(
-                                            first_name, last_name)}
+                    return {'response': 1,
+                            'summary': "{0} {1} doesn't seem to have any "
+                                       "phone numbers listed".format(
+                                           first_name, last_name)}
                 elif len(phones) == 1:
-                    return {'response': "{0} {1}'s phone number is "
-                                        "{2}".format(
-                                            first_name, last_name, phones[0])}
+                    return {'response': 1,
+                            'summary': "{0} {1}'s phone number is "
+                                       "{2}".format(
+                                           first_name, last_name, phones[0])}
                 else:
                     pnums = ', '.join([str(p) for p in phones])
-                    return {'response': "{0} {1}'s phone numbers are "
-                                        "{2}".format(first_name,
-                                                     last_name,
-                                                     pnums)}
+                    return {'response': 1,
+                            'summary': "{0} {1}'s phone numbers are "
+                                       "{2}".format(first_name,
+                                                    last_name,
+                                                    pnums)}
 
             # answer email questions
             email_keywords = set(['email', 'e-mail', 'mail'])
@@ -114,18 +121,18 @@ class DirectoryService(Service):
                         "Could not find {0} {1}".format(first_name, last_name))
 
                 if email == '':
-                    return {'response': "{0} {1} doesn't seem to have an "
-                                        "email address listed"
-                                        "".format(first_name, last_name)}
+                    return {'response': 1,
+                            'summary': "{0} {1} doesn't seem to have an "
+                                       "email address listed"
+                                       "".format(first_name, last_name)}
                 else:
-                    return {'response': "{0} {1}'s email address is "
-                                        "{2}".format(first_name,
-                                                     last_name, email)}
-
+                    return {'response': 1,
+                            'summary': "{0} {1}'s email address is "
+                                       "{2}".format(first_name,
+                                                    last_name, email)}
         else:
             # these types of questions pertain to 2 or more people
             # i.e. "Does Matt live with Ken?"
-            pass
-
-        directory.cleanup()
-        return
+            directory.cleanup()
+            return {'response': 0,
+                    'summary': 'Sorry, multi person queries not supported.'}
