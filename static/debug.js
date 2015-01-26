@@ -7,7 +7,7 @@ var queryPAL = function(query, callback) {
       client: 'web'
     },
     success: function (response) {
-      callback(response.result.response);
+      callback(response.result);
     }
   });
 };
@@ -30,7 +30,8 @@ var queryEndpoint = function(query, endpoint) {
 $(document).ready(function () {
 
   var showResult = function (result) {
-        $('.history-result').append('<li>' + result + '</li>');
+        var li = '<li' + (result.response ? '>' : ' class="error">');
+        $('.history-result').append(li + result.summary + '</li>');
       },
       prompt = $('.prompt'),
       sendQuery = function () {

@@ -21,8 +21,7 @@ $(document).ready(function () {
   }
 
   var showResult = function (result) {
-        // $('.result'+(result.response ? '' : '-error')).html(result.summary);
-        var li = '<li' + (result.response ? '>' : ' class="error">')
+        var li = '<li' + (result.response ? '>' : ' class="error">');
         $('.history-result').prepend(li + result.summary + '</li>');
         if($('#speak-check').is(':checked')) {
           var utterance = new SpeechSynthesisUtterance(result);
