@@ -17,8 +17,6 @@ var queryPAL = function(query, callback) {
 };
 
 function expandData (el) {
-  console.log('yolo');
-  console.log($(el));
   $(el).toggleClass('expanded');
   return true;
 }
@@ -32,43 +30,43 @@ $(document).ready(function () {
   }
 
   var showResult = function (query, result) {
-        prompt.removeAttr('disabled');
-        $('#go-btn').removeAttr('disabled');
-        if (result.response) {
-          console.log('no error');
-          var data = '';
-          if (result.hasOwnProperty('data')) {
-            data = '<div class="data" onclick="expandData(this);"><br>' +
-                   result.data + '</div>'
-          }
-          $('.history').prepend('<li><div class="query">' + query +
-                                '</div><div class="result">' +
-                                result.summary + '</div>' +
-                                data + '</li>');
-        } else {
-          console.log('error');
-          $('.history').prepend('<li class="error"><div class="query">' +
-                                query + '</div><div class="result">' +
-                                result.summary + '</div></li>');
-        };
-        if($('#speak-check').is(':checked')) {
-          var utterance = new SpeechSynthesisUtterance(result.summary);
-          utterance.rate = 1.1;
-          window.speechSynthesis.speak(utterance);
-        }
-      },
-      prompt = $('.prompt'),
-      lastQuery = '',
-      sendQuery = function () {
-        var query = prompt.val();
-        if (query.length > 0 && query.trim() != lastQuery.trim()) {
-          prompt.attr('disabled', 'disabled');
-          $('#go-btn').attr('disabled', 'disabled');
-          lastQuery = query;
-          queryPAL(query, showResult);
-          $('.history-prompt').prepend('<li>' + query + '</li>');
-        }
-      };
+    prompt.removeAttr('disabled');
+    $('#go-btn').removeAttr('disabled');
+    if (result.response) {
+      console.log('no error');
+      var data = '';
+      if (result.hasOwnProperty('data')) {
+        data = '<div class="data" onclick="expandData(this);"><br>' +
+               result.data + '</div>'
+      }
+      $('.history').prepend('<li><div class="query">' + query +
+                            '</div><div class="result">' +
+                            result.summary + '</div>' +
+                            data + '</li>');
+    } else {
+      console.log('error');
+      $('.history').prepend('<li class="error"><div class="query">' +
+                            query + '</div><div class="result">' +
+                            result.summary + '</div></li>');
+    };
+    if($('#speak-check').is(':checked')) {
+      var utterance = new SpeechSynthesisUtterance(result.summary);
+      utterance.rate = 1.1;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+  var prompt = $('.prompt');
+  var lastQuery = '';
+  var sendQuery = function () {
+    var query = prompt.val();
+    if (query.length > 0 && query.trim() != lastQuery.trim()) {
+      prompt.attr('disabled', 'disabled');
+      $('#go-btn').attr('disabled', 'disabled');
+      lastQuery = query;
+      queryPAL(query, showResult);
+      $('.history-prompt').prepend('<li>' + query + '</li>');
+    }
+  };
 
   prompt.focus();
 

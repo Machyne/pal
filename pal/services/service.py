@@ -16,8 +16,8 @@ class response_codes(object):
 def wrap_response(func):
     """ A wrapper for service response functions
     """
-    def fn(*args):
-        res = func(*args)
+    def fn(*args, **kwargs):
+        res = func(*args, **kwargs)
         if not isinstance(res, (list, tuple)):
             res = (res,)
         if len(res) == 1:

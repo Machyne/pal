@@ -27,7 +27,7 @@ class DictionaryService(Service):
             tokens = tokens[:-1]
         if len(tokens):
             word = tokens[-1]
-            tokens = set(tokens)
+            tokens = set(tokens[:-1])
             synonym = bool(len(self._SYNONYM.intersection(tokens)))
             antonym = bool(len(self._ANTONYM.intersection(tokens)))
             if synonym or antonym:
@@ -53,8 +53,10 @@ class DictionaryService(Service):
                             lead + ', '.join(all_words[:7]) + '.',
                             lead + ', '.join(all_words) + '.')
                 except Exception:
+                    things = 'synonyms' if synonym else 'antonyms'
                     return (response_codes.ERROR,
-                            lead[:-1] + ' could not be found.')
+                            'I couldn\'t find any ' + things +
+                            ' for ' + word + '.')
             else:
                 try:
                     url = 'http://dictionary.reference.com/browse/' + word
@@ -70,5 +72,7 @@ class DictionaryService(Service):
                         full_text += def_list.get_text()
                     return (response_codes.SUCCESS, short, full_text)
                 except Exception:
-                    return (response_codes.ERROR, 'No definitions found.')
+                    return (response_codes.ERROR,
+                            'I couldn\'t find any definitions for ' + word +
+                            '.')
         return None

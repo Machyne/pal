@@ -93,7 +93,7 @@ class DirectoryService(Service):
                             "listed".format(first_name, last_name))
                 elif len(phones) == 1:
                     return "{0} {1}'s phone number is {2}".format(
-                       first_name, last_name, phones[0])
+                        first_name, last_name, phones[0])
                 else:
                     pnums = ', '.join([str(p) for p in phones])
                     return "{0} {1}'s phone numbers are {2}".format(
@@ -118,9 +118,11 @@ class DirectoryService(Service):
                 else:
                     return "{0} {1}'s email address is {2}".format(
                         first_name, last_name, email)
-        else:
+        elif len(full_name) > 1:
             # these types of questions pertain to 2 or more people
             # i.e. "Does Matt live with Ken?"
-            directory.cleanup()
             return (response_codes.ERROR,
                     "Sorry, I don't support multi-person queries yet.")
+        directory.cleanup()
+        return (response_codes.ERROR,
+                "Sorry, I'm not that good at stalking.")
