@@ -1,4 +1,3 @@
-#!usr/bin/env python
 # A service for the dining hall menus
 
 from api import DataNotAvailableException
@@ -16,7 +15,8 @@ BURTON = "burton"
 SAYLES = "sayles-hill-cafe"
 WEITZ = "weitz-cafe"
 
-class BonAppetitService(Service):
+
+class BonAppService(Service):
 
     cafe_keywords = {'ldc': LDC,
                      'east': LDC,
