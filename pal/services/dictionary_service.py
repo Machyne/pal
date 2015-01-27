@@ -3,7 +3,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-from pal.services.service import Service
+from pal.services.service import Service, response_codes, wrap_response
 
 
 class DictionaryService(Service):
@@ -18,6 +18,7 @@ class DictionaryService(Service):
 
     _ANTONYM = set(['antonyms', 'antonym', 'opposite'])
 
+    @wrap_response
     def go(self, features):
         tokens = map(str.lower, features['tokens'])
         while len(tokens) and (len(tokens[-1]) < 3 or
@@ -48,12 +49,12 @@ class DictionaryService(Service):
                     all_words = wrapper.find_all('span', class_='text')
                     all_words = map(lambda el: el.get_text(), all_words)
                     # Summary will be up to 7, data will be all of them.
-                    return {'response': 1,
-                            'summary': lead + ', '.join(all_words[:7]) + '.',
-                            'data': lead + ', '.join(all_words) + '.'}
+                    return (response_codes.SUCCESS,
+                            lead + ', '.join(all_words[:7]) + '.',
+                            lead + ', '.join(all_words) + '.')
                 except Exception:
-                    return {'response': 0,
-                            'summary': lead[:-1] + ' could not be found.'}
+                    return (response_codes.ERROR,
+                            lead[:-1] + ' could not be found.')
             else:
                 try:
                     url = 'http://dictionary.reference.com/browse/' + word
@@ -67,7 +68,7 @@ class DictionaryService(Service):
                     full_text = ''
                     for def_list in soup.find_all(class_='def-list'):
                         full_text += def_list.get_text()
-                    return {'response': 1, 'summary': short, 'data': full_text}
+                    return (response_codes.SUCCESS, short, full_text)
                 except Exception:
-                    return {'response': 0, 'summary': 'No definitions found.'}
+                    return (response_codes.ERROR, 'No definitions found.')
         return None

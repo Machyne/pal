@@ -2,13 +2,9 @@
 
 from api import DataNotAvailableException
 from api.bonapp.bon_api import get_meals_for_cafe
-from pal.services.service import Service
+from pal.services.service import Service, wrap_response
 from utils import infer_date
 from utils import weekdays
-
-
-def wrap_response(func):
-    return lambda *args: {'response': 1, 'summary': func(*args)}
 
 LDC = "east-hall"
 BURTON = "burton"
