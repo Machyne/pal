@@ -64,7 +64,7 @@ app.register_blueprint(pal_blueprint, url_prefix='/api')
 logger = logging.getLogger('PAL Engine')
 logger.setLevel(logging.DEBUG)
 
-file_handler = logging.FileHandler('flask_pal.log')
+file_handler = logging.FileHandler('/var/www/pal/flask_pal.log')
 file_handler.setLevel(logging.DEBUG)
 
 ch = logging.StreamHandler()
