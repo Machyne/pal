@@ -256,12 +256,12 @@ class CommitChecker(object):
             if stripped.startswith("#") or "# NOQA" in line:
                 # Don't nitpick commented out lines
                 continue
-            elif stripped.startswith("class"):
+            elif stripped.startswith("class "):
                 match_and_check(self.class_re,
                                 {'type': 'Class',
                                  'name': extract_name(line),
                                  'form': 'CapWords'})
-            elif stripped.startswith("def"):
+            elif stripped.startswith("def "):
                 match_and_check(self.func_re,
                                 {'type': 'Function',
                                  'name': extract_name(line),
