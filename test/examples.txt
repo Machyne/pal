@@ -195,7 +195,7 @@ What's LDC serving today?
 What's lunch?
 What's the special at the Weitz cafe?
 What's tomorrow's dinner?
-What's Wetiz cafe got today?
+What's Weitz cafe got today?
 When does Burton open tomorrow morning?
 When does Burton open tonight?
 When does LDC close tomorrow morning?
@@ -209,3 +209,5 @@ Translate "alto" from Spanish
 Translate "wolf" Italian
 What's "desk" in German?
 How do you say "table" in Portuguese?
+What's "Italian" in French?
+Translate "German" from English to Spanish?
