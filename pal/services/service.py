@@ -18,6 +18,9 @@ def wrap_response(func):
     """
     def fn(*args, **kwargs):
         res = func(*args, **kwargs)
+        err_msg = 'Sorry, but I got confused. What did you want?'
+        if res is None:
+            return {'response': 0, 'summary': err_msg}
         if not isinstance(res, (list, tuple)):
             res = (res,)
         if len(res) == 1:
@@ -27,8 +30,7 @@ def wrap_response(func):
         elif len(res) == 3:
             return {'response': res[0], 'summary': res[1], 'data': res[2]}
         else:
-            msg = 'Sorry, but I got confused. What did you want?'
-            return {'response': 0, 'summary': msg}
+            return {'response': 0, 'summary': err_msg}
     return fn
 
 
