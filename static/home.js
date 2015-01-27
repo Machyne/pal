@@ -25,7 +25,7 @@ $(document).ready(function () {
         $('.history-result').prepend('<li>' + result + '</li>');
         if($('#speak-check').is(':checked')) {
           var utterance = new SpeechSynthesisUtterance(result);
-          utterance.rate = 1.3;
+          utterance.rate = 1.1;
           window.speechSynthesis.speak(utterance);
         }
       },
