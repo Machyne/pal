@@ -49,14 +49,14 @@ class DictionaryService(Service):
                     all_words = wrapper.find_all('span', class_='text')
                     all_words = map(lambda el: el.get_text(), all_words)
                     # Summary will be up to 7, data will be all of them.
-                    return (response_codes.SUCCESS,
+                    return (response_codes['SUCCESS'],
                             lead + ', '.join(all_words[:7]) + '.',
                             lead + ', '.join(all_words) + '.')
                 except Exception:
                     things = 'synonyms' if synonym else 'antonyms'
-                    return (response_codes.ERROR,
-                            'I couldn\'t find any ' + things +
-                            ' for ' + word + '.')
+                    return (response_codes['ERROR'],
+                            'I couldn\'t find any {} for {}.'.format(
+                                things, word))
             else:
                 try:
                     url = 'http://dictionary.reference.com/browse/' + word
@@ -70,9 +70,9 @@ class DictionaryService(Service):
                     full_text = ''
                     for def_list in soup.find_all(class_='def-list'):
                         full_text += def_list.get_text()
-                    return (response_codes.SUCCESS, short, full_text)
+                    return (response_codes['SUCCESS'], short, full_text)
                 except Exception:
-                    return (response_codes.ERROR,
-                            'I couldn\'t find any definitions for ' + word +
-                            '.')
+                    return (response_codes['ERROR'],
+                            'I couldn\'t find any definitions for {}.'.format(
+                                word))
         return None

@@ -91,8 +91,8 @@ class WeatherService(Service):
                 forecasts = forecasts['item']['forecast']
             except Exception:
                 # TODO: different response once we have an error spec up
-                return (response_codes.ERROR,
-                        "Error fetching weather information")
+                return (response_codes['ERROR'],
+                        "Error fetching weather information.")
 
             yahoo_day = yahoo_days[day]
             days_forecast = [f for f in forecasts if f['day'] == yahoo_day]
@@ -117,7 +117,7 @@ class WeatherService(Service):
                 day_forecast = days_forecast[0]
             else:
                 return ("Weather information not available for {0} on "
-                        "{1}".format(loc, day_str))
+                        "{1}.".format(loc, day_str))
 
             # extract weather data
             high_temp = day_forecast['high']

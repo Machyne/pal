@@ -93,7 +93,7 @@ html, body {
 }
 .history li .query {
   font-size: 18px;
-  color: inherit;
+  color: #67a;
 }
 .history li .query:before {
   content: "“";
@@ -127,6 +127,7 @@ html, body {
 }
 .history li .data:before {
   content: '▶';
+  font-style: normal;
   font-size: 15px;
   color: #333;
   position: absolute;
@@ -142,6 +143,7 @@ html, body {
 }
 .history li .data.expanded:before {
   content: '▼';
+  font-style: normal;
   font-size: 15px;
   color: #333;
   position: absolute;

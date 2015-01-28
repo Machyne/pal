@@ -1,8 +1,9 @@
 # A service for the dining hall menus
+from requests.exceptions import Timeout
 
 from api import DataNotAvailableException
 from api.bonapp.bon_api import get_meals_for_cafe
-from pal.services.service import Service, wrap_response
+from pal.services.service import Service, response_codes, wrap_response
 from utils import infer_date
 from utils import weekdays
 
@@ -107,8 +108,13 @@ class BonAppService(Service):
 
         try:
             api_response = get_meals_for_cafe(cafe, day)
-        except DataNotAvailableException:
-            return ("I'm sorry, Bon Appetit doesn't appear to have any "
+        except (Timeout, DataNotAvailableException) as e:
+            if isinstance(e, Timeout):
+                return (response_codes['ERROR'],
+                        "I'm sorry, looks like Bon Appetit doesn't want to "
+                        "tell me that at the moment. Try back later.")
+            return (response_codes['ERROR'],
+                    "I'm sorry, Bon Appetit doesn't appear to have any "
                     "specials for {cafe} on {date_}.".format(
                         cafe=self.reverse_lookup_cafes[cafe],
                         date_=day.strftime("%d/%m/%y")))

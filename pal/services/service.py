@@ -3,15 +3,16 @@ import re
 from pal.heuristics.heuristic import Heuristic
 
 
-class response_codes(object):
-    """ A class to hold response codes.
+""" A class to hold response codes.
 
-        The `response` codes are
-        0: error - something went wrong or the query could not be answered
-        1: success - the query was successfully answered
-    """
-    ERROR = 0
-    SUCCESS = 1
+    The `response` codes are
+    0: error - something went wrong or the query could not be answered
+    1: success - the query was successfully answered
+"""
+response_codes = {
+    'ERROR': 0,
+    'SUCCESS': 1,
+}
 
 def wrap_response(func):
     """ A wrapper for service response functions
@@ -24,13 +25,13 @@ def wrap_response(func):
         if not isinstance(res, (list, tuple)):
             res = (res,)
         if len(res) == 1:
-            return {'response': response_codes.SUCCESS, 'summary': res[0]}
+            return {'response': response_codes['SUCCESS'], 'summary': res[0]}
         elif len(res) == 2:
             return {'response': res[0], 'summary': res[1]}
         elif len(res) == 3:
             return {'response': res[0], 'summary': res[1], 'data': res[2]}
         else:
-            return {'response': 0, 'summary': err_msg}
+            return {'response': response_codes['ERROR'], 'summary': err_msg}
     return fn
 
 

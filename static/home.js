@@ -36,7 +36,7 @@ $(document).ready(function () {
       console.log('no error');
       var data = '';
       if (result.hasOwnProperty('data')) {
-        data = '<div class="data" onclick="expandData(this);"><br>' +
+        data = '<div class="data" onclick="expandData(this);">...<br>' +
                result.data + '</div>'
       }
       $('.history').prepend('<li><div class="query">' + query +
@@ -50,7 +50,9 @@ $(document).ready(function () {
                             result.summary + '</div></li>');
     };
     if($('#speak-check').is(':checked')) {
-      var utterance = new SpeechSynthesisUtterance(result.summary);
+      // to avoid pronouncing 'li' etc.
+      var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
+      var utterance = new SpeechSynthesisUtterance(no_html);
       utterance.rate = 1.1;
       window.speechSynthesis.speak(utterance);
     }

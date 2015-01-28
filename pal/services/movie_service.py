@@ -13,4 +13,4 @@ class MovieService(Service):
 
     @wrap_response
     def go(self, features):
-        return (response_codes.ERROR, 'Tom Hanks was in 1 movies.')
+        return (response_codes['ERROR'], 'Tom Hanks was in 1 movies.')

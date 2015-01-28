@@ -56,7 +56,7 @@ class DirectoryService(Service):
                 student = matching_students[0]
                 building_name = directory.get_name_for_id(
                     Building, student.building_id)
-                return "{0} {1} lives in {2} {3}".format(
+                return "{0} {1} lives in {2} {3}.".format(
                     first_name, last_name,
                     building_name, student.room)
 
@@ -71,7 +71,7 @@ class DirectoryService(Service):
                 facstaff = matching_facstaff[0]
                 building_name = directory.get_name_for_id(
                     Building, facstaff.office_building_id)
-                return "{0} {1}'s office is {2} {3}".format(
+                return "{0} {1}'s office is {2} {3}.".format(
                     first_name, last_name,
                     building_name, facstaff.office)
 
@@ -90,13 +90,13 @@ class DirectoryService(Service):
 
                 if len(phones) == 0:
                     return ("{0} {1} doesn't seem to have any phone numbers "
-                            "listed".format(first_name, last_name))
+                            "listed.".format(first_name, last_name))
                 elif len(phones) == 1:
-                    return "{0} {1}'s phone number is {2}".format(
+                    return "{0} {1}'s phone number is {2}.".format(
                         first_name, last_name, phones[0])
                 else:
                     pnums = ', '.join([str(p) for p in phones])
-                    return "{0} {1}'s phone numbers are {2}".format(
+                    return "{0} {1}'s phone numbers are {2}.".format(
                         first_name, last_name, pnums)
 
             # answer email questions
@@ -114,15 +114,15 @@ class DirectoryService(Service):
 
                 if email == '':
                     return ("{0} {1} doesn't seem to have an email address "
-                            "listed".format(first_name, last_name))
+                            "listed.".format(first_name, last_name))
                 else:
-                    return "{0} {1}'s email address is {2}".format(
+                    return "{0} {1}'s email address is {2}.".format(
                         first_name, last_name, email)
         elif len(full_name) > 1:
             # these types of questions pertain to 2 or more people
             # i.e. "Does Matt live with Ken?"
-            return (response_codes.ERROR,
+            return (response_codes['ERROR'],
                     "Sorry, I don't support multi-person queries yet.")
         directory.cleanup()
-        return (response_codes.ERROR,
+        return (response_codes['ERROR'],
                 "Sorry, I'm not that good at stalking.")
