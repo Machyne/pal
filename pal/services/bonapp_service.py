@@ -1,8 +1,13 @@
 # A service for the dining hall menus
 
+from datetime import datetime
+
 from api import DataNotAvailableException
 from api.bonapp.bon_api import get_meals_for_cafe
+from api.bonapp.bon_api import START_KEY
+from api.bonapp.bon_api import END_KEY
 from pal.services.service import Service
+from time_zones import Central
 from utils import infer_date
 from utils import weekdays
 
@@ -34,11 +39,22 @@ class BonAppService(Service):
     date_keywords = {'today', 'tomorrow'}.union(set(weekdays))
     requested_cafe = None
 
-    def infer_cafe(self, colloquial):
+    def _infer_cafe(self, colloquial):
         """ Maps the colloquial cafe names to Bon Appetit's names """
         inferred = self.cafe_keywords[colloquial]
         self.requested_cafe = inferred
         return inferred
+
+    @staticmethod
+    def _is_meal_open(meal):
+        """ Given a meal, check the start and end times, return a boolean
+            whether it is open right now.
+        """
+        time_format = "%I:%M %p"
+        start = datetime.strptime(meal[START_KEY], time_format)
+        end = datetime.strptime(meal[END_KEY], time_format)
+        now = datetime.now(Central)
+        return start <= now < end
 
     def _parse_string_from_response(self, api_response, requested_meals):
         """ Builds a human-readable string from the API response dictionary """
@@ -108,7 +124,7 @@ class BonAppService(Service):
         if len(cafe_matches) != 1:
             return ("I can only display results for "
                     "a single Bon Appetit location.")
-        cafe = self.infer_cafe(cafe_matches.pop())
+        cafe = self._infer_cafe(cafe_matches.pop())
 
         meal_matches = matching_keywords(self.meal_keywords) or set()
 

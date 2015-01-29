@@ -33,7 +33,10 @@ _MENU_REPLACEMENTS = (
     (re.compile(r' (\([^G]?G?\))'), ""),
     (re.compile(r'\s+'), " ")
 )
-_MEAL_FIELDS = _BASE_FIELDS + [u'stations', u'time_formatted']
+START_KEY = u'starttime_formatted'
+END_KEY = u'endtime_formatted'
+_MEAL_FIELDS = _BASE_FIELDS + [u'stations', u'time_formatted',
+                               START_KEY, END_KEY]
 _MEAL_STATION_FIELDS = _BASE_FIELDS + [u'items']
 
 
