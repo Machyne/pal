@@ -54,7 +54,10 @@ class BonAppService(Service):
         formatted_station = "<li>{title}:<ul>{entrees}</ul></li>"
         formatted_entree = "<li>{label}</li>"
         meals = ""
-        for meal, meal_details in api_response.iteritems():
+        # sort the meals by their ids so they show up in the logical order
+        meal_pairs = sorted(api_response.iteritems(),
+                            key=lambda pair: int(pair[1][u'id']))
+        for meal, meal_details in meal_pairs:
             if meal.lower() not in requested_meals:
                 continue
             stations = ""
