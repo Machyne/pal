@@ -3,7 +3,9 @@
 from bs4 import BeautifulSoup
 import requests
 
-from pal.services.service import Service, response_codes, wrap_response
+from pal.services.service import Service
+from pal.services.service import response_codes
+from pal.services.service import wrap_response
 
 
 class DictionaryService(Service):

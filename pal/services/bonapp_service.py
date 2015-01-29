@@ -3,7 +3,9 @@ from requests.exceptions import Timeout
 
 from api import DataNotAvailableException
 from api.bonapp.bon_api import get_meals_for_cafe
-from pal.services.service import Service, response_codes, wrap_response
+from pal.services.service import Service
+from pal.services.service import response_codes
+from pal.services.service import wrap_response
 from utils import infer_date
 from utils import weekdays
 

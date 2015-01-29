@@ -3,7 +3,9 @@
 from api.directory.models import Building
 from api.directory.directory_api import Directory
 
-from pal.services.service import Service, response_codes, wrap_response
+from pal.services.service import Service
+from pal.services.service import response_codes
+from pal.services.service import wrap_response
 
 
 class NotEnoughInformationException(Exception):
