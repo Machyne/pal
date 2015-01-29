@@ -30,7 +30,7 @@ var queryEndpoint = function(query, endpoint) {
 $(document).ready(function () {
 
   var showResult = function (result) {
-        var li = '<li' + (result.response ? '>' : ' class="error">');
+        var li = '<li' + (result.status ? '>' : ' class="error">');
         $('.history-result').append(li + result.summary + '</li>');
       },
       prompt = $('.prompt'),

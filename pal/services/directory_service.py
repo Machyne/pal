@@ -120,7 +120,7 @@ class DirectoryService(Service):
                 else:
                     return "{0} {1}'s email address is {2}.".format(
                         first_name, last_name, email)
-        elif len(full_name) > 1:
+        elif len(full_names) > 1:
             # these types of questions pertain to 2 or more people
             # i.e. "Does Matt live with Ken?"
             return (response_codes['ERROR'],
