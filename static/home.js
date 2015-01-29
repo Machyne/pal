@@ -7,10 +7,19 @@ var queryPAL = function(query, callback) {
       client: 'web'
     },
     success: function (response) {
-      callback(response.result.response);
+      callback(query, response.result);
+    },
+    error: function () {
+      $('.prompt').removeAttr('disabled');
+      $('#go-btn').removeAttr('disabled');
     }
   });
 };
+
+function expandData (el) {
+  $(el).toggleClass('expanded');
+  return true;
+}
 
 $(document).ready(function () {
 
@@ -20,23 +29,45 @@ $(document).ready(function () {
     $("#speak-check").attr("checked", true);
   }
 
-  var showResult = function (result) {
-        $('.result').html(result);
-        $('.history-result').prepend('<li>' + result + '</li>');
-        if($('#speak-check').is(':checked')) {
-          var utterance = new SpeechSynthesisUtterance(result);
-          utterance.rate = 1.1;
-          window.speechSynthesis.speak(utterance);
-        }
-      },
-      prompt = $('.prompt'),
-      sendQuery = function () {
-        var query = prompt.val();
-        if (query.length > 0) {
-          queryPAL(query, showResult);
-          $('.history-prompt').prepend('<li>' + query + '</li>');
-        }
-      };
+  var showResult = function (query, result) {
+    prompt.removeAttr('disabled');
+    $('#go-btn').removeAttr('disabled');
+    if (result.status) {
+      var data = '';
+      if (result.hasOwnProperty('data')) {
+        data = '<div class="data" onclick="expandData(this);">...<br>' +
+               result.data.replace(/\n+/ig, '<br>') + '</div>'
+      }
+      $('.history').prepend('<li><div class="query">' + query +
+                            '</div><div class="result">' +
+                            result.summary.replace(/\n+/ig, '<br>') +
+                            '</div>' + data + '</li>');
+    } else {
+      $('.history').prepend('<li class="error"><div class="query">' +
+                            query + '</div><div class="result">' +
+                            result.summary.replace(/\n+/ig, '<br>') +
+                            '</div></li>');
+    };
+    if($('#speak-check').is(':checked')) {
+      // to avoid pronouncing 'li' etc.
+      var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
+      var utterance = new SpeechSynthesisUtterance(no_html);
+      utterance.rate = 1.1;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+  var prompt = $('.prompt');
+  var lastQuery = '';
+  var sendQuery = function () {
+    var query = prompt.val();
+    if (query.length > 0 && query.trim() != lastQuery.trim()) {
+      prompt.attr('disabled', 'disabled');
+      $('#go-btn').attr('disabled', 'disabled');
+      lastQuery = query;
+      queryPAL(query, showResult);
+      $('.history-prompt').prepend('<li>' + query + '</li>');
+    }
+  };
 
   prompt.focus();
 

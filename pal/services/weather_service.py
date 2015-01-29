@@ -3,6 +3,8 @@ import datetime
 import requests
 
 from pal.services.service import Service
+from pal.services.service import response_codes
+from pal.services.service import wrap_response
 
 
 class WeatherService(Service):
@@ -13,6 +15,7 @@ class WeatherService(Service):
     def get_confidence(self, features):
         return super(self.__class__, self).get_confidence(features)
 
+    @wrap_response
     def go(self, features):
 
         # Why are there so many types of things that a location can be tagged
@@ -90,7 +93,8 @@ class WeatherService(Service):
                 forecasts = forecasts['item']['forecast']
             except Exception:
                 # TODO: different response once we have an error spec up
-                return {'response': "Error fetching weather information"}
+                return (response_codes['ERROR'],
+                        "Error fetching weather information.")
 
             yahoo_day = yahoo_days[day]
             days_forecast = [f for f in forecasts if f['day'] == yahoo_day]
@@ -114,9 +118,8 @@ class WeatherService(Service):
             if len(days_forecast) > 0:
                 day_forecast = days_forecast[0]
             else:
-                return {'response':
-                        ("Weather information not available for "
-                         "{0} on {1}").format(loc, day_str)}
+                return ("Weather information not available for {0} on "
+                        "{1}.".format(loc, day_str))
 
             # extract weather data
             high_temp = day_forecast['high']
@@ -185,7 +188,7 @@ class WeatherService(Service):
                             "and the low will be {3} degrees."
                             ).format(day_str, loc, high_temp,
                                      low_temp, weather_descript, preposition)
-            return {'response': response}
+            return response
 
         else:
             # more than one or no GPE found... now what?
