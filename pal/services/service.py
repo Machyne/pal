@@ -21,17 +21,17 @@ def wrap_response(func):
         res = func(*args, **kwargs)
         err_msg = 'Sorry, but I got confused. What did you want?'
         if res is None:
-            return {'response': 0, 'summary': err_msg}
+            return {'status': response_codes['ERROR'], 'summary': err_msg}
         if not isinstance(res, (list, tuple)):
             res = (res,)
         if len(res) == 1:
-            return {'response': response_codes['SUCCESS'], 'summary': res[0]}
+            return {'status': response_codes['SUCCESS'], 'summary': res[0]}
         elif len(res) == 2:
-            return {'response': res[0], 'summary': res[1]}
+            return {'status': res[0], 'summary': res[1]}
         elif len(res) == 3:
-            return {'response': res[0], 'summary': res[1], 'data': res[2]}
+            return {'status': res[0], 'summary': res[1], 'data': res[2]}
         else:
-            return {'response': response_codes['ERROR'], 'summary': err_msg}
+            return {'status': response_codes['ERROR'], 'summary': err_msg}
     return fn
 
 

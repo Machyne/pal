@@ -135,7 +135,7 @@ html, body {
   left: 0;
 }
 .history li .data.expanded {
-  max-height: 4000px;
+  max-height: 6000px;
   transition: 0.9s max-height ease;
   -o-transition: 0.9s max-height ease;
   -moz-transition: 0.9s max-height ease;

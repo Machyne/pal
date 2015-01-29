@@ -32,22 +32,21 @@ $(document).ready(function () {
   var showResult = function (query, result) {
     prompt.removeAttr('disabled');
     $('#go-btn').removeAttr('disabled');
-    if (result.response) {
-      console.log('no error');
+    if (result.status) {
       var data = '';
       if (result.hasOwnProperty('data')) {
         data = '<div class="data" onclick="expandData(this);">...<br>' +
-               result.data + '</div>'
+               result.data.replace(/\n+/ig, '<br>') + '</div>'
       }
       $('.history').prepend('<li><div class="query">' + query +
                             '</div><div class="result">' +
-                            result.summary + '</div>' +
-                            data + '</li>');
+                            result.summary.replace(/\n+/ig, '<br>') +
+                            '</div>' + data + '</li>');
     } else {
-      console.log('error');
       $('.history').prepend('<li class="error"><div class="query">' +
                             query + '</div><div class="result">' +
-                            result.summary + '</div></li>');
+                            result.summary.replace(/\n+/ig, '<br>') +
+                            '</div></li>');
     };
     if($('#speak-check').is(':checked')) {
       // to avoid pronouncing 'li' etc.

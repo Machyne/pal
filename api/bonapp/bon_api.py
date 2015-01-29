@@ -40,7 +40,7 @@ _MEAL_STATION_FIELDS = _BASE_FIELDS + [u'items']
 def _get_page_for_cafe(cafe_name, date_):
     """ Returns the HTML page for the given cafe and date."""
     url = _CAFE_URL.format(cafe_name=cafe_name, date=date_.isoformat())
-    response = requests.get(url, timeout=1.0)
+    response = requests.get(url, timeout=5.0)
     return response.text
 
 
