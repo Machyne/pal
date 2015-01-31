@@ -4,7 +4,6 @@ from api.directory.models import Building
 from api.directory.directory_api import Directory
 
 from pal.services.service import Service
-from pal.services.service import response_codes
 from pal.services.service import wrap_response
 
 
@@ -123,8 +122,8 @@ class DirectoryService(Service):
         elif len(full_names) > 1:
             # these types of questions pertain to 2 or more people
             # i.e. "Does Matt live with Ken?"
-            return (response_codes['ERROR'],
+            return ('ERROR',
                     "Sorry, I don't support multi-person queries yet.")
         directory.cleanup()
-        return (response_codes['ERROR'],
+        return ('ERROR',
                 "Sorry, I'm not that good at stalking.")

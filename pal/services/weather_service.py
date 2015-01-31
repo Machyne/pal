@@ -3,7 +3,6 @@ import datetime
 import requests
 
 from pal.services.service import Service
-from pal.services.service import response_codes
 from pal.services.service import wrap_response
 
 
@@ -93,7 +92,7 @@ class WeatherService(Service):
                 forecasts = forecasts['item']['forecast']
             except Exception:
                 # TODO: different response once we have an error spec up
-                return (response_codes['ERROR'],
+                return ('ERROR',
                         "Error fetching weather information.")
 
             yahoo_day = yahoo_days[day]

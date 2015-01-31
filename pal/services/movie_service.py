@@ -1,7 +1,6 @@
 # A service for movie info
 
 from pal.services.service import Service
-from pal.services.service import response_codes
 from pal.services.service import wrap_response
 
 
@@ -15,4 +14,4 @@ class MovieService(Service):
 
     @wrap_response
     def go(self, features):
-        return (response_codes['ERROR'], 'Tom Hanks was in 1 movies.')
+        return ('ERROR', 'Tom Hanks was in 1 movies.')
