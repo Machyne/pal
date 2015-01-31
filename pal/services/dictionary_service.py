@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 import requests
 
 from pal.services.service import Service
-from pal.services.service import response_codes
 from pal.services.service import wrap_response
 
 
@@ -51,12 +50,12 @@ class DictionaryService(Service):
                     all_words = wrapper.find_all('span', class_='text')
                     all_words = map(lambda el: el.get_text(), all_words)
                     # Summary will be up to 7, data will be all of them.
-                    return (response_codes['SUCCESS'],
+                    return ('SUCCESS',
                             lead + ', '.join(all_words[:7]) + '.',
                             lead + ', '.join(all_words) + '.')
                 except Exception:
                     things = 'synonyms' if synonym else 'antonyms'
-                    return (response_codes['ERROR'],
+                    return ('ERROR',
                             'I couldn\'t find any {} for {}.'.format(
                                 things, word))
             else:
@@ -72,9 +71,9 @@ class DictionaryService(Service):
                     full_text = ''
                     for def_list in soup.find_all(class_='def-list'):
                         full_text += def_list.get_text()
-                    return (response_codes['SUCCESS'], short, full_text)
+                    return ('SUCCESS', short, full_text)
                 except Exception:
-                    return (response_codes['ERROR'],
+                    return ('ERROR',
                             'I couldn\'t find any definitions for {}.'.format(
                                 word))
         return None
