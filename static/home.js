@@ -89,7 +89,6 @@ $(document).ready(function () {
             console.log('unknown requested data type')
         }
       };
-      return;
     } else if (result.status == 1) {
       $('#user-data').html('');
       var data = '';
@@ -110,7 +109,12 @@ $(document).ready(function () {
     };
     if($('#speak-check').is(':checked')) {
       // to avoid pronouncing 'li' etc.
-      var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
+      var no_html = '';
+      if (result.status == 2) {
+        no_html = 'Sorry, I need to know more';
+      } else {
+        no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
+      };
       var utterance = new SpeechSynthesisUtterance(no_html);
       utterance.rate = 1.1;
       window.speechSynthesis.speak(utterance);

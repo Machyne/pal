@@ -44,9 +44,6 @@ class Executor(Resource):
     @classmethod
     def process(cls, params):
         service = get_service_by_name(params['service'])
-        if params['service'] == 'yelp':
-            params['result'] = service.go(params) or cls.NO_RESPONSE
-            return
         if service:
             params['result'] = service.go(params) or cls.NO_RESPONSE
         else:
