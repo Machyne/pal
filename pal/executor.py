@@ -2,7 +2,7 @@ from flask import request
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
 
-from pal.services import get_service_by_name
+from pal.services import get_service_by_name, no_response
 
 from pal.nlp.standard_nlp import StandardNLP
 from pal.nlp.feature_extractor import FeatureExtractor
@@ -39,17 +39,13 @@ class Executor(Resource):
         Executor.process(params)
         return params
 
-    NO_RESPONSE = {
-        'response_code': 1,
-        'response': "Sorry, I'm not sure what you mean."
-    }
+    NO_RESPONSE = no_response()
 
     @classmethod
     def process(cls, params):
         service = get_service_by_name(params['service'])
         if service:
-            params['result'] = service.go(params['features']) \
-                or cls.NO_RESPONSE
+            params['result'] = service.go(params) or cls.NO_RESPONSE
         else:
             params['error'] = '[Executor] Invalid service'
             params['result'] = cls.NO_RESPONSE
