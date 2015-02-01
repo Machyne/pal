@@ -15,8 +15,8 @@ class WeatherService(Service):
         return super(self.__class__, self).get_confidence(features)
 
     @wrap_response
-    def go(self, features):
-
+    def go(self, params):
+        features = params['features']
         # Why are there so many types of things that a location can be tagged
         # as? GPE = Geo-Political Entity; GSP = "Geo-Socio-Political group"
         places = [place[0] for place in features['tree'] if place[1] in

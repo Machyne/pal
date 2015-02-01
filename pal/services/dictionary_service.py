@@ -20,7 +20,8 @@ class DictionaryService(Service):
     _ANTONYM = set(['antonyms', 'antonym', 'opposite'])
 
     @wrap_response
-    def go(self, features):
+    def go(self, params):
+        features = params['features']
         tokens = map(str.lower, features['tokens'])
         while len(tokens) and (len(tokens[-1]) < 3 or
                                tokens[-1] == 'mean'):

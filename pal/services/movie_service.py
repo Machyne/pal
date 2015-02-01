@@ -13,5 +13,5 @@ class MovieService(Service):
         return super(self.__class__, self).get_confidence(features)
 
     @wrap_response
-    def go(self, features):
+    def go(self, params):
         return ('ERROR', 'Tom Hanks was in 1 movies.')
