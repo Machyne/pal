@@ -12,6 +12,7 @@ from pal.heuristics.heuristic import Heuristic
 _response_codes = {
     'ERROR': 0,
     'SUCCESS': 1,
+    'NEEDS MORE': 2,
 }
 
 def wrap_response(func):
@@ -22,12 +23,17 @@ def wrap_response(func):
         err_msg = 'Sorry, but I got confused. What did you want?'
         if res is None:
             return {'status': _response_codes['ERROR'], 'summary': err_msg}
+        if isinstance(res, dict):
+            return res
         if not isinstance(res, (list, tuple)):
             res = (res,)
         if len(res) == 1:
             return {'status': _response_codes['SUCCESS'], 'summary': res[0]}
         elif len(res) == 2:
-            return {'status': _response_codes[res[0]], 'summary': res[1]}
+            key = 'summary'
+            if res[0] == 'NEEDS MORE':
+                key = 'needs'
+            return {'status': _response_codes[res[0]], key: res[1]}
         elif len(res) == 3:
             return {'status': _response_codes[res[0]],
                     'summary': res[1], 'data': res[2]}

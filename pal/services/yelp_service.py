@@ -12,5 +12,15 @@ class YelpService(Service):
         return super(self.__class__, self).get_confidence(features)
 
     @wrap_response
-    def go(self, features):
-        return 'OMG I HAZ A YELP!'
+    def go(self, params):
+        print 'here', params.get('user-data', {})
+        if 'location' not in params.get('user-data', {}):
+            return ('NEEDS MORE',
+                {'location':
+                    {'type': 'loc',
+                     'default': [44.46126762422732, -93.15553424445801]}})
+        try:
+            lat, lon = map(float, params['user-data']['location'].split(','))
+        except Exception:
+            return ('ERROR', "I can't handle that format of location data.")
+        return 'OMG I HAZ A YELP AT {}, {}!'.format(lat, lon)

@@ -1,10 +1,11 @@
-var queryPAL = function(query, callback) {
+var queryPAL = function(query, data, callback) {
   $.ajax({
     type: 'POST',
     url: '/api/pal',
     data: {
       query: query,
-      client: 'web'
+      client: 'web',
+      'user-data': data
     },
     success: function (response) {
       callback(query, response.result);
@@ -23,7 +24,7 @@ function expandData (el) {
 
 $(document).ready(function () {
 
-  // show speak checkbox only if browser supports tts
+  // show speak checkbox only if browser supports it
   if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false)  {
     $("#speak").show();
     // load user preference on speech from cookie
@@ -35,9 +36,62 @@ $(document).ready(function () {
   }
 
   var showResult = function (query, result) {
+    console.dir(result)
     prompt.removeAttr('disabled');
     $('#go-btn').removeAttr('disabled');
-    if (result.status) {
+    if (result.status == 2) {
+      $('#user-data').html('');
+      for (need in result.needs) {
+        var type = result.needs[need].type;
+        var def = result.needs[need].default;
+        console.log('type', type, 'def', def);
+        switch(type) {
+          case 'loc':
+            var li = $('<li data-type="' + type + '" data-param="' + need +
+                       '">Location: <input type="text" class="address" ' +
+                       'style="width: 200px"><br><div class="map" ' +
+                       'style="width: 500px; height: 400px; display: ' +
+                       'inline-block;"></div>' +
+                       '<input type="tel" class="lat" style="display:none">' +
+                       '<input type="tel" class="lon" style="display:none">')
+            $('#user-data').append(li);
+            li = $('#user-data li').last();
+            li.hide()
+            var finish = function () {
+              li.find('.map').locationpicker({
+                location: {latitude: def[0], longitude: def[1]},
+                radius: 0,
+                inputBinding: {
+                  latitudeInput: li.find('.lat'),
+                  longitudeInput: li.find('.lon'),
+                  locationNameInput: li.find('.address')
+                },
+                enableAutocomplete: true
+              });
+              li.show()
+            };
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function (pos) {
+                def[0] = pos.coords.latitude;
+                def[1] = pos.coords.longitude;
+                finish();
+              });
+            } else {
+              finish();
+            };
+            break;
+          case 'str':
+            $('#user-data').append(
+              '<li data-type="' + type + '" data-param="' + need + '">' +
+              need + ': ' + '<input type="text" value="' + def + '"></li>')
+            break;
+          default:
+            console.log('unknown requested data type')
+        }
+      };
+      return;
+    } else if (result.status == 1) {
+      $('#user-data').html('');
       var data = '';
       if (result.hasOwnProperty('data')) {
         data = '<div class="data" onclick="expandData(this);">...<br>' +
@@ -48,6 +102,7 @@ $(document).ready(function () {
                             result.summary.replace(/\n+/ig, '<br>') +
                             '</div>' + data + '</li>');
     } else {
+      $('#user-data').html('');
       $('.history').prepend('<li class="error"><div class="query">' +
                             query + '</div><div class="result">' +
                             result.summary.replace(/\n+/ig, '<br>') +
@@ -64,13 +119,38 @@ $(document).ready(function () {
     $('#prompt').val('');
     $('#prompt').focus();
   };
-  var prompt = $('#prompt');
+  var prompt = $('.prompt');
+  var lastQuery = '';
+  var getUserData = function () {
+    var ret = {}
+    console.log('getting user data');
+    $('#user-data li').each(function () {
+      var li = $(this);
+      var need = li.attr('data-param');
+      var type = li.attr('data-type');
+      switch(type) {
+        case 'loc':
+          ret[need] = '' + li.find('.lat').val() + ',' + li.find('.lon').val()
+          break;
+        case 'str':
+          ret[need] = li.find('input').val();
+          break;
+      }
+    });
+    console.log('got user data');
+    console.dir(ret);
+    return ret;
+  };
   var sendQuery = function () {
     var query = prompt.val();
-    prompt.attr('disabled', 'disabled');
-    $('#go-btn').attr('disabled', 'disabled');
-    lastQuery = query;
-    queryPAL(query, showResult);
+    if (query.length > 0 &&
+        (query.trim() != lastQuery.trim() ||
+         $('#user-data').html().trim() != '')) {
+      prompt.attr('disabled', 'disabled');
+      $('#go-btn').attr('disabled', 'disabled');
+      lastQuery = query;
+      queryPAL(query, getUserData(), showResult);
+    }
   };
 
   prompt.focus();
