@@ -14,7 +14,7 @@ class StandardNLP(Resource):
         params['features'] = {'tokens': tokens, 'pos': pos}
 
     @swagger.operation(
-        notes='Tokenize and Tag Parts of Speach',
+        notes='Tokenize and Tag Parts of Speech',
         nickname='standard_nlp',
         parameters=[
             {

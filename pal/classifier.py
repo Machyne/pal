@@ -11,7 +11,8 @@ from pal.nlp.feature_extractor import FeatureExtractor
 
 class Classifier(Resource):
     @swagger.operation(
-        notes='Classify',
+        notes=('Get the names of potentially relevant services and pick the '
+               'one with the highest confidence.'),
         nickname='classify',
         parameters=[
             {
@@ -62,4 +63,5 @@ class Classifier(Resource):
                        .get_confidence(features)
                        for service_name in service_names}
         params['confidences'] = conf_levels
-        params['service'] = max(conf_levels, key=conf_levels.get)
+        params['service'] = (max(conf_levels, key=conf_levels.get) if
+                             max(conf_levels.itervalues()) > 0 else None)
