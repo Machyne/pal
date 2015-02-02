@@ -4,10 +4,11 @@ from pal.services.directory_service import DirectoryService
 from pal.services.movie_service import MovieService
 from pal.services.service import wrap_response
 from pal.services.weather_service import WeatherService
+from pal.services.social_service import SocialService
 
 
 _SERVICE_CLASSES = [DictionaryService, DirectoryService, MovieService,
-                    WeatherService, BonAppService]
+                    WeatherService, BonAppService, SocialService]
 _SERVICES = {cls.short_name(): cls() for cls in _SERVICE_CLASSES}
 
 

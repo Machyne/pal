@@ -12,6 +12,7 @@ from pal.heuristics.heuristic import Heuristic
 _response_codes = {
     'ERROR': 0,
     'SUCCESS': 1,
+    'EXTERNAL': 3
 }
 
 def wrap_response(func):
@@ -31,6 +32,12 @@ def wrap_response(func):
         elif len(res) == 3:
             return {'status': _response_codes[res[0]],
                     'summary': res[1], 'data': res[2]}
+        elif len(res) == 4 and res[0] == 'EXTERNAL':
+            # implement external services
+            # 'action' is thing to do (i.e. post to fb)
+            # 'external' is 3rd party service
+            return {'status': _response_codes[res[0]], 'action': res[1],
+                    'summary': res[2], 'external': res[3]}
         else:
             return {'status': _response_codes['ERROR'], 'summary': err_msg}
     return fn

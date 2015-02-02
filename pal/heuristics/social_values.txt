@@ -1,0 +1,5 @@
+post, 70
+[
+    facebook
+    twitter
+], 100

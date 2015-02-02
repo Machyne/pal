@@ -32,6 +32,7 @@ $(document).ready(function () {
   var showResult = function (query, result) {
     prompt.removeAttr('disabled');
     $('#go-btn').removeAttr('disabled');
+    console.log(result.status);
     if (result.status) {
       var data = '';
       if (result.hasOwnProperty('data')) {
