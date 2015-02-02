@@ -3,6 +3,39 @@ import re
 from pal.heuristics.heuristic import Heuristic
 
 
+""" A class to hold response codes.
+
+    The `response` codes are
+    0: error - something went wrong or the query could not be answered
+    1: success - the query was successfully answered
+"""
+_response_codes = {
+    'ERROR': 0,
+    'SUCCESS': 1,
+}
+
+def wrap_response(func):
+    """ A wrapper for service response functions
+    """
+    def fn(*args, **kwargs):
+        res = func(*args, **kwargs)
+        err_msg = 'Sorry, but I got confused. What did you want?'
+        if res is None:
+            return {'status': _response_codes['ERROR'], 'summary': err_msg}
+        if not isinstance(res, (list, tuple)):
+            res = (res,)
+        if len(res) == 1:
+            return {'status': _response_codes['SUCCESS'], 'summary': res[0]}
+        elif len(res) == 2:
+            return {'status': _response_codes[res[0]], 'summary': res[1]}
+        elif len(res) == 3:
+            return {'status': _response_codes[res[0]],
+                    'summary': res[1], 'data': res[2]}
+        else:
+            return {'status': _response_codes['ERROR'], 'summary': err_msg}
+    return fn
+
+
 class Service(object):
 
     def __init__(self):
