@@ -21,6 +21,62 @@ function expandData (el) {
   return true;
 }
 
+
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+window.fbAsyncInit = function() {
+  FB.init({
+    appId   : '363891403803678',
+    xfbml   : true,
+    version : 'v2.1',
+    cookie  : true  
+  });
+}  
+
+function loggedIntoFacebook() {
+  var connected = false;
+  FB.getLoginStatus(function(response) {
+    console.log(response.status);
+    if (response.status === 'connected') {
+      connected = true;
+    }
+  });
+  return connected;
+}
+
+function handleFacebook(payload) {
+  FB.getLoginStatus(function(response) {
+    console.log("it's here");
+    if (response.status === 'connected') {
+      // post if app is authorized
+      FB.api('/me/feed', 'post', {message: payload.data}, function(response) {
+        // get rid of login stuff if it was presented
+        $('#facebook_login').remove();
+        // show confirmation that the post was successful
+        $('.history').prepend('<li><div class="result">' +
+                              "Ok, I've sent your post to Facebook" +
+                              '</div></li>');
+      });
+    }
+    else {
+      // gotta show the login button (to get around popup blocker)
+      var fb_login_button = '<fb:login-button max_rows="1" size="large" show_faces="false" '+
+       '"auto_logout_link="false" scope="publish_actions"></fb:login-button>';
+
+      $('.history').prepend('<li id="facebook_login"><div class="result">' +
+                      "You'll need to login to Facebook first<br>" +
+                      fb_login_button + '</div>');
+      FB.XFBML.parse(document.getElementById('.history')); // changes XFBML to valid HTML
+    }
+  });
+}
+
 $(document).ready(function () {
 
   // show speak checkbox only if browser supports tts
@@ -32,17 +88,26 @@ $(document).ready(function () {
   var showResult = function (query, result) {
     prompt.removeAttr('disabled');
     $('#go-btn').removeAttr('disabled');
-    console.log(result.status);
     if (result.status) {
-      var data = '';
-      if (result.hasOwnProperty('data')) {
-        data = '<div class="data" onclick="expandData(this);">...<br>' +
-               result.data.replace(/\n+/ig, '<br>') + '</div>'
+
+      // external stuff
+      if (result.status == 3) {
+        if (result.external === 'facebook') {
+          handleFacebook(result.payload);
+          return;
+        }
       }
-      $('.history').prepend('<li><div class="query">' + query +
-                            '</div><div class="result">' +
-                            result.summary.replace(/\n+/ig, '<br>') +
-                            '</div>' + data + '</li>');
+      else {
+        var data = '';
+        if (result.hasOwnProperty('data')) {
+          data = '<div class="data" onclick="expandData(this);">...<br>' +
+                 result.data.replace(/\n+/ig, '<br>') + '</div>'
+        }
+        $('.history').prepend('<li><div class="query">' + query +
+                              '</div><div class="result">' +
+                              result.summary.replace(/\n+/ig, '<br>') +
+                              '</div>' + data + '</li>');
+      }
     } else {
       $('.history').prepend('<li class="error"><div class="query">' +
                             query + '</div><div class="result">' +
@@ -57,6 +122,7 @@ $(document).ready(function () {
       window.speechSynthesis.speak(utterance);
     }
   };
+  
   var prompt = $('.prompt');
   var lastQuery = '';
   var sendQuery = function () {

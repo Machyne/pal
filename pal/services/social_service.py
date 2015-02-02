@@ -22,5 +22,5 @@ class SocialService(Service):
             # found quoted string, just decide the external service
             message = quoted[0]
             if 'facebook' in features['keywords']:
-                return ('EXTERNAL', 'POST', "Ok, I'll post that to Facebook", 
-                        'facebook')
+                return ('EXTERNAL', 'POST', message, 
+                    "Ok, I'll post that to Facebook", 'facebook')
