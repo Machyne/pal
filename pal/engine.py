@@ -47,7 +47,6 @@ class Engine(Resource):
         ])
     def post(self):
         params = {x: request.form[x] for x in request.form}
-        print params
         # Convert string-ified user-data to a dict for swagger API.
         data = params.get('user-data', {})
         while not isinstance(data, dict):
@@ -66,7 +65,6 @@ class Engine(Resource):
                 data[key[10:-1]] = params[key]
                 del params[key]
             params['user-data'] = data
-        print params
         Engine.process(params)
         return params, 200, {'Access-Control-Allow-Origin': '*'}
 

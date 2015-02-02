@@ -11,11 +11,13 @@ Docs: http://www.yelp.com/developers/documentation for the API documentation.
 
 
 Sample usage of the program:
-`python sample.py --term="bars" --location="San Francisco, CA"`
+`python yelp_api.py --term="bars" --location="San Francisco, CA"`
+`python yelp_api.py --term="food" --location="37.788022,-122.399797"`
 """
 import argparse
 import json
 import pprint
+import re
 import sys
 import urllib
 import urllib2
@@ -34,6 +36,8 @@ CONSUMER_KEY = 'yCvKVXaC0lZSvCFDkwzvrg'
 CONSUMER_SECRET = 'MNOC-nytnZiXoIFicf16NJweS2Q'
 TOKEN = '-dDJM7fYdCBinzn4eOX8OVx4Ip-6tPxF'
 TOKEN_SECRET = 'fe5f8pXgFtGo1BjahpkW2EEeKoI'
+
+is_main = __name__ == '__main__'
 
 
 def request(host, path, url_params=None):
@@ -70,7 +74,8 @@ def request(host, path, url_params=None):
                                consumer, token)
     signed_url = oauth_request.to_url()
     
-    print 'Querying {0} ...'.format(url)
+    if is_main:
+        print 'Querying {0} ...'.format(url)
 
     conn = urllib2.urlopen(signed_url, None)
     try:
@@ -93,9 +98,12 @@ def search(term, location):
     
     url_params = {
         'term': term.replace(' ', '+'),
-        'location': location.replace(' ', '+'),
         'limit': SEARCH_LIMIT
     }
+    if re.match(r'[0-9.-]+', location):
+        url_params['ll'] = location
+    else:
+        url_params['location'] = location.replace(' ', '+')
     return request(API_HOST, SEARCH_PATH, url_params=url_params)
 
 def get_business(business_id):
@@ -123,18 +131,22 @@ def query_api(term, location):
     businesses = response.get('businesses')
 
     if not businesses:
-        print 'No businesses for {0} in {1} found.'.format(term, location)
+        if is_main:
+            print 'No businesses for {0} in {1} found.'.format(term, location)
         return
 
-    business_id = businesses[0]['id']
+    if is_main:
+        print ('{0} businesses found, querying business info for the top '
+               'result "{1}"...'.format(len(businesses), businesses[0]['id']))
 
-    print ('{0} businesses found, querying business info for the top result '
-           '"{1}" ...'.format(len(businesses), business_id))
+    responses = map(lambda biz: get_business(biz['id']), businesses)
 
-    response = get_business(business_id)
+    if is_main:
+        print 'Result for business "{0}" found:'.format(businesses[0]['id'])
+        pprint.pprint(businesses[0], indent=2)
+        pprint.pprint(responses[0], indent=2)
 
-    print 'Result for business "{0}" found:'.format(business_id)
-    pprint.pprint(response, indent=2)
+    return responses
 
 
 def main():
@@ -158,5 +170,5 @@ def main():
             'Encountered HTTP error {0}. Abort program.'.format(error.code))
 
 
-if __name__ == '__main__':
+if is_main:
     main()

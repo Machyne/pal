@@ -36,15 +36,11 @@ $(document).ready(function () {
   }
 
   var showResult = function (query, result) {
-    console.dir(result)
-    prompt.removeAttr('disabled');
-    $('#go-btn').removeAttr('disabled');
     if (result.status == 2) {
       $('#user-data').html('');
       for (need in result.needs) {
         var type = result.needs[need].type;
         var def = result.needs[need].default;
-        console.log('type', type, 'def', def);
         switch(type) {
           case 'loc':
             var li = $('<li data-type="' + type + '" data-param="' + need +
@@ -68,7 +64,7 @@ $(document).ready(function () {
                 },
                 enableAutocomplete: true
               });
-              li.show()
+              li.show();
             };
             if (navigator.geolocation) {
               navigator.geolocation.getCurrentPosition(function (pos) {
@@ -122,12 +118,13 @@ $(document).ready(function () {
 
     $('#prompt').val('');
     $('#prompt').focus();
+    prompt.removeAttr('disabled');
+    $('#go-btn').removeAttr('disabled');
   };
   var prompt = $('.prompt');
   var lastQuery = '';
   var getUserData = function () {
     var ret = {}
-    console.log('getting user data');
     $('#user-data li').each(function () {
       var li = $(this);
       var need = li.attr('data-param');
@@ -141,8 +138,6 @@ $(document).ready(function () {
           break;
       }
     });
-    console.log('got user data');
-    console.dir(ret);
     return ret;
   };
   var sendQuery = function () {
