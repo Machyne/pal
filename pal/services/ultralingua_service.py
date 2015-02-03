@@ -42,13 +42,14 @@ class UltraLinguaService(Service):
         iso = cls._SPECIAL_ISO_CODES.get(language, language[:3])
         return iso if language in cls._SUPPORTED_LANGUAGES else None
 
-    @staticmethod
-    def _handle_part_of_speech(pos_dict):
+    def _handle_part_of_speech(self, pos_dict):
         out_fmt = u"{category}{details}"
         category = pos_dict[u'partofspeechcategory']
         details = None
         if category == u'noun' or category == u'adjective':
-            details = u" - {gender}, {number}".format(**pos_dict)
+            details = u" - {gender}, {number}".format(
+                gender=pos_dict.get(u'gender', u''),
+                number=pos_dict.get(u'number', u''))
         else:
             details = u""
         return out_fmt.format(category=category, details=details)
@@ -124,11 +125,14 @@ class UltraLinguaService(Service):
             # If tokens looks like ["translate", <word>, "to", <language>],
             # assume the middle as the_word
             specifiers = self._SPECIFIER_KEYWORDS.intersection(keywords)
-            for keyword in specifiers:
-                word_before = tokens[tokens.index(keyword)-1]
-                if word_before not in [from_lang, to_lang]:
-                    the_word = word_before
-                    break
+            if len(specifiers) == 0:
+                the_word = tokens[tokens.index(to_lang)-1]
+            else:
+                for keyword in specifiers:
+                    word_before = tokens[tokens.index(keyword)-1]
+                    if word_before not in [from_lang, to_lang]:
+                        the_word = word_before
+                        break
             if the_word is None:
                 return ('ERROR', "I can't figure out what word you want "
                                  "translated.")
