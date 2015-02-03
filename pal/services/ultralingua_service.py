@@ -3,7 +3,7 @@
 
 import requests
 
-from pal.services.service import Service
+from pal.services.service import Service, wrap_response
 
 
 API_URL = ("http://api.ultralingua.com/api/definitions/{from_}/{to_}/{word}"
@@ -20,6 +20,8 @@ class UltraLinguaService(Service):
         "french": "fra",
         "german": "deu"
     }
+
+    _SPECIFIER_KEYWORDS = {'from', 'to', 'in'}
 
     default_lang = 'english'
 
@@ -38,8 +40,18 @@ class UltraLinguaService(Service):
         iso = cls._SPECIAL_ISO_CODES.get(language, language[:3])
         return iso if language in cls._SUPPORTED_LANGUAGES else None
 
-    def go(self, features):
-        tokens = map(str.lower, features['tokens'])
+    @staticmethod
+    def _remove_quotes(tokens):
+        clean_tokens = tokens
+        for quote_symbol in ["\"", "'", "``", "''"]:
+            (clean_tokens.remove(quote_symbol) if quote_symbol in clean_tokens
+             else clean_tokens)
+        return clean_tokens
+
+    @wrap_response
+    def go(self, params):
+        features = params['features']
+        tokens = self._remove_quotes(map(str.lower, features['tokens']))
         keywords = set(features['keywords'])
 
         if tokens:
@@ -79,6 +91,15 @@ class UltraLinguaService(Service):
             the_word = None
             # If tokens looks like ["translate", <word>, "to", <language>],
             # assume the middle as the_word
+            specifiers = self._SPECIFIER_KEYWORDS.intersection(keywords)
+            for keyword in specifiers:
+                word_before = tokens[tokens.index(keyword)-1]
+                if word_before not in [from_lang, to_lang]:
+                    the_word = word_before
+                    break
+            if the_word is None:
+                return ('ERROR', "I can't figure out what word you want "
+                                 "translated.")
 
             url = API_URL.format(from_=self._get_iso_code(from_lang),
                                  to_=self._get_iso_code(to_lang),
