@@ -21,6 +21,12 @@ class SocialService(Service):
         if len(quoted) == 1:
             # found quoted string, just decide the external service
             message = quoted[0]
-            if 'facebook' in features['keywords']:
-                return ('EXTERNAL', 'POST', message, 
-                    "Ok, I'll post that to Facebook", 'facebook')
+            # if 'facebook' in features['keywords']:
+            # assume facebook for now since there aren't any other services
+            return ('EXTERNAL', 'POST', message, 
+                "If this got dispalyed, something's wrong", 'facebook')
+
+# TODO:
+# 1. Allow unquoted posting
+# (i.e. 'Post Hi from Pal' instad of 'Post "Hi from Pal"')
+# 2. Twitter/Other social networks?
