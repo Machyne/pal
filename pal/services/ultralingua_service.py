@@ -27,7 +27,7 @@ class UltraLinguaService(Service):
         return True
 
     def get_confidence(self, features):
-        pass
+        return super(self.__class__, self).get_confidence(features)
 
     @classmethod
     def _get_iso_code(cls, language):
@@ -41,44 +41,39 @@ class UltraLinguaService(Service):
     def go(self, features):
         tokens = map(str.lower, features['tokens'])
         keywords = set(features['keywords'])
+
         if tokens:
             # Figure out the source and destination languages
-            from_lang = self.default_lang
+            from_lang = None
             to_lang = None
             languages = self._SUPPORTED_LANGUAGES.intersection(keywords)
+
+            def get_lang_after(keyword, default=self.default_lang):
+                is_present = (keyword in keywords)
+                next_word = (tokens[tokens.index(keyword)+1] if is_present
+                             else None)
+                lang = (next_word if is_present and next_word in languages
+                        else default)
+                return lang
             if len(languages):
-                from_is_present = ('from' in keywords)
-                to_is_present = ('to' in keywords)
-                from_not_to = (from_is_present and not to_is_present)
-                from_and_to = (from_is_present and to_is_present)  # NOQA
-                if len(languages) == 1:
-                    lang = languages.pop()
-                    if from_not_to:
-                        from_lang = lang
-                        to_lang = self.default_lang
-                    else:
-                        # Only one language, the word 'from' isn't present
-                        to_lang = lang
-                elif len(languages) == 2:
-                    # If there's 2 languages, figure out which is from_lang
-                    # and which is to_lang
-                    lang1 = languages.pop()
-                    lang2 = languages.pop()
-                    index_lang1 = tokens.index(lang1)  # NOQA
-                    index_lang2 = tokens.index(lang2)  # NOQA
-                    if from_is_present and to_is_present:
-                        index_from = tokens.index('from')  # NOQA
-                        index_to = tokens.index('to')  # NOQA
 
+                from_lang = get_lang_after('from')
+                to_lang = get_lang_after('to')
+                nondefault_langs = languages.difference({self.default_lang})
+                if (from_lang == self.default_lang
+                        and to_lang == self.default_lang
+                        and len(nondefault_langs) > 0):
+                    # language(s) specified without "from" or "to" keywords
+                    if len(nondefault_langs) == 1:
+                        to_lang = nondefault_langs.pop()
+                    elif 'in' in keywords:
+                        # ex: "What's German in Spanish?"
+                        to_lang = get_lang_after('in')
                     else:
-                        # just assume that the order they appear is from->to
-                        pass
-                else:
-                    # WTF, why are there more than 2 languages??
-                    pass
-
+                        return ('ERROR', "I can't tell what languages you want"
+                                         " to translate between.")
             else:
-                return "I'm not sure what you mean"
+                return 'ERROR', "I'm not sure what you mean."
 
             # Figure out what the user wants translated
             the_word = None
