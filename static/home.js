@@ -34,25 +34,13 @@ window.fbAsyncInit = function() {
   FB.init({
     appId   : '363891403803678',
     xfbml   : true,
-    version : 'v2.1',
+    version : 'v2.2',
     cookie  : true  
   });
 }  
 
-function loggedIntoFacebook() {
-  var connected = false;
-  FB.getLoginStatus(function(response) {
-    console.log(response.status);
-    if (response.status === 'connected') {
-      connected = true;
-    }
-  });
-  return connected;
-}
-
 function handleFacebook(payload) {
   FB.getLoginStatus(function(response) {
-    console.log("it's here");
     if (response.status === 'connected') {
       // post if app is authorized
       FB.api('/me/feed', 'post', {message: payload.data}, function(response) {
@@ -84,6 +72,10 @@ $(document).ready(function () {
     $("#speak").show();
     $("#speak-check").attr("checked", true);
   }
+
+  FB.login(function(response) {
+    console.log("it's here");
+  });
 
   var showResult = function (query, result) {
     prompt.removeAttr('disabled');
