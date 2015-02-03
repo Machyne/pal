@@ -206,8 +206,9 @@ ultralingua
 Translate "chair" to French
 Translate "baseball" from English to Spanish
 Translate "alto" from Spanish
+Translate 'beziehungsweise' from German
 Translate "wolf" Italian
 What's "desk" in German?
 How do you say "table" in Portuguese?
 What's "Italian" in French?
-Translate "German" from English to Spanish?
+Translate "German" from English to Spanish

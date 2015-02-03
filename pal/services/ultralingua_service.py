@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # A service for translations
 
+import json
+
 import requests
 
 from pal.services.service import Service, wrap_response
@@ -39,6 +41,36 @@ class UltraLinguaService(Service):
         """
         iso = cls._SPECIAL_ISO_CODES.get(language, language[:3])
         return iso if language in cls._SUPPORTED_LANGUAGES else None
+
+    @staticmethod
+    def _handle_part_of_speech(pos_dict):
+        out_fmt = u"{category}{details}"
+        category = pos_dict[u'partofspeechcategory']
+        details = None
+        if category == u'noun' or category == u'adjective':
+            details = u" - {gender}, {number}".format(**pos_dict)
+        else:
+            details = u""
+        return out_fmt.format(category=category, details=details)
+
+    def _parse_api_response(self, api_response):
+        results = json.loads(api_response.content)
+        data = u"<ol>{}</ol>"
+        entries = u""
+        entry_fmt = u"<li>{text}: <i>{pos}</i>\n{clarification}</li>"
+        brief_results = []
+        if type(results) != list:
+            return None, None
+        for result in results:
+            entry = {u'text': u'"{}"'.format(result[u'text'])}
+            brief_results.append(entry[u'text'])
+            pos_dict = result[u'partofspeech']
+            entry[u'pos'] = self._handle_part_of_speech(pos_dict)
+            clarification = result.get(u'clarification', None)
+            entry[u'clarification'] = (u";".join(clarification)
+                                       if clarification else u"")
+            entries += entry_fmt.format(**entry)
+        return u", ".join(brief_results), data.format(entries)
 
     @staticmethod
     def _remove_quotes(tokens):
@@ -104,50 +136,16 @@ class UltraLinguaService(Service):
             url = API_URL.format(from_=self._get_iso_code(from_lang),
                                  to_=self._get_iso_code(to_lang),
                                  word=the_word)
-            response = requests.get(url)  # NOQA
-            # parse the response from something that looks like:
-            # response = [{
-            #   "partofspeech": {
-            #     "gender": "feminine",
-            #     "number": "singular",
-            #     "partofspeechcategory": "noun",
-            #     "partofspeechdisplay": "noun"
-            #   },
-            #   "root": "chaise",
-            #   "surfaceform": "chaise",
-            #   "text": "chaise"
-            # }, {
-            #   "partofspeech": {
-            #     "gender": "masculine",
-            #     "number": "singular",
-            #     "partofspeechcategory": "noun",
-            #     "partofspeechdisplay": "noun"
-            #   },
-            #   "root": "fauteuil",
-            #   "surfaceform": "fauteuil",
-            #   "text": "fauteuil"
-            # }, {
-            #   "partofspeech": {
-            #     "gender": "masculine",
-            #     "number": "singular",
-            #     "partofspeechcategory": "noun",
-            #     "partofspeechdisplay": "noun"
-            #   },
-            #   "root": "si\u00e8ge",
-            #   "surfaceform": "si\u00e8ge",
-            #   "text": "si\u00e8ge"
-            # }, {
-            #   "clarification": ["chair a panel"],
-            #   "partofspeech": {
-            #     "partofspeechcategory": "verb",
-            #     "partofspeechdisplay": "verb",
-            #     "tense": "infinitive"
-            #   },
-            #   "root": "pr\u00e9sider",
-            #   "surfaceform": "pr\u00e9sider",
-            #   "text": "pr\u00e9sider"
-            # }]
+            api_response = requests.get(url)
+            if api_response.status_code != 200:
+                return ('ERROR',
+                        "I couldn't find any {} translations for "
+                        "\"{}\".".format(to_lang.capitalize(), the_word))
+            brief, data = self._parse_api_response(api_response)
 
-            # Return cleaned response
+            return ('SUCCESS',
+                    u"{lang} translations for \"{word}\":\n    {brief}".format(
+                        lang=to_lang.capitalize(), word=the_word, brief=brief),
+                    data)
 
         return None
