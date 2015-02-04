@@ -26,7 +26,12 @@ $(document).ready(function () {
   // show speak checkbox only if browser supports tts
   if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false)  {
     $("#speak").show();
-    $("#speak-check").attr("checked", true);
+    // load user preference on speech from cookie
+    if (document.cookie) {
+      if (document.cookie === 'speech=true') {
+        $("#speak-check").attr("checked", true);
+      }
+    }
   }
 
   var showResult = function (query, result) {
@@ -74,6 +79,16 @@ $(document).ready(function () {
     // 'enter' key
     if (e.which == 13) {
       sendQuery();
+    }
+  });
+
+  // remember if user has checked the speech checbox
+  $("#speak-check").on('click', function(event) {
+    if($('#speak-check').is(':checked')) {
+      document.cookie = 'speech=true;';
+    }
+    else {
+      document.cookie = 'speech=false;';
     }
   });
 
