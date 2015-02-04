@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # A service for translations
 
-import json
-
 import requests
 
 from pal.services.service import Service, wrap_response
@@ -55,7 +53,7 @@ class UltraLinguaService(Service):
         return out_fmt.format(category=category, details=details)
 
     def _parse_api_response(self, api_response):
-        results = json.loads(api_response.content)
+        results = api_response.json()
         data = u"<ol>{}</ol>"
         entries = u""
         entry_fmt = u"<li>{text}: <i>{pos}</i>\n{clarification}</li>"
