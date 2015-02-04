@@ -19,10 +19,9 @@ import json
 import pprint
 import re
 import sys
-import urllib
-import urllib2
 
 import oauth2
+import requests
 
 
 API_HOST = 'api.yelp.com'
@@ -51,11 +50,9 @@ def request(host, path, url_params=None):
     Returns:
         dict: The JSON response from the request.
 
-    Raises:
-        urllib2.HTTPError: An error occurs from the HTTP request.
     """
     url_params = url_params or {}
-    url = 'http://{0}{1}?'.format(host, path)
+    url = u'http://{0}{1}?'.format(host, path)
 
     consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
     oauth_request = oauth2.Request(
@@ -77,13 +74,8 @@ def request(host, path, url_params=None):
     if is_main:
         print 'Querying {0} ...'.format(url)
 
-    conn = urllib2.urlopen(signed_url, None)
-    try:
-        response = json.loads(conn.read())
-    finally:
-        conn.close()
-
-    return response
+    r = requests.get(signed_url)
+    return r.json()
 
 def search(term, location):
     """Query the Search API by a search term and location.
@@ -165,9 +157,9 @@ def main():
 
     try:
         query_api(input_values.term, input_values.location)
-    except urllib2.HTTPError as error:
+    except Exception as error:
         sys.exit(
-            'Encountered HTTP error {0}. Abort program.'.format(error.code))
+            'Encountered HTTP error {0}. Abort program.'.format(error))
 
 
 if is_main:

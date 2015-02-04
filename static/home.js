@@ -1,16 +1,18 @@
-var queryPAL = function(query, data, callback) {
+var queryPAL = function(query, usdat, clidat, callback) {
   $.ajax({
     type: 'POST',
     url: '/api/pal',
     data: {
       query: query,
       client: 'web',
-      'user-data': data
+      'user-data': usdat,
+      'client-data': clidat
     },
     success: function (response) {
       callback(query, response.result);
     },
     error: function () {
+      console.log('server error');
       $('.prompt').removeAttr('disabled');
       $('#go-btn').removeAttr('disabled');
     }
@@ -21,6 +23,8 @@ function expandData (el) {
   $(el).toggleClass('expanded');
   return true;
 }
+
+var mapGo;
 
 $(document).ready(function () {
 
@@ -35,47 +39,52 @@ $(document).ready(function () {
     }
   }
 
+  var prompt = $('.prompt');
+  var lastQuery = '';
   var showResult = function (query, result) {
-    if (result.status == 2) {
-      $('#user-data').html('');
-      for (need in result.needs) {
-        var type = result.needs[need].type;
-        var def = result.needs[need].default;
+    if (result.status == 3) {
+      var needs = result.needs_client;
+      var keys = Object.keys(needs);
+      function sendError (msg) {
+        $('#user-data').html('');
+        $('.history').prepend('<li class="error"><div class="query">' +
+                              query + '</div><div class="result">' +
+                              msg + '</div></li>');
+      }
+      function handleIndex(i, data) {
+        if (i >= keys.length) {
+          queryPAL(query, getUserData(), data, showResult);
+          return true;
+        }
+        var need = keys[i];
+        var type = needs[need].type;
+        var msg = needs[need].msg;
         switch(type) {
           case 'loc':
-            var li = $('<li data-type="' + type + '" data-param="' + need +
-                       '">Location: <input type="text" class="address" ' +
-                       'style="width: 200px"><br><div class="map" ' +
-                       'style="width: 500px; height: 400px; display: ' +
-                       'inline-block;"></div>' +
-                       '<input type="tel" class="lat" style="display:none">' +
-                       '<input type="tel" class="lon" style="display:none">')
-            $('#user-data').append(li);
-            li = $('#user-data li').last();
-            li.hide()
-            var finish = function () {
-              li.find('.map').locationpicker({
-                location: {latitude: def[0], longitude: def[1]},
-                radius: 0,
-                inputBinding: {
-                  latitudeInput: li.find('.lat'),
-                  longitudeInput: li.find('.lon'),
-                  locationNameInput: li.find('.address')
-                },
-                enableAutocomplete: true
-              });
-              li.show();
-            };
             if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(function (pos) {
-                def[0] = pos.coords.latitude;
-                def[1] = pos.coords.longitude;
-                finish();
+              navigator.geolocation.getCurrentPosition(function (idx) {
+                return function(pos) {
+                  data[need] = pos.coords.latitude + ',' + pos.coords.longitude;
+                  return handleIndex(idx + 1, data);
+                };
+              }(i), function (posError) {
+                return sendError(msg);
               });
             } else {
-              finish();
-            };
+              return sendError(msg);
+            }
             break;
+          default:
+            return sendError(msg);
+        };
+      };
+      handleIndex(0, {});
+    } else if (result.status == 2) {
+      $('#user-data').html('');
+      for (need in result.needs_user) {
+        var type = result.needs_user[need].type;
+        var def = result.needs_user[need].default;
+        switch(type) {
           case 'str':
             $('#user-data').append(
               '<li data-type="' + type + '" data-param="' + need + '">' +
@@ -103,26 +112,18 @@ $(document).ready(function () {
                             result.summary.replace(/\n+/ig, '<br>') +
                             '</div></li>');
     };
-    if($('#speak-check').is(':checked')) {
+    if($('#speak-check').is(':checked') && result.status <= 1) {
       // to avoid pronouncing 'li' etc.
-      var no_html = '';
-      if (result.status == 2) {
-        no_html = 'Sorry, I need to know more';
-      } else {
-        no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
-      };
+      var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
       var utterance = new SpeechSynthesisUtterance(no_html);
       utterance.rate = 1.1;
       window.speechSynthesis.speak(utterance);
-    }
-
+    };
     $('#prompt').val('');
     $('#prompt').focus();
     prompt.removeAttr('disabled');
     $('#go-btn').removeAttr('disabled');
   };
-  var prompt = $('.prompt');
-  var lastQuery = '';
   var getUserData = function () {
     var ret = {}
     $('#user-data li').each(function () {
@@ -130,9 +131,6 @@ $(document).ready(function () {
       var need = li.attr('data-param');
       var type = li.attr('data-type');
       switch(type) {
-        case 'loc':
-          ret[need] = '' + li.find('.lat').val() + ',' + li.find('.lon').val()
-          break;
         case 'str':
           ret[need] = li.find('input').val();
           break;
@@ -148,7 +146,7 @@ $(document).ready(function () {
       prompt.attr('disabled', 'disabled');
       $('#go-btn').attr('disabled', 'disabled');
       lastQuery = query;
-      queryPAL(query, getUserData(), showResult);
+      queryPAL(query, getUserData(), {}, showResult);
     }
   };
 
@@ -173,4 +171,12 @@ $(document).ready(function () {
 
   $('#go-btn').on('click', sendQuery);
 
+  mapGo = function (el) {
+    var div = $(el).parent();
+    var userData = getUserData();
+    var lat = div.find('.lat').val();
+    var lng = div.find('.lng').val();
+    userData['location'] = lat + ',' + lng;
+    queryPAL(div.find('.q').val(), userData, {}, showResult);
+  }
 });
