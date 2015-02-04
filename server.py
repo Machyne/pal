@@ -88,4 +88,4 @@ logger.addHandler(file_handler)
 
 if __name__ == '__main__':
     # app.register_blueprint(pal_blueprint, url_prefix='/api')
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
