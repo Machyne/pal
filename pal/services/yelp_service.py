@@ -1,5 +1,7 @@
 import re
 
+from flask import render_template
+
 from api.yelp import yelp_api
 from api.google.geocoding import geocode
 from pal.services.service import Service
@@ -13,38 +15,6 @@ class YelpService(Service):
 
     def get_confidence(self, features):
         return super(self.__class__, self).get_confidence(features)
-
-    def _map_html(self, query, lat, lng):
-        html = """
-            <div class="yelp-map-wrapper">
-                Location:
-                <input type="text" class="address" style="width: 500px">
-                <br>
-                <div class="map" style="width: 400px; height: 300px; display:
-                inline-block;"></div>
-                <br>
-                <input type="tel" class="lat" style="display:none">
-                <input type="tel" class="lng" style="display:none">
-                <input type="text" class="q" style="display:none" value="%s">
-                <button onclick="mapGo(this);">Search here.</button>
-            </div>
-            <script type="text/javascript">
-                var div = $('.yelp-map-wrapper').first();
-                div.find('.map').locationpicker({
-                  location: {latitude: %f, longitude: %f},
-                  radius: 0,
-                  inputBinding: {
-                    latitudeInput: div.find('.lat'),
-                    longitudeInput: div.find('.lng'),
-                    locationNameInput: div.find('.address')
-                  },
-                  enableAutocomplete: true
-                });
-            </script>
-        """
-        html = html % (query, lat, lng)
-        html = re.sub(r'\s+', ' ', html)
-        return html
 
     @wrap_response
     def go(self, params):
@@ -111,6 +81,13 @@ class YelpService(Service):
             results += li
         lat, lng = map(float, location.split(','))
         query = "yelp find " + query
-        results += self._map_html(query, lat, lng)
+        template = render_template('yelp.html', query=query, lat=lat, lng=lng)
+        template = re.sub(r'\s+', ' ', template)
+        results += template
         results += '</ul>'
-        return results
+        # Create summary
+        summary = map(lambda biz: biz['name'], businesses)
+        summary[-1] = 'and ' + summary[-1]
+        summary = ', '.join(summary)
+        summary = 'I like {}.'.format(summary)
+        return ('SUCCESS', summary, results)
