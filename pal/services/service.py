@@ -12,8 +12,8 @@ from pal.heuristics.heuristic import Heuristic
 _response_codes = {
     'ERROR': 0,
     'SUCCESS': 1,
-    'NEEDS USER DATA': 2,
-    'NEEDS CLIENT DATA': 3,
+    'NEEDS DATA - USER': 2,
+    'NEEDS DATA - CLIENT': 3,
 }
 
 def wrap_response(func):
@@ -32,9 +32,9 @@ def wrap_response(func):
             return {'status': _response_codes['SUCCESS'], 'summary': res[0]}
         elif len(res) == 2:
             key = 'summary'
-            if res[0] == 'NEEDS USER DATA':
+            if res[0] == 'NEEDS DATA - USER':
                 key = 'needs_user'
-            elif res[0] == 'NEEDS CLIENT DATA':
+            elif res[0] == 'NEEDS DATA - CLIENT':
                 key = 'needs_client'
             return {'status': _response_codes[res[0]], key: res[1]}
         elif len(res) == 3:

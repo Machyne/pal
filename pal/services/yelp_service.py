@@ -29,7 +29,7 @@ class YelpService(Service):
                       ['GPE', 'GSP', 'LOCATION', 'PERSON']]
             orgs = [t[0] for t in features['tree'] if t[1] == 'ORGANIZATION']
             if not len(places):
-                return ('NEEDS CLIENT DATA',
+                return ('NEEDS DATA - CLIENT',
                     {'location':
                         {'type': 'loc',
                          'msg': "Sorry, I can't do that without knowing where "
