@@ -24,9 +24,14 @@ function expandData (el) {
 $(document).ready(function () {
 
   // show speak checkbox only if browser supports tts
-  if ('SpeechSynthesisUtterance' in window) {
+  if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false)  {
     $("#speak").show();
-    $("#speak-check").attr("checked", true);
+    // load user preference on speech from cookie
+    if (document.cookie) {
+      if (document.cookie === 'speech=true') {
+        $("#speak-check").attr("checked", true);
+      }
+    }
   }
 
   var showResult = function (query, result) {
@@ -55,18 +60,17 @@ $(document).ready(function () {
       utterance.rate = 1.1;
       window.speechSynthesis.speak(utterance);
     }
+
+    $('#prompt').val('');
+    $('#prompt').focus();
   };
-  var prompt = $('.prompt');
-  var lastQuery = '';
+  var prompt = $('#prompt');
   var sendQuery = function () {
     var query = prompt.val();
-    if (query.length > 0 && query.trim() != lastQuery.trim()) {
-      prompt.attr('disabled', 'disabled');
-      $('#go-btn').attr('disabled', 'disabled');
-      lastQuery = query;
-      queryPAL(query, showResult);
-      $('.history-prompt').prepend('<li>' + query + '</li>');
-    }
+    prompt.attr('disabled', 'disabled');
+    $('#go-btn').attr('disabled', 'disabled');
+    lastQuery = query;
+    queryPAL(query, showResult);
   };
 
   prompt.focus();
@@ -75,6 +79,16 @@ $(document).ready(function () {
     // 'enter' key
     if (e.which == 13) {
       sendQuery();
+    }
+  });
+
+  // remember if user has checked the speech checbox
+  $("#speak-check").on('click', function(event) {
+    if($('#speak-check').is(':checked')) {
+      document.cookie = 'speech=true;';
+    }
+    else {
+      document.cookie = 'speech=false;';
     }
   });
 
