@@ -39,23 +39,24 @@ $(document).ready(function () {
     }
   }
 
-  var prompt = $('.prompt');
+  var prompt = $('#prompt');
   var lastQuery = '';
+
   var showResult = function (query, result) {
     if (result.status == 3) {
       var needs = result.needs_client;
       var keys = Object.keys(needs);
-      function sendError (msg) {
+      var sendError = function (msg) {
         $('#user-data').html('');
         $('.history').prepend('<li class="error"><div class="query">' +
                               query + '</div><div class="result">' +
                               msg + '</div></li>');
-      }
-      function handleIndex(i, data) {
+      };
+      var handleIndex = function (i, data) {
         if (i >= keys.length) {
           queryPAL(query, getUserData(), data, showResult);
           return true;
-        }
+        };
         var need = keys[i];
         var type = needs[need].type;
         var msg = needs[need].msg;
@@ -112,6 +113,7 @@ $(document).ready(function () {
                             result.summary.replace(/\n+/ig, '<br>') +
                             '</div></li>');
     };
+
     if($('#speak-check').is(':checked') && result.status <= 1) {
       // to avoid pronouncing 'li' etc.
       var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
@@ -119,11 +121,13 @@ $(document).ready(function () {
       utterance.rate = 1.1;
       window.speechSynthesis.speak(utterance);
     };
+
     $('#prompt').val('');
     $('#prompt').focus();
     prompt.removeAttr('disabled');
     $('#go-btn').removeAttr('disabled');
   };
+
   var getUserData = function () {
     var ret = {}
     $('#user-data li').each(function () {
@@ -138,6 +142,7 @@ $(document).ready(function () {
     });
     return ret;
   };
+
   var sendQuery = function () {
     var query = prompt.val();
     if (query.length > 0 &&
@@ -178,5 +183,6 @@ $(document).ready(function () {
     var lng = div.find('.lng').val();
     userData['location'] = lat + ',' + lng;
     queryPAL(div.find('.q').val(), userData, {}, showResult);
-  }
+  };
+
 });
