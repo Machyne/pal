@@ -37,3 +37,10 @@
     - [x] From English to {Spanish, French, German, Italian, Portuguese}
     - [x] From {Spanish, French, German, Italian, Portuguese} to English
     - [x] Between {Spanish, French, German, Italian, Portuguese}
+
+- Yelp (requests to [Yelp API]
+    (http://www.yelp.com/developers/documentation))
+    - [x] Businesses by search terms
+    - [x] Ratings, URL, Phone Number
+    - [x] Find by location
+    - [ ] Businesses appear on map

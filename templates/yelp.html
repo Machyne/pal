@@ -1,0 +1,24 @@
+<div class="yelp-map-wrapper">
+    Location:
+    <input type="text" class="address" style="width: 500px">
+    <br>
+    <div class="map" style="width: 400px; height: 300px; display:inline-block;"></div>
+    <br>
+    <input type="tel" class="lat" style="display:none">
+    <input type="tel" class="lng" style="display:none">
+    <input type="text" class="q" style="display:none" value="{{ query }}">
+    <button onclick="mapGo(this);">Search here.</button>
+</div>
+<script type="text/javascript">
+    var div = $('.yelp-map-wrapper').first();
+    div.find('.map').locationpicker({
+      location: {latitude: {{ lat }}, longitude: {{ lng }} },
+      radius: 0,
+      inputBinding: {
+        latitudeInput: div.find('.lat'),
+        longitudeInput: div.find('.lng'),
+        locationNameInput: div.find('.address')
+      },
+      enableAutocomplete: true
+    });
+</script>
