@@ -70,6 +70,8 @@ function handleFacebook(payload) {
             FB.XFBML.parse(document.getElementById('.history')); // changes XFBML to valid HTML
             fbMessage = payload; // remember the message if/when the user gets logged in (async is hell)
         }
+        $('#prompt').removeAttr('disabled');
+        $('#go-btn').removeAttr('disabled');
     });
 }
 
