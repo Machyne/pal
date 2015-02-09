@@ -42,6 +42,7 @@ $(document).ready(function () {
   var prompt = $('#prompt');
   var lastQuery = '';
 
+  // FOR THE LOVE OF GOD PLEASE COMMENT ME WHOEVER WROTE THIS
   var showResult = function (query, result) {
     if (result.status == 3) {
       var needs = result.needs_client;
@@ -73,7 +74,7 @@ $(document).ready(function () {
               });
             } else {
               return sendError(msg);
-            }
+            } 
             break;
           default:
             return sendError(msg);
@@ -145,9 +146,7 @@ $(document).ready(function () {
 
   var sendQuery = function () {
     var query = prompt.val();
-    if (query.length > 0 &&
-        (query.trim() != lastQuery.trim() ||
-         $('#user-data').html().trim() != '')) {
+    if (query.length > 0) {
       prompt.attr('disabled', 'disabled');
       $('#go-btn').attr('disabled', 'disabled');
       lastQuery = query;
