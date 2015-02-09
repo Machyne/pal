@@ -1,9 +1,14 @@
+# TODO:
+# 1. Allow unquoted posting
+# (i.e. 'Post Hi from Pal' instad of 'Post "Hi from Pal"')
+# 2. Twitter/Other social networks?
+
 import re
 
 from pal.services.service import Service
 from pal.services.service import wrap_response
 
-class SocialService(Service):
+class FacebookService(Service):
     def applies_to_me(self, client, feature_request_type):
         return True
     
@@ -24,9 +29,4 @@ class SocialService(Service):
             # if 'facebook' in features['keywords']:
             # assume facebook for now since there aren't any other services
             return ('EXTERNAL', 'POST', message, 
-                "If this got dispalyed, something's wrong", 'facebook')
-
-# TODO:
-# 1. Allow unquoted posting
-# (i.e. 'Post Hi from Pal' instad of 'Post "Hi from Pal"')
-# 2. Twitter/Other social networks?
+                "If this got displayed, something's wrong", 'facebook')

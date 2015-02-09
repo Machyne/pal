@@ -5,7 +5,7 @@ from pal.services.movie_service import MovieService
 from pal.services.service import wrap_response
 from pal.services.ultralingua_service import UltraLinguaService
 from pal.services.weather_service import WeatherService
-from pal.services.social_service import SocialService
+from pal.services.facebook_service import FacebookService
 from pal.services.yelp_service import YelpService
 
 
@@ -17,7 +17,7 @@ _SERVICE_CLASSES = [
     UltraLinguaService,
     WeatherService,
     YelpService,
-	SocialService
+	FacebookService
 ]
 _SERVICES = {cls.short_name(): cls() for cls in _SERVICE_CLASSES}
 
