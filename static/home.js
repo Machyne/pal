@@ -20,168 +20,233 @@ var queryPAL = function(query, usdat, clidat, callback) {
 };
 
 function expandData (el) {
-  $(el).toggleClass('expanded');
-  return true;
+    $(el).toggleClass('expanded');
+    return true;
+}
+window.fbAsyncInit = function() {
+    FB.init({
+        appId   : '363891403803678',
+        xfbml   : true,
+        version : 'v2.2',
+        cookie  : true
+    });
+
+    FB.Event.subscribe('auth.authResponseChange', function(fbResponse) {
+        handleFacebook(fbMessage);
+    });
+};
+
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+function handleFacebook(payload) {
+    FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+            // post if app is authorized
+            FB.api('/me/feed', 'post', {message: payload.data}, function(response) {
+                // get rid of login stuff if it was presented
+                $('#facebook_login').remove();
+                // show confirmation that the post was successful
+                var message = "Ok, I've posted that to Facebook";
+                $('.history').prepend('<li><div class="result">' + message +
+                '</div></li>');
+                speakIfAppropriate(message);
+            });
+        }
+        else {
+            // gotta show the login button (to get around popup blocker)
+            var fb_login_button = '<fb:login-button max_rows="1" size="large" show_faces="false" '+
+                '"auto_logout_link="false" scope="publish_actions"></fb:login-button>';
+
+            var message = "Before I can post, you'll need to login to Facebook"
+            $('.history').prepend('<li id="facebook_login"><div class="result">' + message +'<br>' +
+            fb_login_button + '</div>');
+            speakIfAppropriate(message);
+            FB.XFBML.parse(document.getElementById('.history')); // changes XFBML to valid HTML
+            fbMessage = payload; // remember the message if/when the user gets logged in (async is hell)
+        }
+    });
+}
+
+function speakIfAppropriate(message) {
+  if($('#speak-check').is(':checked')) {
+    var utterance = new SpeechSynthesisUtterance(message);
+    utterance.rate = 1.1;
+    window.speechSynthesis.speak(utterance);
+  }
 }
 
 var mapGo;
 
 $(document).ready(function () {
 
-  // show speak checkbox only if browser supports it
-  if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false)  {
-    $("#speak").show();
-    // load user preference on speech from cookie
-    if (document.cookie) {
-      if (document.cookie === 'speech=true') {
-        $("#speak-check").attr("checked", true);
-      }
-    }
-  }
-
-  var prompt = $('#prompt');
-  var lastQuery = '';
-
-  // FOR THE LOVE OF GOD PLEASE COMMENT ME WHOEVER WROTE THIS
-  var showResult = function (query, result) {
-    if (result.status == 3) {
-      var needs = result.needs_client;
-      var keys = Object.keys(needs);
-      var sendError = function (msg) {
-        $('#user-data').html('');
-        $('.history').prepend('<li class="error"><div class="query">' +
-                              query + '</div><div class="result">' +
-                              msg + '</div></li>');
-      };
-      var handleIndex = function (i, data) {
-        if (i >= keys.length) {
-          queryPAL(query, getUserData(), data, showResult);
-          return true;
-        };
-        var need = keys[i];
-        var type = needs[need].type;
-        var msg = needs[need].msg;
-        switch(type) {
-          case 'loc':
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(function (idx) {
-                return function(pos) {
-                  data[need] = pos.coords.latitude + ',' + pos.coords.longitude;
-                  return handleIndex(idx + 1, data);
-                };
-              }(i), function (posError) {
-                return sendError(msg);
-              });
-            } else {
-              return sendError(msg);
-            } 
-            break;
-          default:
-            return sendError(msg);
-        };
-      };
-      handleIndex(0, {});
-    } else if (result.status == 2) {
-      $('#user-data').html('');
-      for (need in result.needs_user) {
-        var type = result.needs_user[need].type;
-        var def = result.needs_user[need].default;
-        switch(type) {
-          case 'str':
-            $('#user-data').append(
-              '<li data-type="' + type + '" data-param="' + need + '">' +
-              need + ': ' + '<input type="text" value="' + def + '"></li>')
-            break;
-          default:
-            console.log('unknown requested data type')
+    // show speak checkbox only if browser supports it
+    if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false) {
+        $("#speak").show();
+        // load user preference on speech from cookie
+        if (document.cookie) {
+            if (document.cookie === 'speech=true') {
+                $("#speak-check").attr("checked", true);
+            }
         }
-      };
-    } else if (result.status == 1) {
-      $('#user-data').html('');
-      var data = '';
-      if (result.hasOwnProperty('data')) {
-        data = '<div class="data" onclick="expandData(this);">...<br>' +
-               result.data.replace(/\n+/ig, '<br>') + '</div>'
-      }
-      $('.history').prepend('<li><div class="query">' + query +
-                            '</div><div class="result">' +
-                            result.summary.replace(/\n+/ig, '<br>') +
-                            '</div>' + data + '</li>');
-    } else {
-      $('#user-data').html('');
-      $('.history').prepend('<li class="error"><div class="query">' +
-                            query + '</div><div class="result">' +
-                            result.summary.replace(/\n+/ig, '<br>') +
-                            '</div></li>');
+    }
+
+    var prompt = $('#prompt');
+    var lastQuery = '';
+
+    // FOR THE LOVE OF GOD PLEASE COMMENT ME WHOEVER WROTE THIS
+    var showResult = function (query, result) {
+        // external stuff
+        if (result.status == 4) {
+            if (result.external === 'facebook') {
+                handleFacebook(result.payload);
+                return;
+            }
+        }
+        else if (result.status == 3) {
+            var needs = result.needs_client;
+            var keys = Object.keys(needs);
+            var sendError = function (msg) {
+                $('#user-data').html('');
+                $('.history').prepend('<li class="error"><div class="query">' +
+                query + '</div><div class="result">' +
+                msg + '</div></li>');
+            };
+            var handleIndex = function (i, data) {
+                if (i >= keys.length) {
+                    queryPAL(query, getUserData(), data, showResult);
+                    return true;
+                }
+                ;
+                var need = keys[i];
+                var type = needs[need].type;
+                var msg = needs[need].msg;
+                switch (type) {
+                    case 'loc':
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(function (idx) {
+                                return function (pos) {
+                                    data[need] = pos.coords.latitude + ',' + pos.coords.longitude;
+                                    return handleIndex(idx + 1, data);
+                                };
+                            }(i), function (posError) {
+                                return sendError(msg);
+                            });
+                        } else {
+                            return sendError(msg);
+                        }
+                        break;
+                    default:
+                        return sendError(msg);
+                }
+                ;
+            };
+            handleIndex(0, {});
+        }
+        else if (result.status == 2) {
+            $('#user-data').html('');
+            for (need in result.needs_user) {
+                var type = result.needs_user[need].type;
+                var def = result.needs_user[need].default;
+                switch (type) {
+                    case 'str':
+                        $('#user-data').append(
+                            '<li data-type="' + type + '" data-param="' + need + '">' +
+                            need + ': ' + '<input type="text" value="' + def + '"></li>')
+                        break;
+                    default:
+                        console.log('unknown requested data type')
+                }
+            }
+        }
+        else if (result.status == 1) {
+            $('#user-data').html('');
+            var data = '';
+            if (result.hasOwnProperty('data')) {
+                data = '<div class="data" onclick="expandData(this);">...<br>' +
+                result.data.replace(/\n+/ig, '<br>') + '</div>'
+            }
+            $('.history').prepend('<li><div class="query">' + query +
+            '</div><div class="result">' +
+            result.summary.replace(/\n+/ig, '<br>') +
+            '</div>' + data + '</li>');
+        }
+        else {
+            $('#user-data').html('');
+            $('.history').prepend('<li class="error"><div class="query">' +
+            query + '</div><div class="result">' +
+            result.summary.replace(/\n+/ig, '<br>') +
+            '</div></li>');
+        }
+        ;
+
+        if ($('#speak-check').is(':checked') && result.status <= 1) {
+            // to avoid pronouncing 'li' etc.
+            var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
+            speakIfAppropriate(no_html);
+        }
+
+        $('#prompt').val('');
+        $('#prompt').focus();
+        prompt.removeAttr('disabled');
+        $('#go-btn').removeAttr('disabled');
     };
 
-    if($('#speak-check').is(':checked') && result.status <= 1) {
-      // to avoid pronouncing 'li' etc.
-      var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
-      var utterance = new SpeechSynthesisUtterance(no_html);
-      utterance.rate = 1.1;
-      window.speechSynthesis.speak(utterance);
+    var getUserData = function () {
+        var ret = {}
+        $('#user-data li').each(function () {
+            var li = $(this);
+            var need = li.attr('data-param');
+            var type = li.attr('data-type');
+            switch (type) {
+                case 'str':
+                    ret[need] = li.find('input').val();
+                    break;
+            }
+        });
+        return ret;
     };
 
-    $('#prompt').val('');
-    $('#prompt').focus();
-    prompt.removeAttr('disabled');
-    $('#go-btn').removeAttr('disabled');
-  };
+    var sendQuery = function () {
+        var query = prompt.val();
+        if (query.length > 0) {
+            prompt.attr('disabled', 'disabled');
+            $('#go-btn').attr('disabled', 'disabled');
+            lastQuery = query;
+            queryPAL(query, getUserData(), {}, showResult);
+        }
+    }
 
-  var getUserData = function () {
-    var ret = {}
-    $('#user-data li').each(function () {
-      var li = $(this);
-      var need = li.attr('data-param');
-      var type = li.attr('data-type');
-      switch(type) {
-        case 'str':
-          ret[need] = li.find('input').val();
-          break;
+    prompt.on('keypress', function (e) {
+      // 'enter' key
+      if (e.which == 13) {
+        sendQuery();
       }
     });
-    return ret;
-  };
 
-  var sendQuery = function () {
-    var query = prompt.val();
-    if (query.length > 0) {
-      prompt.attr('disabled', 'disabled');
-      $('#go-btn').attr('disabled', 'disabled');
-      lastQuery = query;
-      queryPAL(query, getUserData(), {}, showResult);
-    }
-  };
+    // remember if user has checked the speech checbox
+    $("#speak-check").on('click', function(event) {
+      if($('#speak-check').is(':checked')) {
+        document.cookie = 'speech=true;';
+      }
+      else {
+        document.cookie = 'speech=false;';
+      }
+    });
 
-  prompt.focus();
+    $('#go-btn').on('click', sendQuery);
 
-  prompt.on('keypress', function (e) {
-    // 'enter' key
-    if (e.which == 13) {
-      sendQuery();
-    }
-  });
-
-  // remember if user has checked the speech checbox
-  $("#speak-check").on('click', function(event) {
-    if($('#speak-check').is(':checked')) {
-      document.cookie = 'speech=true;';
-    }
-    else {
-      document.cookie = 'speech=false;';
-    }
-  });
-
-  $('#go-btn').on('click', sendQuery);
-
-  mapGo = function (el) {
-    var div = $(el).parent();
-    var userData = getUserData();
-    var lat = div.find('.lat').val();
-    var lng = div.find('.lng').val();
-    userData['location'] = lat + ',' + lng;
-    queryPAL(div.find('.q').val(), userData, {}, showResult);
-  };
-
+    mapGo = function (el) {
+      var div = $(el).parent();
+      var userData = getUserData();
+      var lat = div.find('.lat').val();
+      var lng = div.find('.lng').val();
+      userData['location'] = lat + ',' + lng;
+      queryPAL(div.find('.q').val(), userData, {}, showResult);
+    };
 });

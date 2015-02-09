@@ -1,0 +1,2 @@
+post, 70
+facebook, 100
