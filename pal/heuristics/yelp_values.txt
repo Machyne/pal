@@ -1,0 +1,32 @@
+find, 70
+[
+    food
+    eat
+    eats
+    hungry
+    restaurant
+], 70
+[   
+    drink
+    drinks
+    bar
+    bars
+    beverage
+    beverages
+    thirsty
+], 70
+[ 
+    nearby
+    local
+    close
+    closest
+    near
+    nearest
+], 60
+yelp, 80
+movies, -10
+[
+    burton
+    ldc
+    sayles
+], -60

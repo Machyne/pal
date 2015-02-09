@@ -11,7 +11,7 @@ from pal.classifier import Classifier
 
 class Executor(Resource):
     @swagger.operation(
-        notes='Executor',
+        notes='Run the service and send the result to the client.',
         nickname='executor',
         parameters=[
             {

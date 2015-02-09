@@ -31,3 +31,16 @@
 - Bon Appetit (actively scraped from [Bon Appetit website]
     (http://carleton.cafebonappetit.com/cafe/))
     - [x] Single dining hall, single day, any or all meals
+    
+- Translations (requests through [UltraLingua REST API]
+    (http://api.ultralingua.com/ulapi/rest)
+    - [x] From English to {Spanish, French, German, Italian, Portuguese}
+    - [x] From {Spanish, French, German, Italian, Portuguese} to English
+    - [x] Between {Spanish, French, German, Italian, Portuguese}
+
+- Yelp (requests to [Yelp API]
+    (http://www.yelp.com/developers/documentation))
+    - [x] Businesses by search terms
+    - [x] Ratings, URL, Phone Number
+    - [x] Find by location
+    - [ ] Businesses appear on map

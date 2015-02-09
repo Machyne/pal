@@ -35,10 +35,45 @@ class Engine(Resource):
                 'allowMultiple': False,
                 'dataType': 'string',
                 'paramType': 'form'
+            },
+            {
+                'name': 'user-data',
+                'description': 'Additional data such as credit card',
+                'required': False,
+                'allowMultiple': False,
+                'dataType': 'json',
+                'paramType': 'form'
+            },
+            {
+                'name': 'client-data',
+                'description': 'Additional data such as location',
+                'required': False,
+                'allowMultiple': False,
+                'dataType': 'json',
+                'paramType': 'form'
             }
         ])
     def post(self):
         params = {x: request.form[x] for x in request.form}
+        for data_type in ['user-data', 'client-data']:
+            # Convert string-ified user-data to a dict for swagger API.
+            data = params.get(data_type, {})
+            while not isinstance(data, dict):
+                try:
+                    true, false = True, False
+                    data = eval(data)
+                except Exception:
+                    data = {}
+            params[data_type] = data
+            # Convert [] notation to nested dicts
+            bad_nested = [x for x in params if x.startswith(data_type + '[')]
+            if len(bad_nested):
+                data = {}
+                for key in bad_nested:
+                    # ignore '*-data[' and ']'
+                    data[key[len(data_type) + 1:-1]] = params[key]
+                    del params[key]
+                params[data_type] = data
         Engine.process(params)
         return params, 200, {'Access-Control-Allow-Origin': '*'}
 

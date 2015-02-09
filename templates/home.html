@@ -9,12 +9,14 @@
   <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
   <script src="{{ url_for('static', filename='home.js') }}"></script>
   <script src="//connect.facebook.net/en_US/sdk.js"></script>
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=places"></script>
+  <script src="{{ url_for('static', filename='locationpicker.js') }}"></script>
 </head>
 <body>
   <div id="fb-root"></div>
   <div class="top">
-    <div class="center">
-      <h1 class="title">Hi, how can I help you?</h1>
+	<h1 class="title">Hi, how can I help you?</h1>
       <div class="row">
         <div class="col-lg-6 col-md-8 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-2 col-sm-offset-2">
           <div class="input-group">
@@ -27,19 +29,19 @@
               <button class="btn btn-default" type="button" id="go-btn">Go!</button>
             </span>
           </div>
+          <ul id="user-data"></ul>
         </div>
       </div>
     </div>
-  </div>
-  <div class="bottom">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <ul class="history"></ul>
+    <div class="bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <ul class="history"></ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   <div class="navbar navbar-default navbar-fixed-bottom footer">
     <div class="container">
       <span class="footer-left"><a href="/debug">Debug view</a></span>
