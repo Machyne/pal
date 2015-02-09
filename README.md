@@ -44,3 +44,6 @@
     - [x] Ratings, URL, Phone Number
     - [x] Find by location
     - [ ] Businesses appear on map
+
+- Facebook (requests to [Facebook Graph API](https://developers.facebook.com/docs/graph-api))
+    - [x] Post to timeline on behalf of user
