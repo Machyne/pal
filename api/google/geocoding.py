@@ -1,12 +1,11 @@
 import requests
 
 API_KEY = 'AIzaSyAT6m1naoO9zYBIuR_Fxbkplt1-uqR5rLk'
-SERVER_IP = '137.22.5.73'
 
 def geocode(location, default=None):
     url = ("https://maps.googleapis.com/maps/api/geocode/json?"
-           "address={}&key={}&userIp={}")
-    url = url.format(location.replace(' ', '+'), API_KEY, SERVER_IP)
+           "address={}&key={}")
+    url = url.format(location.replace(' ', '+'), API_KEY)
     r = requests.get(url)
     json = r.json()
     if json['status'] != 'OK':
@@ -16,3 +15,6 @@ def geocode(location, default=None):
         results = results[0]
     loc = results['geometry']['location']
     return [loc['lat'], loc['lng']]
+
+if __name__ == '__main__':
+    print geocode('Northfield, MN', 'no response')
