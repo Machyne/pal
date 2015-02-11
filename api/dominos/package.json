@@ -1,0 +1,12 @@
+{
+  "name": "PalDominos",
+  "version": "1.0.0",
+  "description": "Dominos server for PAL.",
+  "dependencies": {
+    "dominos": "^0.1.2",
+    "request": "^2.53.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
