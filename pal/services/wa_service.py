@@ -31,15 +31,6 @@ class WAService(Service):
         # send the query to WA
         response = requests.get(query_url)
 
-        # increment APPID counter in wa_counts.csv
-        counts = open('wa_counts.csv','rwb')
-        for line in counts:
-            split = line.strip().split(',')
-            if APPID == split[0]:
-                split[1] = str(int(split[1]) + 1)
-            split.append('\n')
-
-
         # parse the WA results
         root = ET.fromstring(response.text)
         return_value = "Error: No Valid Response from Wolfram Alpha"
