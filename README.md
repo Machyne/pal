@@ -23,6 +23,9 @@
         - [ ] All professors in a department
         - [ ] "Show me all the Brians on campus"
 
+- Facebook (requests to [Facebook Graph API](https://developers.facebook.com/docs/graph-api))
+    - [x] Post to timeline on behalf of user
+
 - Weather (requests to [Yahoo weather API]
         (https://query.yahooapis.com/v1/public/yql?))
     - [x] High/low temperatures
@@ -45,8 +48,7 @@
     - [x] Find by location
     - [ ] Businesses appear on map
 
-- Facebook (requests to [Facebook Graph API](https://developers.facebook.com/docs/graph-api))
-    - [x] Post to timeline on behalf of user
+
 
 - Wolfram|Alpha (requests using Wolfram|Alpha's API)
     - [x] Run queries on natural language and get numerical output
