@@ -18,7 +18,7 @@ def _load_keyword_data():
     dir_ = path.realpath(
         path.join(
             path.dirname(__file__),
-            '..', 'heuristics'))
+            '..', 'heuristics', 'values'))
     files = [f for f in listdir(dir_) if re.match(r'[a-z]+_values\.txt', f)]
     files = map(lambda f: path.realpath(path.join(dir_, f)), files)
     for file_ in files:

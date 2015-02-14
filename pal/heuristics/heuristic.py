@@ -25,6 +25,7 @@ class Heuristic(object):
         file_ = path.realpath(
             path.join(
                 path.dirname(__file__),
+                'values',
                 self._name + '_values.txt'))
         lines = []
         try:
