@@ -4,11 +4,13 @@
 
 APPID = "QG6645-R77PAAXQX9"
 
+import urllib
+import xml.etree.ElementTree as ET
+
+import requests
+
 from pal.services.service import Service
 from pal.services.service import wrap_response
-import xml.etree.ElementTree as ET
-import urllib
-import requests
 
 class WAService(Service):
 
