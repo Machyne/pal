@@ -16,7 +16,9 @@ class WAService(Service):
         return True
 
     def get_confidence(self, features):
-        return super(self.__class__, self).get_confidence(features)
+        my_confidence = super(self.__class__, self).get_confidence(features)
+        fall_back = 15
+        return max(my_confidence, fall_back)
 
     @wrap_response
     def go(self, params):

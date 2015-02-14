@@ -1,2 +1,14 @@
-plus,50
-minus,50
+plus,40
+minus,40
+multiply,40
+times,20
+divide,40
+difference,20
+sum,20
+add,40
+subtract,40
+squared,40
+root,35
+power,40
+factorial,40
+distance,25
