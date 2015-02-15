@@ -12,6 +12,7 @@ import requests
 from pal.services.service import Service
 from pal.services.service import wrap_response
 
+
 class WAService(Service):
 
     def applies_to_me(self, client, feature_request_type):
@@ -44,11 +45,12 @@ class WAService(Service):
             for element in root[0][0]:
                 if element.tag == 'plaintext':
                     return_value = element.text
-                    return {'SUCCESS', return_value, return_value}
+                    return ('SUCCESS', return_value, return_value)
 
-        return {'ERROR', return_value}
+        return ('ERROR', return_value)
+
 
 if __name__ == '__main__':
     my_WA_service = WAService()
-    params = {"query":"What is the distance from the earth to the moon"}
+    params = {'query': "What is the distance from the earth to the moon"}
     print my_WA_service.go(params)
