@@ -1,0 +1,5 @@
+While all tests don't pass:
+    for each service:
+        if service had things wrong (things missing or extra things):
+            step service
+    run tests
