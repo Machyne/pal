@@ -14,12 +14,12 @@ _SERVICE_CLASSES = [
     BonAppService,
     DictionaryService,
     DirectoryService,
+    FacebookService,
     MovieService,
     UltraLinguaService,
+    WAService,
     WeatherService,
     YelpService,
-	FacebookService,
-    WAService
 ]
 _SERVICES = {cls.short_name(): cls() for cls in _SERVICE_CLASSES}
 
