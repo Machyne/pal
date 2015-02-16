@@ -4,7 +4,7 @@ import os.path
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
-from pal.nlp.preprocessing import StandardNLP
+from pal.nlp.standard_nlp import StandardNLP
 from pal.nlp.feature_extractor import FeatureExtractor
 
 keywords = 'keywords'
