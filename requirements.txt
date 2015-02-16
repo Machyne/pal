@@ -1,9 +1,10 @@
 aniso8601==0.83
 argparse==1.2.1
 beautifulsoup4==4.3.2
-flask-restful-swagger==0.14
-Flask-RESTful==0.2.12
 Flask==0.10.1
+Flask-RESTful==0.2.12
+flask-restful-swagger==0.14
+Flask-Testing==0.4.2
 gnureadline==6.3.3
 httplib2==0.9
 ipython==2.3.0
@@ -21,5 +22,6 @@ pytz==2014.7
 requests==2.5.1
 six==1.8.0
 SQLAlchemy==0.9.8
+teamcity-messages==1.12
 termcolor==1.1.0
-Werkzeug==0.9.6
+Werkzeug==0.10.1
