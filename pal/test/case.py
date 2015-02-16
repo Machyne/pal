@@ -7,9 +7,9 @@
 
 import unittest
 
-from flask.ext.testing import TestCase as FlaskTestCase
-
-from server import app
+# from flask.ext.testing import TestCase as FlaskTestCase
+#
+# from server import app
 
 
 class PALTestCase(object):
@@ -99,8 +99,8 @@ class PALTestCase(object):
                     cls.assert_data_matches_format(data[key], value_format)
 
 
-class ServerTestCase(FlaskTestCase, PALTestCase):
-    """ TestCase class for live server tests"""
-    def create_app(self):
-        app.config['TESTING'] = True
-        return app
+# class ServerTestCase(FlaskTestCase, PALTestCase):
+#     """ TestCase class for live server tests"""
+#     def create_app(self):
+#         app.config['TESTING'] = True
+#         return app
