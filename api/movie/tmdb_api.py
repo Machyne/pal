@@ -18,9 +18,11 @@ class TMDBMovie(object):
     def __init__(self, movie_dict):
         self.title = movie_dict['title']
         self.date_ = datetime.strptime(movie_dict['release_date'], '%Y-%m-%d') \
-            if movie_dict['release_date'] else None
+            if 'released_date' in movie_dict and movie_dict['release_date'] \
+            else None
         self.image_url = _IMAGE_BASE_URL + movie_dict['poster_path'] \
-            if movie_dict['poster_path'] else None
+            if 'poster_path' in movie_dict and movie_dict['poster_path'] \
+            else None
 
     def __str__(self):
         return '{0} ({1})'.format(self.title, self.date_.year)
@@ -30,7 +32,9 @@ class TMDBPerson(object):
     def __init__(self, person_dict):
         self.name = person_dict['name']
         self.id = person_dict['id']
-        self.image_url = _IMAGE_BASE_URL + person_dict['profile_path']
+        self.image_url = _IMAGE_BASE_URL + person_dict['profile_path'] \
+            if 'poster_path' in person_dict and person_dict['poster_path'] \
+            else None
 
     def __str__(self):
         return '{0} ({1})'.format(self.name, self.image_url)

@@ -18,10 +18,8 @@ class MovieService(Service):
         return True
 
     def get_confidence(self, params):
-        # TODO: Actually get params rather than features.
         query = params['query']
         return 100 if parse(query, self.grammar) else 0
-        # return super(self.__class__, self).get_confidence(features)
 
     @wrap_response
     def go(self, params):

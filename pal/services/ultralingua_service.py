@@ -28,8 +28,8 @@ class UltraLinguaService(Service):
     def applies_to_me(self, client, feature_request_type):
         return True
 
-    def get_confidence(self, features):
-        return super(self.__class__, self).get_confidence(features)
+    def get_confidence(self, params):
+        return super(self.__class__, self).get_confidence(params)
 
     @classmethod
     def _get_iso_code(cls, language):
@@ -93,7 +93,7 @@ class UltraLinguaService(Service):
 
             def get_lang_after(keyword, default=self.default_lang):
                 is_present = (keyword in keywords)
-                next_word = (tokens[tokens.index(keyword)+1] if is_present
+                next_word = (tokens[tokens.index(keyword) + 1] if is_present
                              else None)
                 lang = (next_word if is_present and next_word in languages
                         else default)
@@ -124,10 +124,10 @@ class UltraLinguaService(Service):
             # assume the middle as the_word
             specifiers = self._SPECIFIER_KEYWORDS.intersection(keywords)
             if len(specifiers) == 0:
-                the_word = tokens[tokens.index(to_lang)-1]
+                the_word = tokens[tokens.index(to_lang) - 1]
             else:
                 for keyword in specifiers:
-                    word_before = tokens[tokens.index(keyword)-1]
+                    word_before = tokens[tokens.index(keyword) - 1]
                     if word_before not in [from_lang, to_lang]:
                         the_word = word_before
                         break

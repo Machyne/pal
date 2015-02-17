@@ -60,7 +60,7 @@ class Classifier(Resource):
             service_names = cls._CACHE[key]
         # Pick the service with the highest confidence
         conf_levels = {service_name: get_service_by_name(service_name)
-                       .get_confidence(features)
+                       .get_confidence(params)
                        for service_name in service_names}
         params['confidences'] = conf_levels
         params['service'] = (max(conf_levels, key=conf_levels.get) if
