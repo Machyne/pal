@@ -7,10 +7,11 @@ from config import TMDB_KEY
 
 _BASE_URL = 'http://api.themoviedb.org/3/'
 _PERSON_BY_NAME = 'search/person?query={name}&api_key={api_key}'
+_MOVIE_BY_TITLE = 'search/movie?query={title}&api_key={api_key}'
 _CREDITS_BY_PERSON_ID = 'person/{id}/movie_credits?api_key={api_key}'
 _IMAGE_BASE_URL = 'http://image.tmdb.org/t/p/w500/'
-_PEOPLE = {}
-_MOVIES = {}
+_PEOPLE = {}  # TMDBPerson objects indexed by name
+_MOVIES = {}  # TMDBMovie objects indexed by title
 
 
 class TMDBMovie(object):
@@ -76,11 +77,25 @@ def get_person_by_name(name):
     return None
 
 
+def get_movie_by_title(title):
+    """ Returns a TMDBMovie for the first search result matching `title`. """
+    if title in _MOVIES:
+        return _MOVIES[title]
+    response = _get(_MOVIE_BY_TITLE, title=title)
+    if 'results' in response:
+        results = response['results']
+        if results:
+            movie = TMDBMovie(results[0])
+            _MOVIES[title] = movie
+            return movie
+    return None
+
+
 def get_credits_by_name(name):
-    """ Returns a list of unique TMDBCredits for the TMDBPerson `person` """
+    """ Returns a list of unique TMDBCredits for the TMDBPerson `person`. """
     person = get_person_by_name(name)
     if not person:
-        return None
+        return []
     id_ = person.id
     results = _get(_CREDITS_BY_PERSON_ID, id=id_)
     credits_set = set()
@@ -106,4 +121,5 @@ if __name__ == '__main__':
     # get_movie_names_for_person('Tom Hanks')
     # for c in get_credits_by_name('Wes Anderson'):
         # print c
-    print get_person_by_name('tom hanks')
+    # print get_person_by_name('tom hanks')
+    print get_movie_by_title('2001')
