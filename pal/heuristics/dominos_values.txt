@@ -1,0 +1,84 @@
+cheese, 10
+[
+    robust inspired tomato sauce
+    tomato sauce
+    sauce
+], 10
+marinara sauce, 10
+white sauce, 10
+[
+    barbecue sauce
+    bbq sauce
+], 10
+pepperoni, 10
+[
+    italian sausage
+    sausage
+], 10
+[
+    sliced italian sausage
+    sliced sausage
+], 10
+beef, 10
+[
+    philly steak
+    steak
+], 10
+ham, 10
+bacon, 10
+salami, 10
+[
+    premium chicken
+    chicken
+], 10
+[
+    cheddar cheese
+    cheddar
+], 10
+[
+    feta cheese
+    feta
+], 10
+[
+    shredded parmesan asiago
+    parmesan
+    asiago
+], 10
+[
+    shredded provolone cheese
+    provolone
+], 10
+banana peppers, 10
+black olives, 10
+[
+    green olives
+    olives
+], 10
+[
+    green pepper
+    pepper
+], 10
+[
+    jalapeno peppers
+    jalapenos
+    jalapeno
+], 10
+mushrooms, 10
+pineapple, 10
+[
+    onions
+    onion
+], 10
+[
+    roasted red pepper
+    red pepper
+], 10
+spinach, 10
+[
+    diced tomatoes
+    tomatoes
+    tomato
+], 10
+hot sauce, 10
+crust, 50
+pizza, 50
