@@ -32,6 +32,7 @@ person_relation:
   "that"?, movie_act_on_person, person_concrete, ("in", "them")?
   "that"?, person_act_on_movie, "by", person_concrete
   aux, person_concrete, [(person_act_on_movie, "from"?), (movie_act_on_person, "in"?)]
+  be, person_concrete, "in"
   person_concrete, aux?, person_act_on_movie
 
 movie_abstract: det?, adj_phrase?, movie_word

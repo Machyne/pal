@@ -1,4 +1,5 @@
 import pprint
+import re
 import sys
 from collections import defaultdict
 
@@ -44,7 +45,9 @@ def generate_grammar_features(grammar):
 
 
 def preprocess(string, grammar_features):
-    """ Convert numbers and unknown words to wild cards. """
+    """ Normalize string, convert numbers and unknown words to wild cards. """
+    string = re.sub('(.*)[\.\?!]$', '\\1', string.strip().lower())
+
     def wild_card(word):
         try:
             int(word, 10)

@@ -1,9 +1,6 @@
-import re
 from collections import defaultdict
 
-from pal.grammars.grammars import make_chomsky_normal_form
-from pal.grammars.grammars import parse_grammar_from_file
-from pal.grammars.parser import generate_grammar_features
+from pal.grammars import get_grammar_for_service
 from pal.grammars.parser import parse
 
 
@@ -17,10 +14,7 @@ def main():
 
 def test_grammar(service_name):
     print('Testing grammar for service \'{0}\'...'.format(service_name))
-    grammar_file = '{0}/{1}_grammar.txt'.format(_GRAMMARS_DIR, service_name)
-    grammar = parse_grammar_from_file(grammar_file)
-    make_chomsky_normal_form(grammar)
-    grammar_features = generate_grammar_features(grammar)
+    grammar = get_grammar_for_service(service_name)
     all_examples = load_examples_from_file(_EXAMPLES_FILE)
     ex_total = 0
     counter_ex_total = 0
@@ -30,14 +24,14 @@ def test_grammar(service_name):
         if key == service_name:
             ex_total += len(examples)
             for example in examples:
-                if parse(example, grammar_features):
+                if parse(example, grammar):
                     hits += 1
                 else:
                     print '>', example
         else:
             counter_ex_total += len(examples)
             for counterexample in examples:
-                if parse(counterexample, grammar_features):
+                if parse(counterexample, grammar):
                     misses += 1
                     print 'X', counterexample
     print('Success:\t\t{0}/{1}'.format(hits, ex_total))
@@ -48,8 +42,8 @@ def load_examples_from_file(examples_file):
     with open(examples_file) as f:
         examples = defaultdict(list)
         cur_name = None
-        for raw_line in f:
-            line = re.sub('(.*)[\.\?!]$', '\\1', raw_line.strip().lower())
+        for line in f:
+            line = line.strip()
             if cur_name is None:
                 if line:
                     cur_name = line

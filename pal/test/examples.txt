@@ -117,6 +117,7 @@ How many movies has Tom Hanks starred in?
 How many movies has Wes Anderson directed?
 How many movies have been directed by wes Anderson
 How many movies have Tom Hanks
+How many movies was tom hanks in?
 Name all Wes Anderson movies
 Name everything Wes Anderson has directed
 Show me everything directed by Tom Hanks

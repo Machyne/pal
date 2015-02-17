@@ -16,8 +16,10 @@ _MOVIES = {}
 class TMDBMovie(object):
     def __init__(self, movie_dict):
         self.title = movie_dict['title']
-        self.date_ = datetime.strptime(movie_dict['release_date'], '%Y-%m-%d')
-        self.image_url = _IMAGE_BASE_URL + movie_dict['poster_path']
+        self.date_ = datetime.strptime(movie_dict['release_date'], '%Y-%m-%d') \
+            if movie_dict['release_date'] else None
+        self.image_url = _IMAGE_BASE_URL + movie_dict['poster_path'] \
+            if movie_dict['poster_path'] else None
 
     def __str__(self):
         return '{0} ({1})'.format(self.title, self.date_.year)
@@ -62,17 +64,23 @@ def _get(endpoint, **params):
 
 def get_person_by_name(name):
     """ Returns a TMDBPerson for the first search result matching `name`. """
-    if name not in _PEOPLE:
-        results = _get(_PERSON_BY_NAME, name=name)['results']
+    if name in _PEOPLE:
+        return _PEOPLE[name]
+    response = _get(_PERSON_BY_NAME, name=name)
+    if 'results' in response:
+        results = response['results']
         if results:
             person = TMDBPerson(results[0])
             _PEOPLE[name] = person
-    return _PEOPLE[name] if name in _PEOPLE else None
+            return person
+    return None
 
 
 def get_credits_by_name(name):
     """ Returns a list of unique TMDBCredits for the TMDBPerson `person` """
     person = get_person_by_name(name)
+    if not person:
+        return None
     id_ = person.id
     results = _get(_CREDITS_BY_PERSON_ID, id=id_)
     credits_set = set()
@@ -96,5 +104,6 @@ def get_credits_by_name(name):
 
 if __name__ == '__main__':
     # get_movie_names_for_person('Tom Hanks')
-    for c in get_credits_by_name('Wes Anderson'):
-        print c
+    # for c in get_credits_by_name('Wes Anderson'):
+        # print c
+    print get_person_by_name('tom hanks')
