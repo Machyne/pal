@@ -21,20 +21,27 @@ def test_grammar(service_name):
     grammar = parse_grammar_from_file(grammar_file)
     make_chomsky_normal_form(grammar)
     grammar_features = generate_grammar_features(grammar)
-    examples = load_examples_from_file(_EXAMPLES_FILE)
-    total = len(examples[service_name])
-    success = sum(parse(example, grammar_features)
-                  for example in examples[service_name])
-    print('Success:\t\t{0}/{1}'.format(success, total))
-    total = 0
+    all_examples = load_examples_from_file(_EXAMPLES_FILE)
+    ex_total = 0
+    counter_ex_total = 0
+    hits = 0
     misses = 0
-    for key in examples.iterkeys():
+    for key, examples in all_examples.iteritems():
         if key == service_name:
-            continue
-        total += len(examples[key])
-        misses += sum(parse(counterexample, grammar_features)
-                      for counterexample in examples[key])
-    print('False Positives:\t{0}/{1}'.format(misses, total))
+            ex_total += len(examples)
+            for example in examples:
+                if parse(example, grammar_features):
+                    hits += 1
+                else:
+                    print '>', example
+        else:
+            counter_ex_total += len(examples)
+            for counterexample in examples:
+                if parse(counterexample, grammar_features):
+                    misses += 1
+                    print 'X', counterexample
+    print('Success:\t\t{0}/{1}'.format(hits, ex_total))
+    print('False Positives:\t{0}/{1}'.format(misses, counter_ex_total))
 
 
 def load_examples_from_file(examples_file):

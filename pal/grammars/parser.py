@@ -1,5 +1,6 @@
 import pprint
 import re
+import sys
 from collections import defaultdict
 
 from pal.grammars.grammars import make_chomsky_normal_form
@@ -7,7 +8,7 @@ from pal.grammars.grammars import parse_grammar_from_file
 
 
 def main():
-    grammar = parse_grammar_from_file('grammar.txt')
+    grammar = parse_grammar_from_file(sys.argv[1])
     make_chomsky_normal_form(grammar)
     grammar_features = generate_grammar_features(grammar)
     pprint.pprint(grammar)
@@ -39,10 +40,17 @@ def generate_grammar_features(grammar):
 
 
 def parse(string, grammar_features):
+    def wild_card(word):
+        try:
+            int(word, 10)
+            return '#'
+        except ValueError:
+            return '*'
     lexicon = grammar_features[2]
-    words = [word if word in lexicon else '*' for word in string.split()]
+    words = [word if word in lexicon else wild_card(word)
+             for word in string.split()]
     string = ' '.join(words)
-    string = re.sub(r'\*( \*)*', '*', string)
+    string = re.sub(r'(\*|#)( (\*|#))+', '*', string)
     return cyk(string, *grammar_features)
 
 
