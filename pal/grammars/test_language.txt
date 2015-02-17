@@ -1,0 +1,11 @@
+aux person_concrete movie_act_on_person
+aux person_concrete movie_act_on_person in
+aux person_concrete person_act_on_movie
+aux person_concrete person_act_on_movie from
+movie_act_on_person person_concrete
+movie_act_on_person person_concrete in_them
+person_act_on_movie by person_concrete
+that movie_act_on_person person_concrete
+that movie_act_on_person person_concrete in_them
+that person_act_on_movie by person_concrete
+with person_concrete
