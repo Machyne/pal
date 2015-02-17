@@ -1,0 +1,38 @@
+MOVIE:
+  movie_to_person_schema
+
+movie_to_person_schema: movie_query, person_relation, prep_phrase?
+
+movie_query: wh_phrase, movie_abstract, ("are", "there")?
+wh_phrase: wh_word, aux?
+wh_word: ["which", "who", "what", ("how", "many")]
+person_relation:
+  "with", person_concrete
+  "that"?, movie_act_on_person, person_concrete, ("in", "them")?
+  "that"?, person_act_on_movie, "by", person_concrete
+  aux, person_concrete, [(person_act_on_movie, "from"?), (movie_act_on_person, "in"?)]
+
+movie_abstract: det?, adj_phrase?, movie_word
+person_concrete: person_abstract?, name
+person_abstract: det?, adj_phrase?, person_word
+name: "*"
+adj_phrase: "ADJ"
+prep_phrase: "PREP"
+movie_act_on_person: aux?, [act, be, feature, have, include, star]
+person_act_on_movie: aux?, [direct, make, write]
+
+feature: ["feature", "features", "featured", "featuring"]
+include: ["include", "includes", "included", "including"]
+act: ["act", "acts", "acted", "acting"]
+star: ["star", "stars", "starred", "starring"]
+direct: ["direct", "directs", "directed"]
+make: ["make", "makes", "made"]
+write: ["write", "writes", "wrote"]
+movie_word: ["blockbuster", "blockbuster", "film", "films", "flick", "flicks", "movie", "movies"]
+person_word: ["guy", "woman", "man", "girl", "boy", "actor", "actors", "actress", "actresses", "director", "directors", "writer", "writers"]
+
+aux: [have, be, do]
+be: ["be", "'s", "is", "are", "been", "were"]
+have: ["have", "'s", "has", "had"]
+do: ["do", "'s", "does", "did"]
+det: ["the", "that", "those"]
