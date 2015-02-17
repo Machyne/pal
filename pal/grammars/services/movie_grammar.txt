@@ -62,7 +62,7 @@ wh_phrase: wh_word, aux?
 wh_time_phrase: wh_time_word, aux?
 wh_word: ["which", "what", ("how", "many")]
 wh_time_word: ["when", ("what", "year"), ("which", "year")]
-name: ["*", ("the", "*")]
+name: "the"?, ["*", "#"], name?
 adj_phrase: ["main", "#"]
 prep_phrase: ("this", "year")
 
