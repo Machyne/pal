@@ -209,14 +209,22 @@ $(document).ready(function () {
         }
         else if (result.status == 2) {
             $userData.html('');
-            for (need in result.needs_user) {
-                var type = result.needs_user[need].type;
-                var def = result.needs_user[need].default;
+            for (i in result.needs_user) {
+                var need = result.needs_user[i][0];
+                var data = result.needs_user[i][1];
+                var type = data.type;
+                var def = data.default;
+                var name = data.name;
+                var scratch = false;
                 switch (type) {
                     case 'str':
-                        $userData.append(
+                        scratch = scratch || 'text';
+                    case 'hidden':
+                        scratch = scratch || 'password';
+                        $('#user-data').append(
                             '<li data-type="' + type + '" data-param="' + need + '">' +
-                            need + ': ' + '<input type="text" value="' + def + '"></li>');
+                            name + ': ' +
+                            '<input type="' + scratch + '" value="' + (def || '') + '"></li>')
                         break;
                     default:
                         console.log('unknown requested data type')
@@ -263,6 +271,7 @@ $(document).ready(function () {
             var type = li.attr('data-type');
             switch (type) {
                 case 'str':
+                case 'hidden':
                     ret[need] = li.find('input').val();
                     break;
             }

@@ -12,6 +12,47 @@ class DominosService(Service):
 
     @wrap_response
     def go(self, params):
+        ud = params.get('user-data', {})
+        required = [
+            ('name', {
+                'type': 'str',
+                'name': 'name',
+            }),
+            ('phone', {
+                'type': 'str',
+                'name': 'phone number',
+            }),
+            ('address', {
+                'type': 'str',
+                'name': 'address',
+            }),
+            ('cc-number', {
+                'type': 'hidden',
+                'name': 'credit card number',
+            }),
+            ('cc-type', {
+                'type': 'hidden',
+                'name': 'credit card type',
+            }),
+            ('cc-expiration', {
+                'type': 'hidden',
+                'name': 'credit card expiration date',
+            }),
+            ('cvv', {
+                'type': 'hidden',
+                'name': 'cvv',
+            }),
+            ('cc-zip', {
+                'type': 'hidden',
+                'name': 'credit card zip code',
+            }),
+        ]
+        needs = []
+        for req in required:
+            if req[0] not in ud:
+                needs.append(req)
+        if len(needs):
+            return ('NEEDS DATA - USER', needs)
         features = params['features']
         tokens = map(str.lower, features['tokens'])
         return 'pizza coming soon'
