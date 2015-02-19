@@ -3,3 +3,12 @@ While all tests don't pass:
         if service had things wrong (things missing or extra things):
             step service
     run tests
+
+
+Each service knows a number that is its correctness. Correctness is defined as
+number of queries intended for the service that are correctly sorted - number of
+queries intended for the service that are incorrectly sorted - number of queries
+intended for a different service that are caught by the service.
+
+If this iteration's correctness is higher than or equal to the previous
+iteration's, maintain the direction from the previous step, otherwise CHANGE!
