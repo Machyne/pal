@@ -5,6 +5,10 @@ from os import path
 from pal.nlp.standard_nlp import StandardNLP
 from pal.nlp.feature_extractor import FeatureExtractor
 
+
+random.seed(1337 - 1453) #Totally not a reference to Quinn's comps...
+
+
 class service_data (object):
     # Each service maintains a list of its values and associated metadata
     def __init__(self, name):
