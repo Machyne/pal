@@ -5,8 +5,9 @@ find, 70
     eats
     hungry
     restaurant
+    restaurants
 ], 70
-[   
+[
     drink
     drinks
     bar
@@ -15,7 +16,7 @@ find, 70
     beverages
     thirsty
 ], 70
-[ 
+[
     nearby
     local
     close
