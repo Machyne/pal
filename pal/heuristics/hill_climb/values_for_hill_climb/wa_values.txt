@@ -13,3 +13,10 @@ power,40
 factorial,40
 distance,25
 mean,25
+[
+    +
+    -
+    *
+    /
+    !
+], 40
