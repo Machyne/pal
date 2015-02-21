@@ -44,6 +44,7 @@ What's panacea mean?
 What's sashimi?
 What's teriyaki sauce?
 define yelp
+Define translate
 
 directory
 Burton 413
@@ -91,45 +92,6 @@ Who's concentrating in cross-cultural studies?
 Who's concentrating in ed studies?
 Who's in room 405 of memo hall?
 Who's in Watson 311?
-
-movie
-Hom many films has tom hanks acted in
-How many films has tom hanks been in
-How many movies are there with tom hanks
-How many movies has Tom Hanks starred in?
-How many movies has Wes Anderson directed?
-How many movies have Tom Hanks
-Name all Wes Anderson movies
-Name everything Wes Anderson has directed
-Show me everything directed by Tom Hanks
-Was tom hanks in Blade Runner?
-Was tom hanks in the 2014 film the grand budapest hotel
-What has Naomi Watts starred in?
-What movie was tom hanks just in?
-What movies has Benedict Cumberbatch been in this year?
-What movies has Benedict Cumberbatch been in?
-What was that 2010 movie with tom hanks?
-What was tom hanks just in?
-What year did 21 Jump Street come out?
-What year did Fight Club come out?
-what year was blade runner made?
-what year was cloud atlas released?
-what year was cloud atlas?
-what year was the film cloud atlas released?
-what year was the movie blade runner?
-What's tom hanks' most recent film
-Which actor starred as the main character of Fight Club?
-Who acted in Blade Runner?
-Who acted in Fight Club?
-Who directed the grand budapest hotel?
-Who played Harry Potter in Harry Potter?
-Who played Neville Longbottom in Harry Potter and the Deathly Hallows part 1?
-Who played Severus Snape in Harry Potter?
-Who stared in 2001 a space odyssey?
-Who starred in Blade Runner?
-Who starred in Fight Club?
-Who was in Fight Club?
-Who wrote 2001 A Space Odyssey?
 
 weather
 Do you think it'll rain?
@@ -199,6 +161,8 @@ What's "desk" in German?
 How do you say "table" in Portuguese?
 What's "Italian" in French?
 Translate "German" from English to Spanish
+Translate "define" into Spanish
+
 
 wa
 2 * 2
@@ -221,6 +185,12 @@ Where can I get a drink?
 Find the closest coffee shop.
 What restaurants are near U of M?
 Any movie theaters near me?
+Where can I go to get a sandwich?
+Where are the best places for lunch in Minneapolis?
+Where can a man get something to eat around here?
+What are the highest-rated gourmet eateries in Hipsteropolis?
+Show me all the bars nearby.
+Where's the nearest coffee shop?
 
 
 facebook
@@ -228,3 +198,8 @@ post "Will it work?"
 post "Burton has better food than the LDC"
 post "Can you find all of the ducks in the dining halls?"
 post "How many movies was Tom Hanks in?"
+post "Assuming direct control of this facebook account -PAL"
+post "BEEP BLOOP DESTROY ALL HUMANS" to facebook
+post "How much wood could a woodchuck chuck if a woodchuck could chuck wood?"
+facebook "test post, please ignore"
+facebook "bookface"
