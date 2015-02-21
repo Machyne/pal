@@ -43,23 +43,19 @@ What's foie gras?
 What's panacea mean?
 What's sashimi?
 What's teriyaki sauce?
+define yelp
 
 directory
 Burton 413
 Does Greg Fournier live on first Cassat?
-Find Brian Charous
 Find Greg Fournier's room
-Find me all people named Robert.
 Give me DLN's email address
 Give me students name Peter.
 How any students in the class of 2015 are named Matt?
 How big is fourth Cassat?
 How many Art History Majors are Computer Science majors?
 How many people live in Parish house?
-How many Quinn's are there on campus?
-How many quints are there?
 Is Brian Charous an Art History Major?
-Is Quinn Radich from Washington?
 Jeff Ondich's email
 Jeff ondich's phone
 Kevin Wolfe's email
@@ -70,8 +66,6 @@ What country is Shen Wang from?
 What country is Shenlun Wang from?
 What is Kyle Schiller's major?
 What major is ken schiller?
-What state is Matt Cotter from?
-What state is Matthew Cotter from?
 What's Alex's dorm number?
 What's Alex's room number?
 What's Anna Rafferty's email?
@@ -80,13 +74,7 @@ What's Greg's phone number?
 What's Ken Schiller's room number?
 What's Kevin Wolfe's email?
 What's matt cotter's address?
-What's mister Cotter's first name?
-What's Ms. Meng's first name?
-What's the guy to girl ratio on First Burton?
 Where does Matt Cotter live?
-Where is Suyu Meng from?
-Where's Brian Charous from
-Where's Brian live?
 Which dorm has the most Computer Science majors?
 Who are Matt's roommates?
 Who lives in Myers 411
@@ -98,7 +86,6 @@ Who's a senior in burton?
 Who's a sophomore in james hall?
 Who's a sophomore in memo?
 Who's a sophomore in memorial hall?
-Who's a women's and gender studies concentrator?
 Who's a women's and gender studies major?
 Who's concentrating in cross-cultural studies?
 Who's concentrating in ed studies?
@@ -212,3 +199,32 @@ What's "desk" in German?
 How do you say "table" in Portuguese?
 What's "Italian" in French?
 Translate "German" from English to Spanish
+
+wa
+2 * 2
+2*2
+What is the distance from the earth to the moon?
+2 + 2
+2 / 2
+2 plus 2
+two plus two
+square root 49
+4!
+4 factorial
+four factorial
+2 ^ 100
+mean 1,2,3,4,5,6,7
+
+yelp
+What restaurants are nearby?
+Where can I get a drink?
+Find the closest coffee shop.
+What restaurants are near U of M?
+Any movie theaters near me?
+
+
+facebook
+post "Will it work?"
+post "Burton has better food than the LDC"
+post "Can you find all of the ducks in the dining halls?"
+post "How many movies was Tom Hanks in?"
