@@ -8,6 +8,16 @@ from pal.nlp.feature_extractor import FeatureExtractor
 
 random.seed(1337 - 1453) #Totally not a reference to Quinn's comps...
 
+# These numbers are touchy feely. If anyone has thoughts about them
+# being different, feel free to change them
+ODDS_NOT_TO_JUMP     = .99 # .99 might be high or low, I'm not sure
+SLOW_DOWN_PER_STEP   = .9  # each step is 90% of the size of the
+                           # previous one unless it was a jump
+BASE_STEP_SIZE       = 5   # This is a guess. But, if we got our initial
+                           # numbers close, I think it will work
+STEPS_BETWEEN_WRITES = 10
+
+
 
 class service_data (object):
     # Each service maintains a list of its values and associated metadata
@@ -19,7 +29,7 @@ class service_data (object):
         self.values = dict()
 
     def add_value(self, word, mag):
-        self.values[word] = [mag, 0, 5]
+        self.values[word] = [mag, 0, BASE_STEP_SIZE]
                             # [Magnitude, Direction, Acceleration]
 
     def _get_score(self, word):
@@ -55,6 +65,7 @@ class service_holder (object):
     def _generate_service_values(self, service):
         # read input file into new dictionary with keyword as key and
         # heuristic score as value
+
         data = service_data(service)
         file_ = path.realpath(
             path.join(
@@ -134,7 +145,6 @@ def climbing(examples, my_service_holder):
 def service_stepper(service, my_service_holder):
     data = my_service_holder.get_service(service)
     if data.correctness < data.prev_correctness:
-        print "CHANGE Directions"
         change_directions(my_service_holder, service)
 
     for key, value in data.values.iteritems():
@@ -147,10 +157,10 @@ def service_stepper(service, my_service_holder):
                         #  magnitude + direction * acceleration
         # Every once in awhile, we want to take a big step to prevent
         # getting stuck
-            if random.random() > .99: # <-- This might need to be higher
-                new_accel = 5
+            if random.random() > ODDS_NOT_TO_JUMP:
+                new_accel = BASE_STEP_SIZE
             else:
-                new_accel = data.values[key][2] * .9
+                new_accel = data.values[key][2] * SLOW_DOWN_PER_STEP
 
             data.values[key] = [new_magnitude, data.values[key][1], new_accel]
 
@@ -164,7 +174,7 @@ def change_directions(my_service_holder, service):
                             data.values[key][2]]
 
 
-# Blatently borrowed from Alex's test code
+# Blatently "borrowed" from Alex's test code
 # Reads in the example query file and returns a dictionary with service
 # names as keys and a list of queries as values.
 def parse_examples():
@@ -205,6 +215,53 @@ def ghetto_classifier(params, my_service_holder):
                          max(conf_levels.itervalues()) > 0 else "Unsorted")
 
 
+def dict_to_file(my_service_data):
+    name = my_service_data.name
+    value_dict = my_service_data.values
+
+    class Dummy_holder (object):
+        def __init__(self, value):
+            self.value = value
+            self.names = []
+
+    to_be_written = []
+    dummy_dict = dict()
+
+    for key in value_dict:
+        if key.startswith("dummy_var"):
+            if key not in dummy_dict:
+                dummy_dict[key] = Dummy_holder(value_dict[key][0])
+        elif str(value_dict[key][0]).startswith("dummy_var"):
+            if value_dict[key][0] in dummy_dict:
+                # If it is in the dummy_dict already, add it
+                dummy_dict[value_dict[key][0]].names.append(key)
+            else:
+                # create a new entry to dummy_dict and add it
+                dummy_dict[value_dict[key][0]] = Dummy_holder(
+                    value_dict[value_dict[key][0]][0])
+
+                dummy_dict[value_dict[key][0]].names.append(key)
+        else:
+            to_be_written.append(key + "," + str(value_dict[key][0]) + "\n")
+
+    for key in dummy_dict:
+        to_be_written.append('[\n')
+        for entry in dummy_dict[key].names:
+            to_be_written.append("    " + entry + "\n")
+        to_be_written.append("], " + str(dummy_dict[key].value) + '\n')
+
+    to_be_opened = path.realpath(
+            path.join(
+                path.dirname(__file__),
+                'values_for_hill_climb',
+                name + '_climbed_values.txt'))
+
+    f = open(to_be_opened,"wb")
+    for line in to_be_written:
+        f.write(line)
+    f.close()
+
+
 def main():
     examples = parse_examples()
     my_service_holder = service_holder()
@@ -213,22 +270,24 @@ def main():
 
     counter = 0
     while len(services_to_step) > 0:
-        print counter
         sys.stdout.flush()
         counter += 1
-        print "ServiceList: ", services_to_step
         for service in services_to_step:
-            print "CurService: ", service
             sys.stdout.flush()
             service_stepper(service, my_service_holder) # Steps the service
         services_to_step = climbing(examples, my_service_holder)
-        if counter % 1 == 0:
-            to_continue = raw_input("Do you want to continue? ")
-            if to_continue[0] == "n" or to_continue[0] == "N":
-                for service in my_service_holder.services:
-                    print my_service_holder.services[service].values
-                    # Write to file
-                sys.exit()
+        # Write to file every 5th step, that way we don't lose too much
+        # progress if we end early
+        if counter % STEPS_BETWEEN_WRITES == 0:
+            for service in my_service_holder.services:
+                # Write to file
+                dict_to_file(my_service_holder.services[service])
+
+    for service in my_service_holder.services:
+        # Write to file
+        dict_to_file(my_service_holder.services[service])
+
+    print "Success! You did it! Hills have been climbed!"
 
 
 if __name__ == '__main__':
