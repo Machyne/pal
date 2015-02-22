@@ -44,7 +44,7 @@ person: [person_abstract, person_concrete]
 movie_act_on_person: aux?, [act, be, (be, person), feature, have, include, play, (play, person), star, (star, "as", person)]
 person_act_on_movie: aux?, [direct, make, write]
 
-movie_release_word: [(come, "out"), ("in theaters"), make, release]
+movie_release_word: [(come, "out"), ("in", "theaters"), make, release]
 movie_word: ["blockbuster", "blockbuster", "film", "films", "flick", "flicks", "movie", "movies"]
 person_word: ["guy", "woman", "man", "girl", "boy", "character", "actor", "actors", "actress", "actresses", "director", "directors", "writer", "writers"]
 
