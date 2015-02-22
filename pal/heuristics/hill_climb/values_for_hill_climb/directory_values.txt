@@ -1,0 +1,159 @@
+where, 10
+who, 10
+which, 10
+hasProperNouns, 50
+[
+    major
+    majors
+], 30
+email, 45
+phone, 45
+address, 40
+live, 40
+office, 20
+[
+    roommate
+    roomates
+], 60
+[
+    graduate
+    graduated
+], 40
+number, 30
+room, 45
+faculty, 30
+department, 40
+building, 30
+call, -20
+contact, -20
+eat, -40
+[
+    allen
+    alumni guest
+    arb office
+    bald spot
+    baseball field
+    bell field
+    bell field
+    benton
+    berg
+    bird
+    boliou
+    brooks
+    cassat
+    center for math & computing
+    chaney
+    chapel
+    clader
+    cmc
+    college warehouse
+    collier
+    colwell
+    cowling gymnasium
+    dacie moses
+    davis
+    dixon
+    douglas
+    dow
+    eugster
+    evans
+    fac club
+    facilities building
+    faculty club
+    faculty club annex
+    farm
+    geffert
+    goodhue
+    goodsell
+    goodsell observatory
+    gould library
+    grounds garage/warehouse
+    hall
+    headley
+    headley cottage
+    henrickson
+    henry
+    hill
+    hill of three oaks
+    hillside prairie
+    hilton
+    hoppin
+    hulings
+    hunt
+    hunt cottage
+    huntington
+    james
+    jewett
+    johnson
+    jones
+    kettle hole marsh
+    laird
+    laird stadium
+    leighton
+    libe
+    library
+    little bald spot
+    lyman lake
+    mai fete island
+    mini bald spot
+    mudd
+    music
+    music & drama center
+    musser
+    myers
+    nason
+    nourse
+    nutting
+    olin
+    owens
+    oxbow pond
+    page
+    parish
+    parr
+    pollock
+    postage stamp prairie
+    prairie warehouse
+    prentice
+    rayment
+    rec
+    recreation center
+    rice
+    rogers
+    ryberg
+    sand volleyball court
+    sayles
+    sayles-hill campus center
+    scott
+    scoville
+    severance
+    sevy
+    skinner memorial chapel
+    softball field
+    sperry
+    spring creek
+    stadium
+    stewsie island
+    stimson
+    strong
+    the council ring
+    the druid circle
+    the japanese garden
+    the wind turbine
+    turtle pond
+    water tower
+    watson
+    weitz
+    weitz center for creativity
+    west field
+    west gym
+    west gymnasium
+    whittier
+    williams
+    willis
+    wilson
+], 70
+[
+    burton
+    ldc
+    language & dining center
+], 40

@@ -1,0 +1,35 @@
+[
+    burton
+    ldc
+    east hall
+    sayles
+    sayles-hill
+    weitz
+], 70
+[
+    breakfast
+    brunch
+    lunch
+    dinner
+], 90
+[
+    dining hall
+    cafe
+    food
+    meal
+], 85
+eat, 80
+[
+    monday
+    tuesday
+    wednesday
+    thursday
+    friday
+    mon
+    tues
+    wed
+    thurs
+    fri
+    today
+    tomorrow
+], 30
