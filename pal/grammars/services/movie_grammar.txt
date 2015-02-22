@@ -5,8 +5,8 @@ MOVIE:
   command?, year_of_movie
   command?, movie_to_person_description
 
-command: [find_command, (procure_command, "me"), (find_command, "for", "me")]
-find_command: ["find", ("look", "up"), "name", "search"]
+command: [find_command, (procure_command, "me"), (find_command, "for me")]
+find_command: ["find", "look up", "name", "search"]
 procure_command: ["find", "get", "give", "show", "tell"]
 
 movie_to_person_question: movie_query, person_relation, prep_phrase?
@@ -20,7 +20,7 @@ movie_to_person_description:
   movie_abstract_vague, person_relation
   person_concrete, movie_abstract
 
-movie_query: wh_phrase, movie_abstract, ("are", "there")?
+movie_query: wh_phrase, movie_abstract, "are there"?
 person_query: ["who", (wh_phrase, person_abstract)]
 
 movie_relation:
@@ -29,7 +29,7 @@ movie_relation:
 
 person_relation:
   "with", person_concrete
-  "that"?, movie_act_on_person, person_concrete, ("in", "them")?
+  "that"?, movie_act_on_person, person_concrete, "in them"?
   "that"?, person_act_on_movie, "by", person_concrete
   aux, person_concrete, [(person_act_on_movie, "from"?), (movie_act_on_person, "in"?)]
   be, person_concrete, "in"

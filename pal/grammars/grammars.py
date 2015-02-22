@@ -84,6 +84,17 @@ def find_bracketed_group(line):
         return None, None
 
 
+def find_multiword_string(line):
+    """ Returns the start (inclusive) and end (exclusive) indices of the
+        first multiword string literal (a string surrounded by double-quotes).
+    """
+    match = re.search(r'("\w+(?: \w+)+")', line)
+    if match:
+        return match.start(), match.end()
+    else:
+        return None, None
+
+
 def parse_grammar_from_file(filename):
     """ Given the path to a text file describing a grammar, returns a dict
         whose keys include the nonterminals of the gramma, and whose values
@@ -94,9 +105,9 @@ def parse_grammar_from_file(filename):
     re_extract_nonterminal = re.compile(r'([\w ]+?):(.*)$')
 
     def parse_rule(outer_name, line):
-        """ Returns a version of the rule without parentheses or brackets. Inner
-            rules are created and added to the global list to replace
-            parenthesized and bracketed groups.
+        """ Returns a version of the rule without parentheses or brackets,
+            by creating new "inner rules" and adding them to the grammar.
+            Also, new rules are created to replace multi-word string literals.
         """
         inner_rule_count = [0]
 
@@ -107,6 +118,20 @@ def parse_grammar_from_file(filename):
                 if inner_nonterminal not in grammar:
                     return inner_nonterminal
                 inner_rule_count[0] += 1
+
+        while True:
+            start, end = find_multiword_string(line)
+            if start is None:
+                break
+            else:
+                string_literal = line[start + 1:end - 1]
+                inner_nonterminal = '_' + string_literal.replace(' ', '_')
+                if inner_nonterminal not in grammar:
+                    inner_rule = [['"{0}"'.format(word)
+                                   for word in string_literal.split()
+                                   ]]
+                    grammar[inner_nonterminal] = inner_rule
+                line = line[:start] + inner_nonterminal + line[end:]
 
         while True:
             start, end = find_bracketed_group(line)
@@ -121,6 +146,7 @@ def parse_grammar_from_file(filename):
                     grammar[inner_nonterminal] = [[x] for x in
                                                   split_csv(inner_rule)]
                 line = line[:start] + inner_nonterminal + line[end:]
+
         return line
 
     start_symbol = None
@@ -141,7 +167,7 @@ def parse_grammar_from_file(filename):
             if line and nonterminal:
                 rule_string = parse_rule(nonterminal, line)
                 grammar[nonterminal].append(split_csv(rule_string))
-            if not multiline:
+            if nonterminal and not multiline:
                 nonterminal = None
     grammar['$'] = [[start_symbol]]
     return dict(grammar)
