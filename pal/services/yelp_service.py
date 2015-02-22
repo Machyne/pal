@@ -65,7 +65,6 @@ class YelpService(Service):
             if not ('near' in adj or 'close' in adj
                     or adj in ['find', 'me', 'some', 'i', 'local']):
                 query = adj + ' ' + query
-        print 'querying yelp:', query, location
         businesses = yelp_api.query_api(query, location)
         results = '<ul>'
         for business in businesses:
