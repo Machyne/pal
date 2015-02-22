@@ -105,15 +105,6 @@ class service_holder (object):
 
         return data
 
-    def _get_key_or_list(self, key):
-        """ if the input key is a valid key, return it, else if it is
-            invalid (starts with dummy_var_), return all keys that have
-            the value of that dummy_var.
-        """
-        if not key.startswith('dummy_var_'):
-            return key
-        return self._get_keys_from_value(key)
-
 
 # Returns the set of services to climb on. Otherwise, an empty set
 def climbing(examples, my_service_holder):
