@@ -1,13 +1,13 @@
-import nltk
 from flask import request
 from flask.ext.restful import Resource
 from flask_restful_swagger import swagger
+from nltk import ne_chunk
 
 from pal.nlp.standard_nlp import StandardNLP
 
 
 def find_nouns(pos_tokens):
-    tree = nltk.ne_chunk(pos_tokens)
+    tree = ne_chunk(pos_tokens)
     tree = [(token if isinstance(token, tuple) else
              (' '.join(map(lambda a: a[0], token.leaves())),
               token.label()))

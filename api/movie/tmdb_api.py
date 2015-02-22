@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import datetime
 
 import requests
@@ -12,13 +13,14 @@ _CREDITS_BY_PERSON_ID = 'person/{id}/movie_credits?api_key={api_key}'
 _IMAGE_BASE_URL = 'http://image.tmdb.org/t/p/w500/'
 _PEOPLE = {}  # TMDBPerson objects indexed by name
 _MOVIES = {}  # TMDBMovie objects indexed by title
+_CREDITS = set()  # Set of tuples (name, title, role)
 
 
 class TMDBMovie(object):
     def __init__(self, movie_dict):
         self.title = movie_dict['title']
         self.date_ = datetime.strptime(movie_dict['release_date'], '%Y-%m-%d') \
-            if 'released_date' in movie_dict and movie_dict['release_date'] \
+            if 'release_date' in movie_dict and movie_dict['release_date'] \
             else None
         self.image_url = _IMAGE_BASE_URL + movie_dict['poster_path'] \
             if 'poster_path' in movie_dict and movie_dict['poster_path'] \
@@ -41,12 +43,15 @@ class TMDBPerson(object):
 
 
 class TMDBCredit(object):
-    def __init__(self, movie_id, role):
-        self.movie_id = movie_id
+    def __init__(self, name, title, role, year):
+        self.name = name
+        self.title = title
         self.role = role
+        self.year = year
 
     def __str__(self):
-        return '{0}, {1}'.format(self.role, _MOVIES[self.movie_id])
+        return '{0}, {1} ({2}, {3})'.format(self.name, self.title,
+                                            self.role, self.year)
 
 
 def _normalize_role(role):
@@ -95,30 +100,65 @@ def get_movie_by_title(title):
     return None
 
 
-def get_credits_by_name(name):
-    """ Returns a list of unique TMDBCredits for the TMDBPerson `person`. """
+def load_credits_for_name(name):
     person = get_person_by_name(name)
     if not person:
         return []
     id_ = person.id
     results = _get(_CREDITS_BY_PERSON_ID, id=id_)
-    credits_set = set()
     if 'cast' in results:
         for movie_dict in results['cast']:
-            movie_id = movie_dict['id']
-            if movie_id not in _MOVIES:
-                _MOVIES[movie_id] = TMDBMovie(movie_dict)
-            credit = movie_id, 'actor'
-            credits_set.add(credit)
+            title = movie_dict['title']
+            _CREDITS.add(TMDBCredit(name, title, 'actor'))
+            _MOVIES[title] = TMDBMovie(movie_dict)
     if 'crew' in results:
         for movie_dict in results['crew']:
-            movie_id = movie_dict['id']
-            if movie_id not in _MOVIES:
-                _MOVIES[movie_id] = TMDBMovie(movie_dict)
+            title = movie_dict['title']
             role = _normalize_role(movie_dict['job'])
-            credit = movie_id, role
-            credits_set.add(credit)
-    return [TMDBCredit(*c) for c in credits_set]
+            _CREDITS.add(TMDBCredit(name, title, role))
+            _MOVIES[title] = TMDBMovie(movie_dict)
+
+
+def load_movie_for_title(title):
+    get_movie_by_title(title)
+
+
+def get_credits(name=None, title=None, role=None, year=None):
+    def filter_(credit):
+        if name and credit.name != name:
+            return False
+        if title and credit.title != title:
+            return False
+        if role and credit.role != role:
+            return False
+        if year and credit.year != year:
+            return False
+        return True
+    return filter(filter_, _CREDITS)
+
+
+def get_movies(name=None, title=None, role=None, year=None):
+    def filter_(movie):
+        if name and movie.name != name:
+            return False
+        if title and movie.title != title:
+            return False
+        if role and movie.role != role:
+            return False
+        if year and movie.year != year:
+            return False
+        return True
+    if title:
+        movies = [_MOVIES[title] if title in _MOVIES else None]
+    else:
+        movies = _MOVIES.values()
+    if name:
+        movies = filter(lambda x: not not _CREDITS[name][x.title].keys(),
+                        movies)
+    if year:
+        movies = filter(lambda x: x.date_.year == year, movies)
+    print movies
+    return movies
 
 
 if __name__ == '__main__':
@@ -126,4 +166,5 @@ if __name__ == '__main__':
     # for c in get_credits_by_name('Wes Anderson'):
         # print c
     # print get_person_by_name('tom hanks')
-    print get_movie_by_title('2001')
+    load_credits_for_name('Tom Hanks')
+    print len(get_credits(role='actor'))
