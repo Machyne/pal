@@ -128,6 +128,8 @@ def parse_grammar_from_file(filename):
         nonterminal = None
         for line in f:
             line = line.strip()
+            if line.startswith('#'):
+                continue
             if not line:
                 nonterminal = None
             elif not nonterminal:
