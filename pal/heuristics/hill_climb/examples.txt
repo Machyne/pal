@@ -163,7 +163,6 @@ What's "Italian" in French?
 Translate "German" from English to Spanish
 Translate "define" into Spanish
 
-
 wa
 2 * 2
 2*2
@@ -191,7 +190,6 @@ Where can a man get something to eat around here?
 What are the highest-rated gourmet eateries in Hipsteropolis?
 Show me all the bars nearby.
 Where's the nearest coffee shop?
-
 
 facebook
 post "Will it work?"
