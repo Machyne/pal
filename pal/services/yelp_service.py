@@ -1,3 +1,4 @@
+import random
 import re
 
 from flask import render_template
@@ -9,6 +10,7 @@ from pal.services.service import wrap_response
 
 
 class YelpService(Service):
+    _ILIKE = ['I like', 'Check out', 'Try', 'I\'m a fan of', 'Look into']
 
     def applies_to_me(self, client, feature_request_type):
         return True
@@ -49,6 +51,8 @@ class YelpService(Service):
                     "Sorry, I don't understand what you're looking for.")
         target = nouns[-1]
         tree = features['tree']
+        if target[0] in ['find', 'me', 'some', 'i', 'local']:
+            target = tree[-1]
         if target not in tree:
             return ('ERROR',
                     "Sorry, I don't understand what you're looking for.")
@@ -59,8 +63,9 @@ class YelpService(Service):
             index -= 1
             adj = tree[index][0].lower()
             if not ('near' in adj or 'close' in adj
-                    or adj in ['me', 'some', 'i', 'local']):
+                    or adj in ['find', 'me', 'some', 'i', 'local']):
                 query = adj + ' ' + query
+        print 'querying yelp:', query, location
         businesses = yelp_api.query_api(query, location)
         results = '<ul>'
         for business in businesses:
@@ -89,5 +94,5 @@ class YelpService(Service):
         summary = map(lambda biz: biz['name'], businesses)
         summary[-1] = 'and ' + summary[-1]
         summary = ', '.join(summary)
-        summary = 'I like {}.'.format(summary)
+        summary = '{} {}.'.format(random.choice(self._ILIKE), summary)
         return ('SUCCESS', summary, results)

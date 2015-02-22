@@ -144,14 +144,12 @@ html, body {
   -webkit-transition: 0.6s max-height cubic-bezier(0, 1.05, 0, 1);
 }
 
-.history li .data:before {
+.history li .data span.data-toggler:before {
   content: '▶';
   font-style: normal;
   font-size: 15px;
   color: #333;
-  position: absolute;
-  top: 0;
-  left: 0;
+  cursor: pointer;
 }
 
 .history li .data.expanded {
@@ -162,14 +160,12 @@ html, body {
   -webkit-transition: 0.9s max-height ease;
 }
 
-.history li .data.expanded:before {
+.history li .data.expanded span.data-toggler:before {
   content: '▼';
   font-style: normal;
   font-size: 15px;
   color: #333;
-  position: absolute;
-  top: 0;
-  left: 0;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 400px) {

@@ -20,7 +20,7 @@ var queryPAL = function(query, usdat, clidat, callback) {
 };
 
 function expandData (el) {
-    $(el).toggleClass('expanded');
+    $(el).parent().toggleClass('expanded');
     return true;
 }
 window.fbAsyncInit = function() {
@@ -170,7 +170,7 @@ $(document).ready(function () {
             $('#user-data').html('');
             var data = '';
             if (result.hasOwnProperty('data')) {
-                data = '<div class="data" onclick="expandData(this);">...<br>' +
+                data = '<div class="data"><span class="data-toggler" onclick="expandData(this);">...</span>' +
                 result.data.replace(/\n+/ig, '<br>') + '</div>'
             }
             $('.history').prepend('<li><div class="query">' + query +
