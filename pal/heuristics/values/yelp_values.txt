@@ -1,12 +1,22 @@
-find, 70
+[
+    find
+    get
+], 70
+[
+    where
+    where's
+], 40
 [
     food
     eat
     eats
+    eatery
+    eateries
     hungry
     restaurant
+    restaurants
 ], 70
-[   
+[
     drink
     drinks
     bar
@@ -15,7 +25,7 @@ find, 70
     beverages
     thirsty
 ], 70
-[ 
+[
     nearby
     local
     close
@@ -23,6 +33,12 @@ find, 70
     near
     nearest
 ], 60
+[
+    lunch
+    breakfast
+    dinner
+    brunch
+], 50
 yelp, 80
 movies, -10
 [

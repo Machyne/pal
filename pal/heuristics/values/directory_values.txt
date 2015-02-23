@@ -2,11 +2,25 @@ where, 10
 who, 10
 which, 10
 hasProperNouns, 50
-major, 30
+[
+    major
+    majors
+], 30
+email, 45
+phone, 45
+address, 40
 live, 40
 office, 20
-roommate, 60
-graduate, 40
+[
+    roommate
+    roomates
+], 60
+[
+    graduate
+    graduated
+], 40
+number, 30
+room, 45
 faculty, 30
 department, 40
 building, 30
@@ -26,7 +40,6 @@ eat, -40
     bird
     boliou
     brooks
-    burton
     cassat
     center for math & computing
     chaney
@@ -36,7 +49,6 @@ eat, -40
     college warehouse
     collier
     colwell
-    cowling gymnasium
     cowling gymnasium
     dacie moses
     davis
@@ -77,8 +89,6 @@ eat, -40
     kettle hole marsh
     laird
     laird stadium
-    language & dining center
-    ldc
     leighton
     libe
     library
@@ -116,6 +126,7 @@ eat, -40
     scott
     scoville
     severance
+    sevy
     skinner memorial chapel
     softball field
     sperry
@@ -141,3 +152,8 @@ eat, -40
     willis
     wilson
 ], 70
+[
+    burton
+    ldc
+    language & dining center
+], 40
