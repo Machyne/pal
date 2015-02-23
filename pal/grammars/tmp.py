@@ -3,7 +3,7 @@ from pal.grammars.grammars import make_chomsky_normal_form
 from pal.grammars.grammars import parse_grammar_from_file
 from pal.grammars.parser import parse, generate_grammar_features, extract, search
 
-string = 'medium pizza with pineapple but no cheese sauce or mushrooms'
+string = 'how much for a medium pizza with pineapple but no cheese sauce or mushrooms'
 
 grammar = parse_grammar_from_file('pal/grammars/services/dominos_grammar.txt')
 make_chomsky_normal_form(grammar)
