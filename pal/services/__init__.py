@@ -1,6 +1,7 @@
 from pal.services.bonapp_service import BonAppService
 from pal.services.dictionary_service import DictionaryService
 from pal.services.directory_service import DirectoryService
+from pal.services.joke_service import JokeService
 from pal.services.movie_service import MovieService
 from pal.services.service import wrap_response
 from pal.services.ultralingua_service import UltraLinguaService
@@ -14,6 +15,7 @@ _SERVICE_CLASSES = [
     BonAppService,
     DictionaryService,
     DirectoryService,
+    JokeService,
     FacebookService,
     MovieService,
     UltraLinguaService,
