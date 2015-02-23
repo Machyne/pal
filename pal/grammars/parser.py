@@ -28,20 +28,23 @@ def main():
 
 def generate_grammar_features(grammar):
     key_list = sorted([key for key in grammar.iterkeys() if not key == '$'])
-    unit_rules = []
-    non_unit_rules = []
+    terminal_rules = []
+    non_terminal_rules = []
     for i, key in enumerate(key_list):
         rules = grammar[key]
         for rule in rules:
             if isinstance(rule, str):
-                unit_rules.append((i, rule))
+                terminal_rules.append((i, rule))
             elif isinstance(rule, tuple):
                 b = key_list.index(rule[0])
-                c = key_list.index(rule[1])
-                non_unit_rules.append((i, b, c))
-    lexicon = [rule[1] for rule in unit_rules]
+                if len(rule) == 1:
+                    non_terminal_rules.append((i, b))
+                if len(rule) == 2:
+                    c = key_list.index(rule[1])
+                    non_terminal_rules.append((i, b, c))
+    lexicon = [rule[1] for rule in terminal_rules]
     start_key = key_list.index(grammar['$'])
-    return key_list, unit_rules, non_unit_rules, lexicon, start_key
+    return key_list, terminal_rules, non_terminal_rules, lexicon, start_key
 
 
 def preprocess(string, grammar_features):
@@ -67,21 +70,22 @@ def parse(string, grammar_features):
 
         Note: Expects a lowercase string without ending punctuation.
     """
-    key_list, unit_rules, non_unit_rules, lexicon, start_key = grammar_features
+    (key_list, terminal_rules, non_terminal_rules,
+        lexicon, start_key) = grammar_features
     original_words = string.split()
     string = preprocess(string, grammar_features)
     words = string.split()
     words_count = len(words)
     p = defaultdict(list)
     for i in xrange(words_count):
-        for rule in unit_rules:
+        for rule in terminal_rules:
             j, rhs = rule
             if rhs == words[i]:
                 p[(0, i, j)] = [key_list[j], original_words[i]]
     for i in xrange(1, words_count):
         for j in xrange(words_count - i):
             for k in xrange(i):
-                for rule in non_unit_rules:
+                for rule in non_terminal_rules:
                     a, b, c = rule
                     if p[(k, j, b)] and p[(i - k - 1, j + k + 1, c)]:
                         p[(i, j, a)] = [key_list[a], (p[(k, j, b)],
