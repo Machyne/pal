@@ -1,6 +1,7 @@
 from api.dominos.pizza_options import order_pizza
 from pal.grammars import get_grammar_for_service
 from pal.grammars.parser import extract
+from pal.grammars.parser import parent
 from pal.grammars.parser import parse
 from pal.grammars.parser import search
 from pal.services.service import Service
@@ -44,6 +45,19 @@ class DominosService(Service):
         non_tops = set(search(parse_tree, 'negation_phrase topping_item'))
         all_tops = set(search(parse_tree, 'topping_item'))
         yes_tops = all_tops.difference(non_tops)
+
+        crust_size = extract('crust_size', parse_tree) or 'medium'
+        crust_type = extract('crust_type', parse_tree) or 'regular'
+        crust = '{} {}'.format(crust_size, crust_type)
+
+        toppings = []
+        for t in yes_tops:
+            item = extract('topping_item', t)
+            amount = 'normal'
+            parent_ = parent(parse_tree, t)
+            if parent and parent_[0] == 'ingredient':
+                amount = extract('topping_amount', t) || amount
+            toppings.append((item, amount))
 
         if extract('price_query', parse_tree):
             return "It costs nine hundred dollars."

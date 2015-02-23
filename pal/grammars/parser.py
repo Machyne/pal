@@ -176,5 +176,19 @@ def search(node, selector):
                         yield found
 
 
+def parent(tree, node):
+    """ returns false if node is not in the tree """
+    if not isinstance(tree, tuple):
+        return False
+    subtrees = tree[1]
+    if node in subtrees:
+        return tree
+    for subtree in subtrees:
+        p = parent(subtree, node)
+        if p:
+            return p
+    return False
+
+
 if __name__ == '__main__':
     main()
