@@ -24,7 +24,6 @@ class JokeService(Service):
     def get_confidence(self, params):
         for joke in self._JOKES:
             query = re.sub(r'[^a-z ]', '', params['query'].lower())
-            print joke, query
             if joke in query:
                 return 9001
         return 0
