@@ -1,11 +1,14 @@
 from collections import defaultdict
+from os import path
 
 from pal.grammars import get_grammar_for_service
 from pal.grammars.parser import parse
 
 
-_GRAMMARS_DIR = 'pal/grammars/services'
-_EXAMPLES_FILE = 'test/examples.txt'
+_GRAMMARS_DIR = path.abspath(path.join(path.dirname(__file__),
+                                       'services'))
+_EXAMPLES_FILE = path.abspath(path.join(path.dirname(__file__),
+                                        '..', 'test', 'examples.txt'))
 
 
 def main():

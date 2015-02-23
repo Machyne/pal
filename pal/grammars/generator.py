@@ -4,8 +4,9 @@ from pal.grammars.grammars import parse_grammar_from_file
 
 
 def main():
-    """ Generates the language of a grammar. """
-    grammar = parse_grammar_from_file('pal/grammars/services/movie_grammar.txt')
+    """ Example of generating the language of a grammar. """
+    grammar = parse_grammar_from_file(
+        'pal/grammars/services/movie_grammar.txt')
     make_chomsky_normal_form(grammar)
     try:
         language = generate_language_cnf(grammar)
