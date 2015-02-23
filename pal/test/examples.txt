@@ -154,7 +154,7 @@ Who starred in Fight Club?
 Who was in Fight Club?
 Who was it that directed 2001 A Space Odyssey?
 Who was it that starred in Blade Runner?
-Who wrote 2001, A Space Odyssey?
+Who wrote 2001 A Space Odyssey?
 
 weather
 Do you think it'll rain?
@@ -226,6 +226,12 @@ How much is an extra large pizza with olives?
 Price of two pizzas
 Cost of fifteen pizzas with mushrooms
 how much for pizza
+medium pizza with pineapple but no cheese sauce or mushrooms
+medium pizza with pineapple no cheese and with mushrooms
+one large mushroom pizza thanks pal
+one large pepperoni pizza
+large pan pizza with premium chicken and onions
+we'll have a small steak and banana pepper pizza please
 
 ultralingua
 Translate "chair" to French

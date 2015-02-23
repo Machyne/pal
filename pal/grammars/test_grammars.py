@@ -13,11 +13,16 @@ _EXAMPLES_FILE = path.abspath(path.join(path.dirname(__file__),
 
 def main():
     test_grammar('movie')
+    test_grammar('pizza')
 
 
 def test_grammar(service_name):
     print('Testing grammar for service \'{0}\'...'.format(service_name))
-    grammar = get_grammar_for_service(service_name)
+    try:
+        grammar = get_grammar_for_service(service_name)
+    except ValueError as e:
+        print 'Error: {}'.format(e.args[0])
+        return
     all_examples = load_examples_from_file(_EXAMPLES_FILE)
     ex_total = 0
     counter_ex_total = 0

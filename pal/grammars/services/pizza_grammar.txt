@@ -1,0 +1,164 @@
+PIZZA:
+  order_command?, pizza_description, pleasantry?
+  price_query, pizza_description, "cost"?
+
+order_command:
+  buy_word, "for"?, first_person_object?
+  first_person_subject, will?, order_verb
+
+price_query:
+  "how much", [be, do, "for"]
+  "what is the"?, cost, ["of", "for"]
+
+pizza_description: det?, pizza_adj_phrase?, ingredients_phrase?, pizza_word, ingredients_phrase?
+
+pizza_adj_phrase: pizza_adj, pizza_adj_phrase?
+pizza_adj:
+  crust_type, "crust"?
+  crust_size
+
+ingredient: topping_amount?, topping_item
+ingredients_phrase:
+  "with"?, ingredient, ("and"?, ingredients_phrase)?
+  negation_word, negation_phrase, ("and"?, ingredients_phrase)?
+
+negation_phrase: topping_item, (topping_items_list?, "or", topping_item)?
+topping_items_list: topping_item, topping_items_list?
+
+be: ["be", "'s", "is", "are", "been", "was", "were"]
+buy_word: ["buy", "get", "order"]
+cost: ["cost", "price"]
+det: ["a", "an", "the", number]
+do: ["do", "'s", "does", "did"]
+first_person_object: ["me", "us"]
+first_person_subject: ["i", "we"]
+negation_word: ["but no", "no", "none", "without"]
+number: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"]
+order_verb: ["have", "like", "take", "want"]
+pizza_word: ["pizza", "pizzas"]
+pleasantry: ["please", "thank you", "thanks", "thanks pal"]
+will: ["will", "would"]
+
+# SIZES
+
+crust_size:
+  small
+  medium
+  large
+  x_large
+
+small: ["small", "ten inch"]
+medium: ["medium", "twelve inch"]
+large: ["large", "fourteen inch"]
+x_large: ["extra large", "sixteen inch"]
+
+# CRUSTS
+
+crust_type:
+  regular_crust
+  pan_crust
+  thin_crust
+  brooklyn_crust
+  gluten_free_crust
+
+regular_crust: ["hand tossed", "regular"]
+pan_crust: ["pan", "handmade pan"]
+thin_crust: ["thin", "crunchy thin"]
+brooklyn_crust: ["brooklyn", "brooklyn style"]
+gluten_free_crust: ["gluten-free", "gluten free"]
+
+# TOPPING AMOUNTS
+
+topping_amount:
+  light_amount
+  normal_amount
+  extra_amount
+  double_amount
+  triple_amount
+
+light_amount: "light"
+normal_amount: "normal"
+extra_amount: "extra"
+double_amount: "double"
+triple_amount: "triple"
+
+# TOPPINGS
+
+topping_item:
+  cheese
+  sauce
+  meat
+  cheese_topping
+  veggie_or_fruit
+
+sauce:
+  tomato_sauce
+  marinara_sauce
+  white_sauce
+  bbq_sauce
+
+meat:
+  pepperoni
+  sausage
+  sliced sausage
+  beef
+  steak
+  ham
+  bacon
+  salami
+  chicken
+
+cheese_topping:
+  cheddar
+  feta
+  asiago
+  provolone
+
+veggie_or_fruit:
+  banana_peppers
+  black_olives
+  olives
+  pepper
+  jalapeno
+  mushrooms
+  pineapple
+  onion
+  red_pepper
+  spinach
+  tomato
+  hot_sauce
+
+cheese: "cheese"
+
+tomato_sauce: ["robust inspired tomato sauce", "tomato sauce", "sauce"]
+marinara_sauce: "marinara sauce"
+white_sauce: "white sauce"
+bbq_sauce: ["barbeque sauce", "bbq sauce"]
+
+pepperoni: "pepperoni"
+sausage: ["italian sausage", "sausage"]
+sliced sausage: ["sliced italian sausage", "sliced sausage"]
+beef: "beef"
+steak: "steak"
+ham: "ham"
+bacon: "bacon"
+salami: "salami"
+chicken: ["chicken", "premium chicken"]
+
+cheddar: ["cheddar cheese", "cheddar"]
+feta: ["feta cheese", "feta"]
+asiago: ["shredded parmesan asiago", "parmesan", "asiago"]
+provolone: ["shredded provolone cheese", "provolone"]
+
+banana_peppers: ["banana pepper", "banana peppers"]
+black_olives: ["black olive", "black olives"]
+olives: ["green olives", "green olive", "olives", "olive"]
+pepper: ["green peppers", "green pepper", "peppers", "pepper"]
+jalapeno: ["jalapeno peppers", "jalapeno peppers", "jalapenos", "jalapeno"]
+mushrooms: ["mushrooms", "mushroom"]
+pineapple: ["pineapples", "pineapple"]
+onion: ["onions", "onion"]
+red_pepper: ["roasted red peppers", "red peppers", "roasted red pepper", "red pepper"]
+spinach: "spinach"
+tomato: ["diced tomatoes", "diced tomato", "tomatoes", "tomato"]
+hot_sauce: "hot sauce"
