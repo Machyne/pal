@@ -82,14 +82,34 @@ def parse(string, grammar_features):
             j, rhs = rule
             if rhs == words[i]:
                 p[(0, i, j)] = [key_list[j], original_words[i]]
+        changed = 1
+        while changed:
+            changed = 0
+            for rule in non_terminal_rules:
+                if len(rule) == 2:
+                    a, b = rule
+                    if p[(0, i, b)] and not p[(0, i, a)]:
+                        p[(0, i, a)] = [key_list[a], (p[(0, i, b)],)]
+                        changed += 1
+
     for i in xrange(1, words_count):
         for j in xrange(words_count - i):
             for k in xrange(i):
                 for rule in non_terminal_rules:
-                    a, b, c = rule
-                    if p[(k, j, b)] and p[(i - k - 1, j + k + 1, c)]:
-                        p[(i, j, a)] = [key_list[a], (p[(k, j, b)],
-                                        p[(i - k - 1, j + k + 1, c)])]
+                    if len(rule) == 3:
+                        a, b, c = rule
+                        if p[(k, j, b)] and p[(i - k - 1, j + k + 1, c)]:
+                            p[(i, j, a)] = [key_list[a], (p[(k, j, b)],
+                                            p[(i - k - 1, j + k + 1, c)])]
+            changed = 1
+            while changed:
+                changed = 0
+                for rule in non_terminal_rules:
+                    if len(rule) == 2:
+                        a, b = rule
+                        if p[(i, j, b)] and not p[(i, j, a)]:
+                            p[(i, j, a)] = [key_list[a], (p[(0, i, b)],)]
+                            changed += 1
     return p[(words_count - 1, 0, start_key)]
 
 
