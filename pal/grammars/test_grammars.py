@@ -13,7 +13,7 @@ _EXAMPLES_FILE = path.abspath(path.join(path.dirname(__file__),
 
 def main():
     test_grammar('movie')
-    test_grammar('pizza')
+    test_grammar('dominos')
 
 
 def test_grammar(service_name):
