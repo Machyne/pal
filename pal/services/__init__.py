@@ -1,13 +1,14 @@
 from pal.services.bonapp_service import BonAppService
 from pal.services.dictionary_service import DictionaryService
 from pal.services.directory_service import DirectoryService
+from pal.services.facebook_service import FacebookService
+from pal.services.introspection_service import IntrospectionService
 from pal.services.movie_service import MovieService
 from pal.services.service import wrap_response
 from pal.services.ultralingua_service import UltraLinguaService
-from pal.services.weather_service import WeatherService
-from pal.services.facebook_service import FacebookService
-from pal.services.yelp_service import YelpService
 from pal.services.wa_service import WAService
+from pal.services.weather_service import WeatherService
+from pal.services.yelp_service import YelpService
 
 
 _SERVICE_CLASSES = [
@@ -15,6 +16,7 @@ _SERVICE_CLASSES = [
     DictionaryService,
     DirectoryService,
     FacebookService,
+    IntrospectionService,
     MovieService,
     UltraLinguaService,
     WAService,
