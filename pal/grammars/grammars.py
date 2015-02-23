@@ -272,7 +272,7 @@ def convert_data_types(grammar):
             continue
         for i in xrange(len(rules)):
             rule = rules[i]
-            if len(rule) == 1:
+            if is_terminal(rule[0]):
                 rules[i] = rule[0][1:-1]
             else:
                 rules[i] = tuple(rule)
@@ -281,7 +281,7 @@ def convert_data_types(grammar):
 
 def make_chomsky_normal_form(grammar):
     remove_question_rules(grammar)
-    convert_unit_rules(grammar)
+    # convert_unit_rules(grammar)
     remove_unused_rules(grammar)
     convert_long_rules(grammar)
     convert_terminal_productions(grammar)
