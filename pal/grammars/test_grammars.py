@@ -1,7 +1,9 @@
+from pprint import pprint
 from collections import defaultdict
 from os import path
 
 from pal.grammars import get_grammar_for_service
+from pal.grammars.parser import extract
 from pal.grammars.parser import parse
 
 
@@ -12,7 +14,7 @@ _EXAMPLES_FILE = path.abspath(path.join(path.dirname(__file__),
 
 
 def main():
-    test_grammar('movie')
+    # test_grammar('movie')
     test_grammar('dominos')
 
 
@@ -32,7 +34,14 @@ def test_grammar(service_name):
         if key == service_name:
             ex_total += len(examples)
             for example in examples:
-                if parse(example, grammar):
+                parse_tree = parse(example, grammar)
+                if parse_tree:
+                    pprint(parse_tree)
+                    print example
+                    print '\torder:', not extract('price_query', parse_tree)
+                    print '\tnumber:', extract('number', parse_tree) or 'one'
+                    print '\tcrust_type:', extract('crust_type', parse_tree, True)
+                    print '\tcrust_size:', extract('crust_size', parse_tree, True)
                     hits += 1
                 else:
                     print '>', example

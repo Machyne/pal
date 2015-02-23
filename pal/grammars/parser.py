@@ -70,18 +70,41 @@ def parse(string, grammar_features):
 
         Note: Expects a lowercase string without ending punctuation.
     """
-    (key_list, terminal_rules, unit_rules, pair_rules,
-        lexicon, start_key) = grammar_features
     original_words = string.split()
     string = preprocess(string, grammar_features)
-    words = string.split()
-    words_count = len(words)
+    tokens = string.split()
+    parse_tree = cyk(tokens, original_words, grammar_features)
+    return clean_tree(parse_tree)
+
+
+def clean_tree(parse_tree):
+    if not isinstance(parse_tree, tuple):
+        return parse_tree
+    root, subtree_list = parse_tree
+    new_subtree_list = ()
+    for subtree in subtree_list:
+        subtree = clean_tree(subtree)
+        root2, subtree_list2 = subtree
+        if root2[0] == '_':
+            new_subtree_list += subtree_list2
+        else:
+            new_subtree_list += (subtree,)
+    return root, new_subtree_list
+
+
+def cyk(tokens, original_words, grammar_features):
+    """ Runs a modified form of the CYK algorithm which allows for
+        unit rules in the grammar.
+    """
+    (key_list, terminal_rules, unit_rules, pair_rules,
+        lexicon, start_key) = grammar_features
+    tokens_count = len(tokens)
     p = {}
-    for i in xrange(words_count):
+    for i in xrange(tokens_count):
         for rule in terminal_rules:
             j, rhs = rule
-            if rhs == words[i]:
-                p[(0, i, j)] = (key_list[j], original_words[i])
+            if rhs == tokens[i]:
+                p[(0, i, j)] = (key_list[j], (original_words[i],))
         changed = True
         while changed:
             changed = False
@@ -90,8 +113,8 @@ def parse(string, grammar_features):
                 if (0, i, b) in p and (0, i, a) not in p:
                     p[(0, i, a)] = (key_list[a], (p[(0, i, b)],))
                     changed = True
-    for i in xrange(1, words_count):
-        for j in xrange(words_count - i):
+    for i in xrange(1, tokens_count):
+        for j in xrange(tokens_count - i):
             for k in xrange(i):
                 for rule in pair_rules:
                     a, b, c = rule
@@ -106,38 +129,33 @@ def parse(string, grammar_features):
                     if (i, j, b) in p and (i, j, a) not in p:
                         p[(i, j, a)] = (key_list[a], (p[(i, j, b)],))
                         changed = True
-    if (words_count - 1, 0, start_key) in p:
-        return p[(words_count - 1, 0, start_key)]
+    if (tokens_count - 1, 0, start_key) in p:
+        return p[(tokens_count - 1, 0, start_key)]
     else:
         return False
 
 
-def extract(symbol, parse_tree):
+def extract(symbol, parse_tree, get_nonterminals=False):
     """ Returns the substring that was expanded from the given symbol in
         the parse indicated by the parse tree.
     """
     def flatten(parse_tree):
-        key, value = parse_tree
-        if isinstance(value, tuple):
-            if len(value) == 1:
-                return flatten(value[0])
-            else:
-                left, right = value
-                return flatten(left) + flatten(right)
-        else:
-            return [value]
+        if not isinstance(parse_tree, tuple):
+            return [parse_tree]
+        root, subtree_list = parse_tree
+        return [item for subtree in subtree_list for item in flatten(subtree)]
 
-    key, value = parse_tree
-    if key == symbol:
+    if not isinstance(parse_tree, tuple):
+        return False
+    root, subtree_list = parse_tree
+    if root == symbol:
         words = flatten(parse_tree)
         return ' '.join(words)
     else:
-        if isinstance(value, tuple):
-            if len(value) == 1:
-                return extract(symbol, value[0]) or ''
-            else:
-                left, right = value
-                return extract(symbol, left) or extract(symbol, right) or ''
+        for subtree in subtree_list:
+            subresult = extract(symbol, subtree)
+            if subresult:
+                return subresult
         return ''
 
 
