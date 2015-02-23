@@ -27,8 +27,9 @@ class MovieService(Service):
         if query[-1] == '?':
             query = query[:-1]
 
-        self.cached_parse = (query, parse(query, self.grammar))
-        return 100 if self.cached_parse else 0
+        parse_ = parse(query, self.grammar)
+        self.cached_parse = (query, parse_)
+        return 100 if parse_ else 0
 
     @wrap_response
     def go(self, params):
