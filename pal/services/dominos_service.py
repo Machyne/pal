@@ -1,4 +1,5 @@
-from api.dominos.pizza_options import order_pizza
+from api.dominos.pizza_options import order_pizzas
+from api.dominos.pizza_options import price_pizzas
 from pal.grammars import get_grammar_for_service
 from pal.grammars.parser import extract
 from pal.grammars.parser import parent
@@ -50,17 +51,29 @@ class DominosService(Service):
         crust_type = extract('crust_type', parse_tree) or 'regular'
         crust = '{} {}'.format(crust_size, crust_type)
 
+        num_pizzas = 1 # TODO
+
         toppings = []
         for t in yes_tops:
             item = extract('topping_item', t)
             amount = 'normal'
             parent_ = parent(parse_tree, t)
             if parent and parent_[0] == 'ingredient':
-                amount = extract('topping_amount', t) || amount
+                amount = extract('topping_amount', t) or amount
             toppings.append((item, amount))
 
+        pizza = {
+            'crust': crust,
+            'quantity': num_pizzas,
+            'options': toppings,
+        }
+
         if extract('price_query', parse_tree):
-            return "It costs nine hundred dollars."
+            price = price_pizzas([pizza])
+            if price:
+                return "It costs $" + "{:20,.2f}.".format(price).strip()
+            else:
+                return ('ERROR', "I think it's more than zero dollars...")
 
         ud = params.get('user-data', {})
         required = [

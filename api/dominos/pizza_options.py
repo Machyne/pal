@@ -76,6 +76,14 @@ AMOUNTS = {
     3.0: 3.0,
 }
 
+_DUMMY_CARD = {
+    'num': "4444888888888888",
+    'type': "VISA",
+    'expire': "1017",
+    'cvv': "189",
+    'zip': "55057",
+}
+
 
 def _topping_amt(full=None, left=None, right=None):
     if sum(AMOUNTS[x or 0] for x in (full, left, right)) == 0:
@@ -108,7 +116,21 @@ def _topping_code(topping):
     return topping
 
 
-def order_pizza(phone, name, address, card, pizzas):
+def _pizzas_to_products(pizzas):
+    products = []
+    for pizza in pizzas:
+        pie = {'options': {}}
+        size, _, crust_type = pizza['crust'].partition(' ')
+        pie['crust'] = _get_crust(size, crust_type)
+        pie['quantity'] = pizza['quantity']
+        for topping, amount in pizza['options']:
+            if not isinstance(amount, dict):
+                amount = {'full': amount}
+            pie['options'][_topping_code(topping)] = _topping_amt(**amount)
+        products.append(pie)
+    return products
+
+def order_pizzas(phone, name, address, card, pizzas):
     name_parts = name.rpartition(' ')
     data = {
         'phone': phone,
@@ -116,37 +138,34 @@ def order_pizza(phone, name, address, card, pizzas):
         'lastName': name_parts[-1],
         'address': address,
         'card': card,
-        'pizzas': [],
+        'pizzas': _pizzas_to_products(pizzas),
     }
-    for pizza in pizzas:
-        pie = {'options': {}}
-        size, _, crust_type = pizza['crust'].partition(' ')
-        pie['crust'] = _get_crust(size, crust_type)
-        pie['quantity'] = pizza['quantity']
-        for topping, amount in pizza['options']:
-            print topping, amount
-            if not isinstance(amount, dict):
-                amount = {'full': amount}
-            pie['options'][_topping_code(topping)] = _topping_amt(**amount)
-            print pie['options']
-        data['pizzas'].append(pie)
 
-    print data['pizzas'][0]
-    raw_input()
     data = json.dumps(data)
     headers = {'Content-Type': 'application/json'}
     r = requests.post("http://localhost:8000", data=data, headers=headers)
     return r.json()
 
 
-if __name__ == '__main__':
-    card = {
-        'num': "4444888888888888",
-        'type': "VISA",
-        'expire': "1017",
-        'cvv': "189",
-        'zip': "55057",
+def price_pizzas(pizzas, address='1 N College St, Northfield, MN 55057'):
+    data = {
+        'phone': '2024561111',
+        'firstName': 'Pizza',
+        'lastName': 'Price',
+        'address': address,
+        'card': _DUMMY_CARD,
+        'pizzas': _pizzas_to_products(pizzas),
+        'onlyPrice':  True,
     }
+    data = json.dumps(data)
+    headers = {'Content-Type': 'application/json'}
+    r = requests.post("http://localhost:8000", data=data, headers=headers)
+    resp = r.json()
+    return resp.get('price', False)
+
+
+if __name__ == '__main__':
+    card = _DUMMY_CARD
     phone = '2024561111'
     name = 'Test Tester'
     address = '1 N College St, Northfield, MN 55057'
@@ -160,4 +179,5 @@ if __name__ == '__main__':
             ('jalapeno', 'normal'),
         ],
     }
+    print price_pizza([pizza])
     print order_pizza(phone, name, address, card, [pizza])

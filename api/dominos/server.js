@@ -48,8 +48,12 @@ var dominosHandler = function (req, res, post) {
 
   placeOrder(post, function (err) {
     if (err) {
+      if (post.onlyPrice && typeof(err) === 'number') {
+        res.writeHead(200, {'Content-Type': 'application/JSON'});
+        return res.end(JSON.stringify({price: err}));
+      };
       res.writeHead(400, {'Content-Type': 'application/JSON'});
-      res.end(JSON.stringify(err));
+      return res.end(JSON.stringify(err));
     }
     res.writeHead(200, {'Content-Type': 'application/JSON'});
     res.end(JSON.stringify({msg: 'Pizza complete.'}));
@@ -107,6 +111,9 @@ var placeOrder = function (data, callback) {
         order.Order.Payments.push(cardInfo);
 
         console.log('Total cost:', cardInfo.Amount);
+        if (data.onlyPrice) {
+          return callback(cardInfo.Amount)
+        };
 
         // Place order
         dominos.order.place(order, function (orderData) {
