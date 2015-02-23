@@ -21,9 +21,8 @@ def main():
 # A set of non terminals that should not be expanded when generating the
 # full language of a grammar, so that we can get a reasonable summary
 # of the language.
-_NO_EXPAND = set(['feature', 'include', 'star', 'direct', 'make', 'write',
-                  'movie_word', 'person_word', 'aux'
-                  ])
+_NO_EXPAND = {'feature', 'include', 'star', 'direct', 'make', 'write',
+                  'movie_word', 'person_word', 'aux'}
 
 
 def generate_language_cnf(cnf_grammar):

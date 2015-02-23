@@ -57,7 +57,7 @@ def split_csv(line):
     """ Given a string of comma separated values, returns a list of
         those values, without whitespace around the items.
     """
-    return map(lambda x: x.strip(), line.split(','))
+    return map(str.strip, line.split(','))
 
 
 def find_bracketed_group(line):
@@ -67,12 +67,12 @@ def find_bracketed_group(line):
     bracket = None
     depth = 0
     for i, c in enumerate(line):
-        if c == '(' or c == '[':
+        if c in '([':
             if depth == 0:
                 bracket = c
                 start = i
             depth += 1
-        elif c == ')' or c == ']':
+        elif c in ')]':
             depth -= 1
         if depth == 0 and bracket is not None:
             end = i + 1
