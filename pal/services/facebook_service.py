@@ -8,16 +8,16 @@ import re
 from pal.services.service import Service
 from pal.services.service import wrap_response
 
+
 class FacebookService(Service):
     def applies_to_me(self, client, feature_request_type):
         return True
-    
-    def get_confidence(self, features):
-        return super(self.__class__, self).get_confidence(features)
+
+    def get_confidence(self, params):
+        return super(self.__class__, self).get_confidence(params)
 
     @wrap_response
     def go(self, params):
-        features = params['features']
         query = params['query']
 
         # if the query has a quoted string,
@@ -28,5 +28,5 @@ class FacebookService(Service):
             message = quoted[0]
             # if 'facebook' in features['keywords']:
             # assume facebook for now since there aren't any other services
-            return ('EXTERNAL', 'POST', message, 
-                "If this got displayed, something's wrong", 'facebook')
+            return ('EXTERNAL', 'POST', message,
+                    "If this got displayed, something's wrong", 'facebook')

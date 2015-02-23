@@ -1,0 +1,10 @@
+person_relation:
+  "with", person_concrete
+  "that"?, movie_act_on_person, person_concrete, "in them"?
+  "that"?, person_act_on_movie, "by", person_concrete
+  aux, person_concrete, [(person_act_on_movie, "from"?), (movie_act_on_person, "in"?)]
+
+person_act_on_movie: "person_act_on_movie"
+movie_act_on_person: "movie_act_on_person"
+person_concrete: "person_concrete"
+aux: "aux"

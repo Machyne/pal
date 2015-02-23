@@ -13,8 +13,8 @@ class YelpService(Service):
     def applies_to_me(self, client, feature_request_type):
         return True
 
-    def get_confidence(self, features):
-        return super(self.__class__, self).get_confidence(features)
+    def get_confidence(self, params):
+        return super(self.__class__, self).get_confidence(params)
 
     @wrap_response
     def go(self, params):
@@ -30,10 +30,11 @@ class YelpService(Service):
             orgs = [t[0] for t in features['tree'] if t[1] == 'ORGANIZATION']
             if not len(places):
                 return ('NEEDS DATA - CLIENT',
-                    {'location':
-                        {'type': 'loc',
-                         'msg': "Sorry, I can't do that without knowing where "
-                                "you are. Try specifying in your question."}})
+                        {'location':
+                            {'type': 'loc',
+                             'msg': "Sorry, I can't do that without knowing "
+                                "where you are. Please specify a location or "
+                                "enable location services in your browser."}})
             else:
                 location = places[0]
                 if len(orgs):

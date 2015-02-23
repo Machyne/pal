@@ -106,12 +106,18 @@ Who's in room 405 of memo hall?
 Who's in Watson 311?
 
 movie
-Hom many films has tom hanks acted in
+Did Daniel Radcliffe play Harry Potter in Harry Potter?
+Did Kubrick direct 2001 a Space Odyssey?
+Did tom hanks act in Blade Runner?
+How many films has tom hanks acted in
 How many films has tom hanks been in
+How many movies are there that have been directed by kubrick
 How many movies are there with tom hanks
 How many movies has Tom Hanks starred in?
 How many movies has Wes Anderson directed?
+How many movies have been directed by wes Anderson
 How many movies have Tom Hanks
+How many movies was tom hanks in?
 Name all Wes Anderson movies
 Name everything Wes Anderson has directed
 Show me everything directed by Tom Hanks
@@ -126,11 +132,16 @@ What was tom hanks just in?
 What year did 21 Jump Street come out?
 What year did Fight Club come out?
 what year was blade runner made?
-what year was cloud atlas released?
+what year was cloud atlas released
 what year was cloud atlas?
 what year was the film cloud atlas released?
 what year was the movie blade runner?
+what year was the movie cloud atlas
+what year was the movie cloud atlas released?
 What's tom hanks' most recent film
+When did fight club come out?
+When was blade runner made?
+When was cloud atlas released?
 Which actor starred as the main character of Fight Club?
 Who acted in Blade Runner?
 Who acted in Fight Club?
@@ -138,11 +149,12 @@ Who directed the grand budapest hotel?
 Who played Harry Potter in Harry Potter?
 Who played Neville Longbottom in Harry Potter and the Deathly Hallows part 1?
 Who played Severus Snape in Harry Potter?
-Who stared in 2001 a space odyssey?
-Who starred in Blade Runner?
+Who starred in 2001 a space odyssey?
 Who starred in Fight Club?
 Who was in Fight Club?
-Who wrote 2001 A Space Odyssey?
+Who was it that directed 2001 A Space Odyssey?
+Who was it that starred in Blade Runner?
+Who wrote 2001, A Space Odyssey?
 
 weather
 Do you think it'll rain?
