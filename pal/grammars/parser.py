@@ -84,9 +84,10 @@ def clean_tree(parse_tree):
     new_subtree_list = ()
     for subtree in subtree_list:
         subtree = clean_tree(subtree)
-        root2, subtree_list2 = subtree
+        root2 = subtree[0]
         if root2[0] == '_':
-            new_subtree_list += subtree_list2
+            for subtree_list2 in subtree[1:]:
+                new_subtree_list += subtree_list2
         else:
             new_subtree_list += (subtree,)
     return root, new_subtree_list
@@ -157,6 +158,22 @@ def extract(symbol, parse_tree, get_nonterminals=False):
             if subresult:
                 return subresult
         return ''
+
+
+def search(node, selector):
+    if isinstance(node, tuple):
+        if ' ' in selector:
+            l, _, r = selector.partition(' ')
+            for found1 in search(node, l):
+                for found2 in search(found1, r):
+                    yield found2
+        else:
+            if node[0] == selector:
+                yield node
+            else:
+                for child in node[1]:
+                    for found in search(child, selector):
+                        yield found
 
 
 if __name__ == '__main__':
