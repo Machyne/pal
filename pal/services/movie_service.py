@@ -11,6 +11,18 @@ from pal.services.service import Service
 from pal.services.service import wrap_response
 
 
+def verb_phrase_from_role(role):
+    if not role:
+        verb = 'been'
+    elif role == 'writer':
+        verb = 'wrote'
+    else:
+        verb = role[:-2] + 'ed'
+    if verb in ['acted', 'been']:
+        return 'has ' + verb + ' in'
+    return 'has ' + verb
+
+
 class MovieService(Service):
 
     def __init__(self):
@@ -33,8 +45,6 @@ class MovieService(Service):
             parse_tree = self.cached_parse[1]
         else:
             parse_tree = parse(query, self.grammar)
-
-        print parse_tree
         if parse_tree:
             intent = self.extract_intent(parse_tree)
             object_ = self.extract_object(parse_tree)
@@ -47,22 +57,42 @@ class MovieService(Service):
 
     @staticmethod
     def extract_intent(parse_tree):
-        name = extract(parse_tree, 'person_concrete')
-        title = extract(parse_tree, 'movie_concrete')
-        if title:
-            intent = ('MOVIES', 'YEAR_OF')
-        if name:
+        if extract(parse_tree, 'person_to_movie_yes_no'):
+            intent = ('CREDITS', 'BOOLEAN_OF')
+        elif extract(parse_tree, 'wh_count'):
             intent = ('CREDITS', 'COUNT_OF')
-        if parse_tree[1][0][0] == 'aux':
-            intent = (intent[0], 'BOOLEAN_OF')
+        elif extract(parse_tree, 'movie_to_person_question') \
+            or extract(parse_tree, 'movie_to_person_description'):
+            intent = ('CREDITS', 'MOVIES_OF')
+        elif extract(parse_tree, 'person_to_movie_question'):
+            intent = ('CREDITS', 'PEOPLE_OF')
+        elif extract(parse_tree, 'year_of_movie'):
+            intent = ('MOVIES', 'YEAR_OF')
         return intent
+
+    @staticmethod
+    def extract_role(parse_tree):
+        if extract(parse_tree, 'actor_word') \
+            or extract(parse_tree, 'movie_act_on_person'):
+            return 'actor'
+        if extract(parse_tree, 'direction_word') \
+            or extract(parse_tree, 'direct'):
+            return 'director'
+        if extract(parse_tree, 'producer_word') \
+            or extract(parse_tree, 'produce'):
+            return 'producer'
+        if extract(parse_tree, 'writer_word') \
+            or extract(parse_tree, 'write'):
+            return 'writer'
+        return ''
 
     @staticmethod
     def extract_object(parse_tree):
         name = extract(parse_tree, 'name')
         title = extract(parse_tree, 'title')
         year = extract(parse_tree, 'year')
-        return {'name': name, 'title': title, 'year': year}
+        role = MovieService.extract_role(parse_tree)
+        return {'name': name, 'title': title, 'role': role, 'year': year}
 
     def update_kb(self, intent, object_):
         """ Adds data to the KB that may be relevant to this query. """
@@ -72,32 +102,52 @@ class MovieService(Service):
             load_movie_for_title(object_['title'])
 
     def query_kb(self, intent, object_, modifier=None, frame=None):
-        """ Makes a query to the knowledge base. """
+        """ Makes a query to the knowledge base, and returns a string
+            representation of the result. """
         if intent[0] == 'CREDITS':
             credits = get_credits(**object_)
             if intent[1] == 'BOOLEAN_OF':
-                return not not credits
+                return 'Yes' if credits else 'No'
             if intent[1] == 'COUNT_OF':
-                return len(credits)
+                unique_titles = {credit.title for credit in credits}
+                return str(len(unique_titles))
+            if intent[1] == 'MOVIES_OF':
+                return ', '.join(sorted({credit.title.title() for credit in credits}))
+            if intent[1] == 'PEOPLE_OF':
+                return ', '.join(sorted({credit.name.title() for credit in credits}))
         elif intent[0] == 'MOVIES':
             movies = get_movies(**object_)
             if intent[1] == 'YEAR_OF':
-                return movies[0].date_.year
+                return movies[0].year
 
     def generate_summary(self, intent, object_, result):
-        if intent[0] == 'CREDITS':
-            name = object_['name'].title()
-            if intent[1] == 'COUNT_OF':
-                return '{0} was in {1} movies.'.format(name, result)
-            if intent[1] == 'BOOLEAN_OF':
-                return 'Yes.' if result else 'No.'
-        elif intent[0] == 'MOVIES':
-            if intent[1] == 'YEAR_OF':
-                title = object_['title'].title()
-                return '{0} was in the year {1}.'.format(title, result)
+        data = {
+            'name': object_['name'].title(),
+            'title': object_['title'].title(),
+            'verb_phrase': verb_phrase_from_role(object_['role']),
+            'result': result
+        }
+        SUMMARY_TEMPLATES = {
+            ('CREDITS', 'BOOLEAN_OF'): '{result}.',
+            ('CREDITS', 'COUNT_OF'): '{name} {verb_phrase} {result} movies.',
+            ('CREDITS', 'MOVIES_OF'): '{result}.',
+            ('CREDITS', 'PEOPLE_OF'): '{result}.',
+            ('MOVIES', 'YEAR_OF'): '{title} was in the year {result}.'
+        }
+        if intent in SUMMARY_TEMPLATES:
+            return SUMMARY_TEMPLATES[intent].format(**data)
 
 
 if __name__ == "__main__":
-    print MovieService().go({
-        'query': 'what year was the movie blade runner?'
-    })
+    from pal.test import parse_examples
+    examples = parse_examples()
+    i = 0
+    for example in examples['movie']:
+        if i > 10:
+            pass
+        i += 1
+        print example
+        print MovieService().go({
+            'query': example
+        })['summary']
+        print

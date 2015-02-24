@@ -5,16 +5,15 @@ from os import path
 from pal.grammars import get_grammar_for_service
 from pal.grammars.parser import extract
 from pal.grammars.parser import parse
+from pal.test import parse_examples
 
 
 _GRAMMARS_DIR = path.abspath(path.join(path.dirname(__file__),
                                        'services'))
-_EXAMPLES_FILE = path.abspath(path.join(path.dirname(__file__),
-                                        '..', 'test', 'examples.txt'))
 
 
 def main():
-    # test_grammar('movie')
+    test_grammar('movie')
     test_grammar('dominos')
 
 
@@ -25,7 +24,7 @@ def test_grammar(service_name):
     except ValueError as e:
         print 'Error: {}'.format(e.args[0])
         return
-    all_examples = load_examples_from_file(_EXAMPLES_FILE)
+    all_examples = parse_examples()
     ex_total = 0
     counter_ex_total = 0
     hits = 0
@@ -36,12 +35,12 @@ def test_grammar(service_name):
             for example in examples:
                 parse_tree = parse(example, grammar)
                 if parse_tree:
-                    pprint(parse_tree)
-                    print example
-                    print '\torder:', not extract(parse_tree, 'price_query')
-                    print '\tnumber:', extract(parse_tree, 'number') or 'one'
-                    print '\tcrust_type:', extract(parse_tree, 'crust_type', True)
-                    print '\tcrust_size:', extract(parse_tree, 'crust_size', True)
+                    # pprint(parse_tree)
+                    # print example
+                    # print '\torder:', not extract(parse_tree, 'price_query')
+                    # print '\tnumber:', extract(parse_tree, 'number') or 'one'
+                    # print '\tcrust_type:', extract(parse_tree, 'crust_type', True)
+                    # print '\tcrust_size:', extract(parse_tree, 'crust_size', True)
                     hits += 1
                 else:
                     print '>', example
@@ -53,23 +52,6 @@ def test_grammar(service_name):
                     print 'X', counterexample
     print('Success:\t\t{0}/{1}'.format(hits, ex_total))
     print('False Positives:\t{0}/{1}'.format(misses, counter_ex_total))
-
-
-def load_examples_from_file(examples_file):
-    with open(examples_file) as f:
-        examples = defaultdict(list)
-        cur_name = None
-        for line in f:
-            line = line.strip()
-            if cur_name is None:
-                if line:
-                    cur_name = line
-            else:
-                if line:
-                    examples[cur_name].append(line)
-                else:
-                    cur_name = None
-    return examples
 
 
 if __name__ == '__main__':

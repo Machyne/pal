@@ -18,7 +18,7 @@ person_to_movie_yes_no:
 year_of_movie: wh_time_phrase, movie_concrete, movie_release_word?
 movie_to_person_description:
   movie_abstract_vague, person_relation
-  person_concrete, movie_abstract
+  "all"?, person_concrete, movie_abstract
 
 movie_query: wh_phrase, movie_abstract, "are there"?
 person_query: ["who", (wh_phrase, person_abstract)]
@@ -32,7 +32,7 @@ person_relation:
   "that"?, movie_act_on_person, person_concrete, "in them"?
   "that"?, person_act_on_movie, "by", person_concrete
   aux, person_concrete, [(person_act_on_movie, "from"?), (movie_act_on_person, "in"?)]
-  be, person_concrete, "in"
+  be, person_concrete, "just"?, "in"
   person_concrete, aux?, person_act_on_movie
 
 movie_abstract: det?, adj_phrase?, movie_word
@@ -42,11 +42,15 @@ movie_concrete: movie_abstract?, title
 person_concrete: person_abstract?, name
 person: [person_abstract, person_concrete]
 movie_act_on_person: aux?, [act, be, (be, person), feature, have, include, play, (play, person), star, (star, "as", person)]
-person_act_on_movie: aux?, [direct, make, write]
+person_act_on_movie: aux?, [direct, make, produce, write]
 
 movie_release_word: [(come, "out"), ("in", "theaters"), make, release]
 movie_word: ["blockbuster", "blockbuster", "film", "films", "flick", "flicks", "movie", "movies"]
-person_word: ["guy", "woman", "man", "girl", "boy", "character", "actor", "actors", "actress", "actresses", "director", "directors", "writer", "writers"]
+person_word: [actor_word, director_word, producer_word, writer_word]
+actor_word: ["guy", "woman", "man", "girl", "boy", "character", "actor", "actors", "actress", "actresses"]
+director_word: ["director", "directors"]
+producer_word: ["producer", "producers"]
+writer_word: ["writer", "writers"]
 
 act: ["act", "acts", "acted", "acting"]
 come: ["come", "came"]
@@ -55,19 +59,21 @@ feature: ["feature", "features", "featured", "featuring"]
 include: ["include", "includes", "included", "including"]
 make: ["make", "makes", "made"]
 play: ["play", "plays", "played"]
+produce: ["produce", "produces", "produced"]
 release: ["release", "releases", "released"]
 star: ["star", "stars", "starred", "starring"]
 write: ["write", "writes", "wrote"]
 
 wh_phrase: wh_word, aux?
 wh_time_phrase: wh_time_word, aux?
-wh_word: ["which", "what", ("how", "many")]
+wh_word: ["which", "what", wh_count]
+wh_count: "how many"
 wh_time_word: ["when", ("what", "year"), ("which", "year")]
 name: "*", name?
 title: "the"?, ["*", "#"], title?
 adj_phrase: ["main", year]
 year: "#"
-prep_phrase: ("this", "year")
+prep_phrase: ["recently", ("this year")]
 
 aux: [have, be, do, (have, be)]
 be: ["be", "'s", "is", "are", "been", "was", "were"]

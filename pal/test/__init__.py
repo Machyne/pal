@@ -3,32 +3,31 @@
 #
 # Module for all the tests
 #
-# Author: Alex Simonides
+# Author: Alex Simonides and Ken Schiller
 
+from collections import defaultdict
 from os import path
+
+
+EXAMPLES_FILE = path.realpath(path.join(path.dirname(__file__),
+                              "examples.txt"))
 
 
 def parse_examples():
     """ Reads in the example query file and returns a dictionary with service
         names as keys and a list of queries as values.
     """
-    file_path = path.realpath(path.join(path.dirname(__file__),
-                                        "examples.txt"))
-    examples = {}
-
-    with open(file_path) as ex_file:
-        service = ex_file.next().strip()
-        queries = []
-        for line in ex_file:
-            if line == "\n":
-                examples[service] = queries
-                queries = []
-                try:
-                    service = ex_file.next().strip()
-                    continue
-                except StopIteration:
-                    break
-
-            queries.append(line.strip())
-
+    with open(EXAMPLES_FILE) as f:
+        examples = defaultdict(list)
+        service_name = None
+        for line in f:
+            line = line.strip()
+            if service_name is None:
+                if line:
+                    service_name = line
+            else:
+                if line:
+                    examples[service_name].append(line)
+                else:
+                    service_name = None
     return examples

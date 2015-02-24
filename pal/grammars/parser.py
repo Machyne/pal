@@ -47,9 +47,29 @@ def generate_grammar_features(grammar):
     return key_list, terminal_rules, unit_rules, pair_rules, lexicon, start_key
 
 
+def parse(string, grammar_features):
+    """ Returns a parse if the string is parsed by the grammar else [].
+
+        Note: Expects a lowercase string without ending punctuation.
+    """
+    string = normalize_string(string)
+    original_words = string.split()
+    string = preprocess(string, grammar_features)
+    tokens = string.split()
+    parse_tree = cyk(tokens, original_words, grammar_features)
+    return clean_tree(parse_tree)
+
+
+def normalize_string(string):
+    """ Remove surrounding whitespace, convert to lowercase,
+        remove punctuation.
+    """
+    return re.sub('[,:]\s?', ' ', re.sub(r'(.*)[\.\?!]$', '\\1',
+                  string.strip().lower()))
+
+
 def preprocess(string, grammar_features):
-    """ Remove surrounding whitespace, convert to lowercase, remove punctuation,
-        separate clitics with whitespace, convert numbers and unknown words to
+    """ Separate clitics with whitespace, convert numbers and unknown words to
         wild cards.
     """
     # TODO: Separating clitics (e.g. "we'll" -> "we 'll") breaks things
@@ -58,8 +78,6 @@ def preprocess(string, grammar_features):
     #                  re.sub(r'(\w+)\'(\w+)', '\\1 \'\\2',
     #                         re.sub(r'(.*)[\.\?!]$', '\\1',
     #                                string.strip().lower())))
-    string = re.sub(',\s?', ' ', re.sub(r'(.*)[\.\?!]$', '\\1',
-                    string.strip().lower()))
 
     def wild_card(word):
         try:
@@ -73,18 +91,6 @@ def preprocess(string, grammar_features):
     string = ' '.join(words)
     # string = re.sub(r'(\*|#)( (\*|#))+', '*', string)
     return string
-
-
-def parse(string, grammar_features):
-    """ Returns a parse if the string is parsed by the grammar else [].
-
-        Note: Expects a lowercase string without ending punctuation.
-    """
-    original_words = string.split()
-    string = preprocess(string, grammar_features)
-    tokens = string.split()
-    parse_tree = cyk(tokens, original_words, grammar_features)
-    return clean_tree(parse_tree)
 
 
 def clean_tree(parse_tree):

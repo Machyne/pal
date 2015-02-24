@@ -107,7 +107,10 @@ Who's in Watson 311?
 
 movie
 Did Daniel Radcliffe play Harry Potter in Harry Potter?
+Did Harrison Ford act in Blade Runner?
 Did Kubrick direct 2001 a Space Odyssey?
+Did Ridley Scott act in Blade Runner?
+Did Ridley Scott direct Blade Runner?
 Did tom hanks act in Blade Runner?
 How many films has tom hanks acted in
 How many films has tom hanks been in
@@ -121,6 +124,8 @@ How many movies was tom hanks in?
 Name all Wes Anderson movies
 Name everything Wes Anderson has directed
 Show me everything directed by Tom Hanks
+Was Ridley Scott in Blade Runner?
+Was Ridley Scott the director of Blade Runner?
 Was tom hanks in Blade Runner?
 Was tom hanks in the 2014 film the grand budapest hotel
 What has Naomi Watts starred in?

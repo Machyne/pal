@@ -1,9 +1,10 @@
-from collections import defaultdict
 from datetime import datetime
+import string
 
 import requests
 
 from config import TMDB_KEY
+from pal.grammars.parser import normalize_string
 
 
 _BASE_URL = 'http://api.themoviedb.org/3/'
@@ -11,14 +12,32 @@ _PERSON_BY_NAME = 'search/person?query={name}&api_key={api_key}'
 _MOVIE_BY_TITLE = 'search/movie?query={title}&api_key={api_key}'
 _CREDITS_BY_PERSON_ID = 'person/{id}/movie_credits?api_key={api_key}'
 _IMAGE_BASE_URL = 'http://image.tmdb.org/t/p/w500/'
-_PEOPLE = {}  # TMDBPerson objects indexed by name
-_MOVIES = {}  # TMDBMovie objects indexed by title
-_CREDITS = set()  # Set of tuples (name, title, role)
+
+# The "Knowledge Base" (KB)
+_PEOPLE = {}   # TMDBPerson objects indexed by name
+_MOVIES = {}   # TMDBMovie objects indexed by title
+_CREDITS = {}  # TMDBCredit objects indexed by (name, title, role, year)
+
+
+def to_ascii(s):
+    return filter(lambda x: x in string.printable, s)
+
+
+def compare_names(reference, query):
+    """ Compares strings after stripping, lowering, and removing punctuation.
+    """
+    return normalize_string(reference).contains(normalize_string(query))
+
+
+def compare_titles(reference, query):
+    """ Compares strings after stripping, lowering, and removing punctuation.
+    """
+    return normalize_string(reference).startswith(normalize_string(query))
 
 
 class TMDBMovie(object):
     def __init__(self, movie_dict):
-        self.title = movie_dict['title']
+        self.title = to_ascii(movie_dict['title'])
         self.date_ = datetime.strptime(movie_dict['release_date'], '%Y-%m-%d') \
             if 'release_date' in movie_dict and movie_dict['release_date'] \
             else None
@@ -26,13 +45,17 @@ class TMDBMovie(object):
             if 'poster_path' in movie_dict and movie_dict['poster_path'] \
             else None
 
+    @property
+    def year(self):
+        return self.date_.year if self.date_ else None
+
     def __str__(self):
-        return '{0} ({1})'.format(self.title, self.date_.year)
+        return '{0} ({1})'.format(self.title, self.year)
 
 
 class TMDBPerson(object):
     def __init__(self, person_dict):
-        self.name = person_dict['name']
+        self.name = to_ascii(person_dict['name'])
         self.id = person_dict['id']
         self.image_url = _IMAGE_BASE_URL + person_dict['profile_path'] \
             if 'poster_path' in person_dict and person_dict['poster_path'] \
@@ -100,6 +123,10 @@ def get_movie_by_title(title):
     return None
 
 
+def load_movie_for_title(title):
+    get_movie_by_title(title)
+
+
 def load_credits_for_name(name):
     person = get_person_by_name(name)
     if not person:
@@ -108,40 +135,40 @@ def load_credits_for_name(name):
     results = _get(_CREDITS_BY_PERSON_ID, id=id_)
     if 'cast' in results:
         for movie_dict in results['cast']:
-            title = movie_dict['title']
-            _CREDITS.add(TMDBCredit(name, title, 'actor'))
-            _MOVIES[title] = TMDBMovie(movie_dict)
+            movie = TMDBMovie(movie_dict)
+            params = (name, movie.title, 'actor', movie.year)
+            _CREDITS[params] = TMDBCredit(*params)
+            _MOVIES[movie.title] = movie
     if 'crew' in results:
         for movie_dict in results['crew']:
-            title = movie_dict['title']
             role = _normalize_role(movie_dict['job'])
-            _CREDITS.add(TMDBCredit(name, title, role))
-            _MOVIES[title] = TMDBMovie(movie_dict)
-
-
-def load_movie_for_title(title):
-    get_movie_by_title(title)
+            movie = TMDBMovie(movie_dict)
+            params = (name, movie.title, role, movie.year)
+            _CREDITS[params] = TMDBCredit(*params)
+            _MOVIES[movie.title] = movie
 
 
 def get_credits(name=None, title=None, role=None, year=None):
     def filter_(credit):
-        if name and credit.name != name:
+        if name and not compare_titles(credit.name, name):
             return False
-        if title and credit.title != title:
+        if title and not compare_titles(credit.title, title):
             return False
         if role and credit.role != role:
             return False
         if year and credit.year != year:
             return False
         return True
-    return filter(filter_, _CREDITS)
+    # print 'get credits: ({0}, {1}, {2}, {3})'.format(name, title, role, year)
+    credits = _CREDITS.itervalues()
+    return filter(filter_, credits)
 
 
 def get_movies(name=None, title=None, role=None, year=None):
     def filter_(movie):
-        if name and movie.name != name:
+        if name and not compare_names(movie.name, name):
             return False
-        if title and movie.title != title:
+        if title and not compare_titles(movie.title, title):
             return False
         if role and movie.role != role:
             return False
@@ -149,15 +176,17 @@ def get_movies(name=None, title=None, role=None, year=None):
             return False
         return True
     if title:
-        movies = [_MOVIES[title] if title in _MOVIES else None]
+        movies = (_MOVIES[title] if title in _MOVIES else None)
     else:
-        movies = _MOVIES.values()
+        movies = _MOVIES.itervalues()
     if name:
         movies = filter(lambda x: not not _CREDITS[name][x.title].keys(),
                         movies)
     if year:
         movies = filter(lambda x: x.date_.year == year, movies)
-    print movies
+    # TODO: WTF?
+    if isinstance(movies, TMDBMovie):
+        return [movies]
     return movies
 
 
