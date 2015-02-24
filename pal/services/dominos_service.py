@@ -51,7 +51,7 @@ class DominosService(Service):
             amount = 'normal'
             parent_ = parent(parse_tree, t)
             if parent and parent_[0] == 'ingredient':
-                amount = extract('topping_amount', t) or amount
+                amount = extract('topping_amount', parent_) or amount
             toppings.append((item, amount))
 
         pizza = {

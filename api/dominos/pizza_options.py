@@ -130,6 +130,7 @@ def _pizzas_to_products(pizzas):
         products.append(pie)
     return products
 
+
 def order_pizzas(phone, name, address, card, pizzas):
     name_parts = name.rpartition(' ')
     data = {
@@ -155,7 +156,7 @@ def price_pizzas(pizzas, address='1 N College St, Northfield, MN 55057'):
         'address': address,
         'card': _DUMMY_CARD,
         'pizzas': _pizzas_to_products(pizzas),
-        'onlyPrice':  True,
+        'onlyPrice': True,
     }
     data = json.dumps(data)
     headers = {'Content-Type': 'application/json'}
