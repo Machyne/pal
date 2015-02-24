@@ -17,38 +17,69 @@ class WeatherService(Service):
     @wrap_response
     def go(self, params):
         features = params['features']
+        location = None
+        places = None
+        state = None
+        city = None
+        if 'location' in params.get('user-data', {}):
+            location = params['user-data']['location']
+        elif 'location' in params.get('client-data', {}):
+            location = params['client-data']['location']
         # Why are there so many types of things that a location can be tagged
         # as? GPE = Geo-Political Entity; GSP = "Geo-Socio-Political group"
         places = [place[0] for place in features['tree'] if place[1] in
-                  ['GPE', 'GSP', 'LOCATION', 'PERSON']]
-        orgs = [org[0] for org in features['tree'] if org[1] == 'ORGANIZATION']
+              ['GPE', 'GSP', 'LOCATION', 'PERSON']]
+        orgs = [org[0] for org in features['tree'] 
+                if org[1] == 'ORGANIZATION']
         tokens = set([t[0].lower() for t in features['tree']])
 
-        if len(places) == 1:
-            city = places[0]
+        baseurl = "https://query.yahooapis.com/v1/public/yql?"
+        if location or places:
+            if location:
+                # get the city name, woeid
+                coords = location.split(',')
+                city_query = ("select city, woeid from geo.placefinder(1) "
+                              " where text=\"{0},{1}\" and gflags=\"R\""
+                              ).format(coords[0], coords[1])
+                city_payload = {'q': city_query, 'format': 'json'}
+                city_response = requests.post(baseurl, city_payload)
+                woeid = None
+                try:
+                    city_json = city_response.json()
+                    city_result = city_json['query']['results']['Result']
+                    city = city_result['city']
+                    woeid = city_result['woeid']
+                except Exception, e:
+                    return ('ERROR', "Error fetching determining location")
+                
+                # yql query if we already looked up location
+                yql_query = ("select * from weather.forecast where woeid={0} "
+                            ).format(woeid)
 
-            state = None
-            # country = None
-            if len(orgs) == 1:
-                state = orgs[0]
-            # if len(orgs) == 2:
-            #     state = orgs[1]
-            #     country = orgs[2]
+            elif len(places) == 1:
+                # user specified location in query, try to parse that out
+                city = places[0]
+                # country = None
+                if len(orgs) == 1:
+                    state = orgs[0]
+                # if len(orgs) == 2:
+                #     state = orgs[1]
+                #     country = orgs[2]
 
-            # query Yahoo
-            baseurl = "https://query.yahooapis.com/v1/public/yql?"
-
-            if state is not None:
-                # doing a terrible thing and assuing everything is in the US
-                state_str = "US-" + state
-                yql_query = ("select * from weather.forecast where woeid in "
-                             "(select woeid from geo.places where "
-                             "text=\"{0}\" and "
-                             "admin1.code=\"{1}\")").format(city, state_str)
+                if state is not None:
+                    # doing a terrible thing and assuing everything is in the US
+                    state_str = "US-" + state
+                    yql_query = ("select * from weather.forecast where woeid "
+                                 "in (select woeid from geo.places where "
+                                 "text=\"{0}\" and "
+                                 "admin1.code=\"{1}\")").format(city, state_str)
+                else:
+                    yql_query = ("select * from weather.forecast where woeid "
+                                 "in (select woeid from geo.places(1) where "
+                                 "text=\"{0}\")").format(city)
             else:
-                yql_query = ("select * from weather.forecast where woeid in "
-                             "(select woeid from geo.places(1) where "
-                             "text=\"{0}\")").format(city)
+                return ('ERROR',
+                    "Sorry, I'm not sure where you are.")
 
             payload = {'q': yql_query, 'format': 'json'}
             response = requests.post(baseurl, params=payload)
@@ -132,6 +163,8 @@ class WeatherService(Service):
 
             cold_words = set(['cold', 'cool', 'freezing'])
             warm_words = set(['hot', 'warm'])
+            rain_words = set(['rain', 'raining'])
+            snow_words = set(['snow', 'snowing'])
 
             # gen responses
             response = ""
@@ -141,7 +174,7 @@ class WeatherService(Service):
             elif 'low' in tokens:
                 response = ("The low for {0} in {1} will "
                             "be {2} degrees.").format(day_str, loc, low_temp)
-            elif 'rain' in tokens:
+            elif len(rain_words.intersection(tokens)) > 0:
                 # see https://developer.yahoo.com/weather/documentation.html
                 # for list of all weather condition codes
                 rain_codes = set([1, 2, 3, 4, 5, 8, 9, 10, 11, 12,
@@ -153,7 +186,7 @@ class WeatherService(Service):
                 else:
                     response = ("I don't see rain in the forecast {0}{1}"
                                 ).format(preposition, day_str)
-            elif 'snow' in tokens:
+            elif len(snow_words.intersection(tokens)) > 0:
                 snow_codes = set([5, 7, 13, 14, 15, 16, 41, 42, 43, 46])
                 if weather_code in snow_codes:
                     response = ("It looks like there will be {0} {1}{2}."
@@ -182,16 +215,31 @@ class WeatherService(Service):
                                 ).format(high_temp)
             else:
                 # some generic response
-                response = ("There's going to be {4} {5}{0} in {1}. "
+                # codes for to format like "there's going to be blank_weather..."
+                there_words = set([0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 
+                                   14, 15, 16, 17, 18, 19, 21, 35, 37, 38, 39, 
+                                   40, 41, 42, 43, 45, 46, 47])
+                phrase_beginning = None
+                if weather_descript in there_words:
+                    phrase_beginning = "There's going to be"
+                else:
+                    phrase_beginning = "It's going to be"
+
+                response = ("{6} {4} {5}{0} in {1}. "
                             "The high will be {2} degrees "
                             "and the low will be {3} degrees."
                             ).format(day_str, loc, high_temp,
-                                     low_temp, weather_descript, preposition)
+                                     low_temp, weather_descript, 
+                                     preposition, phrase_beginning)
             return response
 
         else:
-            # more than one or no GPE found... now what?
-            return None
+            # no location found, get from client
+            return ('NEEDS DATA - CLIENT',
+                    {'location':
+                        {'type': 'loc',
+                         'msg': "Sorry, I can't do that without knowing where "
+                                "you are. Try specifying in your question."}})
 
 # TODO/FIXES:
 # 1. Sometimes things like "Rain" and "Weather" are tagged as GPE if they
