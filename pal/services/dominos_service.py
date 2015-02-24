@@ -110,7 +110,7 @@ class DominosService(Service):
 
         # Case 2: Pizza order query
         ud = params.get('user-data', {})
-        needs = [req[0] for req in PIZZA_ORDER_REQUIRED_FIELDS
+        needs = [req for req in PIZZA_ORDER_REQUIRED_FIELDS
                  if req[0] not in ud]
         if needs:
             return ('NEEDS DATA - USER', needs)
