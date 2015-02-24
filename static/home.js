@@ -92,7 +92,8 @@ $(document).ready(function () {
         $("#speak").show();
         // load user preference on speech from cookie
         if (document.cookie) {
-            if (document.cookie === 'speech=true') {
+            if (document.cookie.indexOf('speech=true') > -1) {
+                // speech=true is in the cookie
                 $("#speak-check").attr("checked", true);
             }
         }
