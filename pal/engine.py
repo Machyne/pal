@@ -1,5 +1,3 @@
-import logging
-
 from flask import request
 from flask.ext.restful import abort
 from flask.ext.restful import Resource
@@ -10,12 +8,11 @@ from pal.nlp.standard_nlp import StandardNLP
 from pal.nlp.feature_extractor import FeatureExtractor
 from pal.classifier import Classifier
 from pal.executor import Executor
+from pal.logger import Logger
 from pal.sanitizer import Sanitizer
 
 
 class Engine(Resource):
-    LOGGER = logging.getLogger('PAL Engine')
-
     @swagger.operation(
         notes='End-to-end processing from query to response',
         nickname='engine',
@@ -87,6 +84,5 @@ class Engine(Resource):
         FeatureExtractor.process(params)
         Classifier.process(params)
         Executor.process(params)
-        # Log the whole process
-        cls.LOGGER.info(params)
+        Logger.process(params)
         Sanitizer.process(params)

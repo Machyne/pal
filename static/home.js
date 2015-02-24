@@ -199,6 +199,7 @@ $(document).ready(function () {
                 $history.prepend('<li class="error"><div class="query">' +
                 query + '</div><div class="result">' +
                 msg + '</div></li>');
+                resetQueryBar();
             };
             var handleIndex = function (i, data) {
                 if (i >= keys.length) {
@@ -229,7 +230,7 @@ $(document).ready(function () {
                 }
 
             };
-            handleIndex(0, {});
+            return handleIndex(0, {});
         }
         else if (result.status == 2) {
             $userData.html('');
@@ -277,7 +278,7 @@ $(document).ready(function () {
 
         if ($speakCheck.is(':checked') && result.status <= 1) {
             // to avoid pronouncing 'li' etc.
-            var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
+            var no_html = result.summary.replace(/(<([^>]+)>)/ig, ' ');
             speakIfAppropriate(no_html);
         }
 
