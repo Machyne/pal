@@ -73,7 +73,7 @@ var placeOrder = function (data, callback) {
   order.Order.Email = '';
 
   dominos.store.find(data.address, function (storeData) {
-    if (!storeData.success) {
+    if (!storeData.success || !storeData.result.Stores[0]) {
       console.log('\nNo store found');
       return callback({msg: 'no stores found'});
     };
@@ -122,17 +122,30 @@ var placeOrder = function (data, callback) {
           var curOrder = orderData.result.Order;
           console.log('\nOrder placed:\n', curOrder);
           if (curOrder.Status < 0) {
-              var details = JSON.stringify(curOrder.StatusItems) +
-                '\n' +
-                JSON.stringify(curOrder.CorrectiveAction);
-              console.log(
-                  '\n######### ERROR! ########\n',
-                  details,
-                  '\n#########################\n\n'
-              );
+            var errorCodes = [];
+            if (curOrder.StatusItems) {
+              errorCodes = errorCodes.concat(curOrder.StatusItems.map(function (item) {
+                return '- ' + item['Code'];
+              }));
+            };
+            if (curOrder.CorrectiveAction) {
+              errorCodes = errorCodes.concat(curOrder.CorrectiveAction.map(function (item) {
+                return '- ' + item['Code'];
+              }));
+            };
+            var details = errorCodes.join('\n');
+            console.log(
+                '\n######### ERROR! ########\n',
+                details,
+                '\n#########################\n\n'
+            );
+            if (curOrder.CorrectiveAction) {
               var msg = curOrder.CorrectiveAction.Detail + ': ' +
                 curOrder.CorrectiveAction.Code;
-              return callback({msg: msg, details: details});
+            } else {
+              var msg = 'One or more errors ocurred:';
+            }
+            return callback({msg: msg, details: details});
           }
 
           dominos.track.phone(orderData.result.Order.Phone, function (pizzaData) {
