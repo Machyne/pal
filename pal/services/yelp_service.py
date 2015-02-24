@@ -1,3 +1,4 @@
+import random
 import re
 
 from flask import render_template
@@ -9,12 +10,13 @@ from pal.services.service import wrap_response
 
 
 class YelpService(Service):
+    _ILIKE = ['I like', 'Check out', 'Try', 'I\'m a fan of', 'Look into']
 
     def applies_to_me(self, client, feature_request_type):
         return True
 
-    def get_confidence(self, features):
-        return super(self.__class__, self).get_confidence(features)
+    def get_confidence(self, params):
+        return super(self.__class__, self).get_confidence(params)
 
     @wrap_response
     def go(self, params):
@@ -30,10 +32,11 @@ class YelpService(Service):
             orgs = [t[0] for t in features['tree'] if t[1] == 'ORGANIZATION']
             if not len(places):
                 return ('NEEDS DATA - CLIENT',
-                    {'location':
-                        {'type': 'loc',
-                         'msg': "Sorry, I can't do that without knowing where "
-                                "you are. Try specifying in your question."}})
+                        {'location':
+                            {'type': 'loc',
+                             'msg': "Sorry, I can't do that without knowing "
+                                "where you are. Please specify a location or "
+                                "enable location services in your browser."}})
             else:
                 location = places[0]
                 if len(orgs):
@@ -49,6 +52,8 @@ class YelpService(Service):
                     "Sorry, I don't understand what you're looking for.")
         target = nouns[-1]
         tree = features['tree']
+        if target[0] in ['find', 'me', 'some', 'i', 'local']:
+            target = tree[-1]
         if target not in tree:
             return ('ERROR',
                     "Sorry, I don't understand what you're looking for.")
@@ -59,7 +64,7 @@ class YelpService(Service):
             index -= 1
             adj = tree[index][0].lower()
             if not ('near' in adj or 'close' in adj
-                    or adj in ['me', 'some', 'i', 'local']):
+                    or adj in ['find', 'me', 'some', 'i', 'local']):
                 query = adj + ' ' + query
         businesses = yelp_api.query_api(query, location)
         results = '<ul>'
@@ -89,5 +94,5 @@ class YelpService(Service):
         summary = map(lambda biz: biz['name'], businesses)
         summary[-1] = 'and ' + summary[-1]
         summary = ', '.join(summary)
-        summary = 'I like {}.'.format(summary)
+        summary = '{} {}.'.format(random.choice(self._ILIKE), summary)
         return ('SUCCESS', summary, results)

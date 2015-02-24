@@ -12,8 +12,8 @@ class DictionaryService(Service):
     def applies_to_me(self, client, feature_request_type):
         return True
 
-    def get_confidence(self, features):
-        return super(self.__class__, self).get_confidence(features)
+    def get_confidence(self, params):
+        return super(self.__class__, self).get_confidence(params)
 
     _SYNONYM = set(['synonyms', 'synonym', 'similar', 'same'])
 

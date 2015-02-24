@@ -17,6 +17,7 @@ _response_codes = {
     'EXTERNAL': 4
 }
 
+
 def wrap_response(func):
     """ A wrapper for service response functions
     """
@@ -45,8 +46,8 @@ def wrap_response(func):
             # implement external services
             # 'action' is thing to do (i.e. post to fb)
             # 'external' is 3rd party service
-            return {'status': _response_codes[res[0]], 'payload': 
-                    { 'action': res[1], 'data': res[2]},
+            return {'status': _response_codes[res[0]], 'payload':
+                    {'action': res[1], 'data': res[2]},
                     'summary': res[3], 'external': res[4]}
         else:
             return {'status': _response_codes['ERROR'], 'summary': err_msg}
@@ -65,11 +66,11 @@ class Service(object):
         """
         raise NotImplementedError()
 
-    def get_confidence(self, features):
+    def get_confidence(self, params):
         """ Returns a number between -Inf and +Inf indicating the confidence of
             this service that it is relevant to the specified features.
         """
-        return self.heuristic.run_heuristic(features['keywords'])
+        return self.heuristic.run_heuristic(params['features']['keywords'])
 
     def go(self, features):
         """ Returns a response to the specified features, making calls to

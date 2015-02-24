@@ -1,0 +1,76 @@
+MOVIE:
+  command?, movie_to_person_question
+  command?, person_to_movie_question
+  command?, person_to_movie_yes_no
+  command?, year_of_movie
+  command?, movie_to_person_description
+
+command: [find_command, (procure_command, "me"), (find_command, "for me")]
+find_command: ["find", "look up", "name", "search"]
+procure_command: ["find", "get", "give", "show", "tell"]
+
+movie_to_person_question: movie_query, person_relation, prep_phrase?
+person_to_movie_question: person_query, movie_relation, prep_phrase?
+person_to_movie_yes_no:
+  aux, person_concrete, movie_relation, prep_phrase?
+  aux, person_concrete, "in", movie_concrete, prep_phrase?
+
+year_of_movie: wh_time_phrase, movie_concrete, movie_release_word?
+movie_to_person_description:
+  movie_abstract_vague, person_relation
+  person_concrete, movie_abstract
+
+movie_query: wh_phrase, movie_abstract, "are there"?
+person_query: ["who", (wh_phrase, person_abstract)]
+
+movie_relation:
+  (be, "it")?, "that"?, movie_act_on_person, "in"?, movie_concrete
+  (be, "it")?, "that"?, person_act_on_movie, movie_concrete
+
+person_relation:
+  "with", person_concrete
+  "that"?, movie_act_on_person, person_concrete, "in them"?
+  "that"?, person_act_on_movie, "by", person_concrete
+  aux, person_concrete, [(person_act_on_movie, "from"?), (movie_act_on_person, "in"?)]
+  be, person_concrete, "in"
+  person_concrete, aux?, person_act_on_movie
+
+movie_abstract: det?, adj_phrase?, movie_word
+movie_abstract_vague: ["everything", movie_abstract]
+person_abstract: det?, adj_phrase?, person_word
+movie_concrete: movie_abstract?, title
+person_concrete: person_abstract?, name
+person: [person_abstract, person_concrete]
+movie_act_on_person: aux?, [act, be, (be, person), feature, have, include, play, (play, person), star, (star, "as", person)]
+person_act_on_movie: aux?, [direct, make, write]
+
+movie_release_word: [(come, "out"), ("in", "theaters"), make, release]
+movie_word: ["blockbuster", "blockbuster", "film", "films", "flick", "flicks", "movie", "movies"]
+person_word: ["guy", "woman", "man", "girl", "boy", "character", "actor", "actors", "actress", "actresses", "director", "directors", "writer", "writers"]
+
+act: ["act", "acts", "acted", "acting"]
+come: ["come", "came"]
+direct: ["direct", "directs", "directed"]
+feature: ["feature", "features", "featured", "featuring"]
+include: ["include", "includes", "included", "including"]
+make: ["make", "makes", "made"]
+play: ["play", "plays", "played"]
+release: ["release", "releases", "released"]
+star: ["star", "stars", "starred", "starring"]
+write: ["write", "writes", "wrote"]
+
+wh_phrase: wh_word, aux?
+wh_time_phrase: wh_time_word, aux?
+wh_word: ["which", "what", ("how", "many")]
+wh_time_word: ["when", ("what", "year"), ("which", "year")]
+name: "*", name?
+title: "the"?, ["*", "#"], title?
+adj_phrase: ["main", year]
+year: "#"
+prep_phrase: ("this", "year")
+
+aux: [have, be, do, (have, be)]
+be: ["be", "'s", "is", "are", "been", "was", "were"]
+have: ["have", "'s", "has", "had"]
+do: ["do", "'s", "does", "did"]
+det: ["the", "that", "those"]

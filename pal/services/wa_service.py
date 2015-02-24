@@ -18,8 +18,9 @@ class WAService(Service):
     def applies_to_me(self, client, feature_request_type):
         return True
 
-    def get_confidence(self, features):
-        my_confidence = super(self.__class__, self).get_confidence(features)
+    def get_confidence(self, params):
+        my_confidence = (super(self.__class__, self)
+                         .get_confidence(params))
         fall_back = 15
         return max(my_confidence, fall_back)
 
