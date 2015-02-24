@@ -48,8 +48,18 @@ def generate_grammar_features(grammar):
 
 
 def preprocess(string, grammar_features):
-    """ Normalize string, convert numbers and unknown words to wild cards. """
-    string = re.sub('(.*)[\.\?!]$', '\\1', string.strip().lower())
+    """ Remove surrounding whitespace, convert to lowercase, remove punctuation,
+        separate clitics with whitespace, convert numbers and unknown words to
+        wild cards.
+    """
+    # TODO: Separating clitics (e.g. "we'll" -> "we 'll") breaks things
+    #
+    # string = re.sub(',\s?', ' ',
+    #                  re.sub(r'(\w+)\'(\w+)', '\\1 \'\\2',
+    #                         re.sub(r'(.*)[\.\?!]$', '\\1',
+    #                                string.strip().lower())))
+    string = re.sub(',\s?', ' ', re.sub(r'(.*)[\.\?!]$', '\\1',
+                    string.strip().lower()))
 
     def wild_card(word):
         try:

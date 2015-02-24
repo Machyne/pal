@@ -22,11 +22,6 @@ class MovieService(Service):
 
     def get_confidence(self, params):
         query = params['query']
-
-        # TODO: shouldn't have to do this
-        if query[-1] == '?':
-            query = query[:-1]
-
         parse_ = parse(query, self.grammar)
         self.cached_parse = (query, parse_)
         return 100 if parse_ else 0
@@ -34,11 +29,6 @@ class MovieService(Service):
     @wrap_response
     def go(self, params):
         query = params['query']
-
-        # TODO: shouldn't have to do this
-        if query[-1] == '?':
-            query = query[:-1]
-
         if self.cached_parse and self.cached_parse[0] == query:
             parse_tree = self.cached_parse[1]
         else:

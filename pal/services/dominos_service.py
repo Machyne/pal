@@ -9,6 +9,7 @@ from pal.grammars.text_to_int import text_to_int
 from pal.services.service import Service
 from pal.services.service import wrap_response
 
+
 class DominosService(Service):
     def __init__(self):
         super(self.__class__, self).__init__()
@@ -20,11 +21,6 @@ class DominosService(Service):
 
     def get_confidence(self, params):
         query = params['query']
-
-        # TODO: shouldn't have to do this
-        if query[-1] in '.!?':
-            query = query[:-1]
-
         parse_ = parse(query, self.grammar)
         self.cached_parse = (query, parse_)
         if parse_:
@@ -34,11 +30,6 @@ class DominosService(Service):
     @wrap_response
     def go(self, params):
         query = params['query']
-
-        # TODO: shouldn't have to do this
-        if query[-1] in '.!?':
-            query = query[:-1]
-
         if self.cached_parse and self.cached_parse[0] == query:
             parse_tree = self.cached_parse[1]
         else:

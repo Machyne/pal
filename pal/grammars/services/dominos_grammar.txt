@@ -37,7 +37,7 @@ number: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
 order_verb: ["have", "like", "take", "want"]
 pizza_word: ["pizza", "pizzas"]
 pleasantry: ["please", "thank you", "thanks", "thanks pal"]
-will: ["will", "would"]
+will: ["'ll", "will", "would"]
 
 # SIZES
 
