@@ -38,10 +38,10 @@ def test_grammar(service_name):
                 if parse_tree:
                     pprint(parse_tree)
                     print example
-                    print '\torder:', not extract('price_query', parse_tree)
-                    print '\tnumber:', extract('number', parse_tree) or 'one'
-                    print '\tcrust_type:', extract('crust_type', parse_tree, True)
-                    print '\tcrust_size:', extract('crust_size', parse_tree, True)
+                    print '\torder:', not extract(parse_tree, 'price_query')
+                    print '\tnumber:', extract(parse_tree, 'number') or 'one'
+                    print '\tcrust_type:', extract(parse_tree, 'crust_type', True)
+                    print '\tcrust_size:', extract(parse_tree, 'crust_size', True)
                     hits += 1
                 else:
                     print '>', example

@@ -51,19 +51,19 @@ def extract_pizza_features(parse_tree):
     all_tops = set(search(parse_tree, 'topping_item'))
     yes_tops = all_tops.difference(non_tops)
 
-    crust_size = extract('crust_size', parse_tree) or 'medium'
-    crust_type = extract('crust_type', parse_tree) or 'regular'
+    crust_size = extract(parse_tree, 'crust_size') or 'medium'
+    crust_type = extract(parse_tree, 'crust_type') or 'regular'
     crust = '{} {}'.format(crust_size, crust_type)
 
-    num_pizzas = text_to_int(extract('number', parse_tree) or 'one')
+    num_pizzas = text_to_int(extract(parse_tree, 'number') or 'one')
 
     toppings = []
     for t in yes_tops:
-        item = extract('topping_item', t)
+        item = extract(t, 'topping_item')
         amount = 'normal'
         parent_ = parent(parse_tree, t)
         if parent and parent_[0] == 'ingredient':
-            amount = extract('topping_amount', parent_) or amount
+            amount = extract(parent_, 'topping_amount') or amount
         toppings.append((item, amount))
 
     return {
@@ -101,7 +101,7 @@ class DominosService(Service):
         pizza = extract_pizza_features(parse_tree)
 
         # Case 1: Pizza pricing query
-        if extract('price_query', parse_tree):
+        if extract(parse_tree, 'price_query'):
             price = price_pizzas([pizza])
             if price:
                 return "It costs $" + "{:20,.2f}.".format(price).strip()

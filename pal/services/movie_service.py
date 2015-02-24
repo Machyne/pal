@@ -47,8 +47,8 @@ class MovieService(Service):
 
     @staticmethod
     def extract_intent(parse_tree):
-        name = extract('person_concrete', parse_tree)
-        title = extract('movie_concrete', parse_tree)
+        name = extract(parse_tree, 'person_concrete')
+        title = extract(parse_tree, 'movie_concrete')
         if title:
             intent = ('MOVIES', 'YEAR_OF')
         if name:
@@ -59,9 +59,9 @@ class MovieService(Service):
 
     @staticmethod
     def extract_object(parse_tree):
-        name = extract('name', parse_tree)
-        title = extract('title', parse_tree)
-        year = extract('year', parse_tree)
+        name = extract(parse_tree, 'name')
+        title = extract(parse_tree, 'title')
+        year = extract(parse_tree, 'year')
         return {'name': name, 'title': title, 'year': year}
 
     def update_kb(self, intent, object_):

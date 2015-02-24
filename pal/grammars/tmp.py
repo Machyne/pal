@@ -14,11 +14,11 @@ pprint.pprint(parse_tree)
 
 print 'NOT'
 for x in search(parse_tree, 'negation_phrase topping_item'):
-    print extract(x[0], x)  # flatten
+    print extract(x, x[0])  # flatten
     print parent(parse_tree, x)[0]
 
 
 print '\nWITH'
 for x in set(search(parse_tree, 'topping_item')).difference(set(search(parse_tree, 'negation_phrase topping_item'))):
-    print extract(x[0], x)  # flatten
+    print extract(x, x[0])  # flatten
     print parent(parse_tree, x)[0]
