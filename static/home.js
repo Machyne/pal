@@ -242,7 +242,7 @@ $(document).ready(function () {
             lastQuery = query;
             queryPAL(query, getUserData(), {}, showResult);
         }
-    }
+    };
 
     prompt.on('keypress', function (e) {
       // 'enter' key

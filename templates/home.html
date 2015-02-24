@@ -12,6 +12,7 @@
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=places"></script>
   <script src="{{ url_for('static', filename='locationpicker.js') }}"></script>
+  <script src="{{ url_for('static', filename='speech.js') }}"></script>
 </head>
 <body>
   <div id="fb-root"></div>
@@ -25,6 +26,9 @@
               <input type="checkbox" id="speak-check">
             </span>
             <input type="text" class="form-control" id="prompt">
+              <div class="mic-wrapper">
+                <img src="{{ url_for('static', filename='mic.gif') }}" id="mic">
+              </div>
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" id="go-btn">Go!</button>
             </span>
