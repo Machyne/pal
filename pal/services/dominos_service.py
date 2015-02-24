@@ -10,6 +10,69 @@ from pal.services.service import Service
 from pal.services.service import wrap_response
 
 
+PIZZA_ORDER_REQUIRED_FIELDS = [
+    ('name', {
+        'type': 'str',
+        'name': 'name',
+    }),
+    ('phone', {
+        'type': 'str',
+        'name': 'phone number',
+    }),
+    ('address', {
+        'type': 'str',
+        'name': 'address',
+    }),
+    ('cc-number', {
+        'type': 'hidden',
+        'name': 'credit card number',
+    }),
+    ('cc-type', {
+        'type': 'hidden',
+        'name': 'credit card type',
+    }),
+    ('cc-expiration', {
+        'type': 'hidden',
+        'name': 'credit card expiration date',
+    }),
+    ('cvv', {
+        'type': 'hidden',
+        'name': 'cvv',
+    }),
+    ('cc-zip', {
+        'type': 'hidden',
+        'name': 'credit card zip code',
+    }),
+]
+
+
+def extract_pizza_features(parse_tree):
+    non_tops = set(search(parse_tree, 'negation_phrase topping_item'))
+    all_tops = set(search(parse_tree, 'topping_item'))
+    yes_tops = all_tops.difference(non_tops)
+
+    crust_size = extract('crust_size', parse_tree) or 'medium'
+    crust_type = extract('crust_type', parse_tree) or 'regular'
+    crust = '{} {}'.format(crust_size, crust_type)
+
+    num_pizzas = text_to_int(extract('number', parse_tree) or 'one')
+
+    toppings = []
+    for t in yes_tops:
+        item = extract('topping_item', t)
+        amount = 'normal'
+        parent_ = parent(parse_tree, t)
+        if parent and parent_[0] == 'ingredient':
+            amount = extract('topping_amount', parent_) or amount
+        toppings.append((item, amount))
+
+    return {
+        'crust': crust,
+        'quantity': num_pizzas,
+        'options': toppings,
+    }
+
+
 class DominosService(Service):
     def __init__(self):
         super(self.__class__, self).__init__()
@@ -35,31 +98,9 @@ class DominosService(Service):
         else:
             parse_tree = parse(query, self.grammar)
 
-        non_tops = set(search(parse_tree, 'negation_phrase topping_item'))
-        all_tops = set(search(parse_tree, 'topping_item'))
-        yes_tops = all_tops.difference(non_tops)
+        pizza = extract_pizza_features(parse_tree)
 
-        crust_size = extract('crust_size', parse_tree) or 'medium'
-        crust_type = extract('crust_type', parse_tree) or 'regular'
-        crust = '{} {}'.format(crust_size, crust_type)
-
-        num_pizzas = text_to_int(extract('number', parse_tree) or 'one')
-
-        toppings = []
-        for t in yes_tops:
-            item = extract('topping_item', t)
-            amount = 'normal'
-            parent_ = parent(parse_tree, t)
-            if parent and parent_[0] == 'ingredient':
-                amount = extract('topping_amount', parent_) or amount
-            toppings.append((item, amount))
-
-        pizza = {
-            'crust': crust,
-            'quantity': num_pizzas,
-            'options': toppings,
-        }
-
+        # Case 1: Pizza pricing query
         if extract('price_query', parse_tree):
             price = price_pizzas([pizza])
             if price:
@@ -67,46 +108,11 @@ class DominosService(Service):
             else:
                 return ('ERROR', "I think it's more than zero dollars...")
 
+        # Case 2: Pizza order query
         ud = params.get('user-data', {})
-        required = [
-            ('name', {
-                'type': 'str',
-                'name': 'name',
-            }),
-            ('phone', {
-                'type': 'str',
-                'name': 'phone number',
-            }),
-            ('address', {
-                'type': 'str',
-                'name': 'address',
-            }),
-            ('cc-number', {
-                'type': 'hidden',
-                'name': 'credit card number',
-            }),
-            ('cc-type', {
-                'type': 'hidden',
-                'name': 'credit card type',
-            }),
-            ('cc-expiration', {
-                'type': 'hidden',
-                'name': 'credit card expiration date',
-            }),
-            ('cvv', {
-                'type': 'hidden',
-                'name': 'cvv',
-            }),
-            ('cc-zip', {
-                'type': 'hidden',
-                'name': 'credit card zip code',
-            }),
-        ]
-        needs = []
-        for req in required:
-            if req[0] not in ud:
-                needs.append(req)
-        if len(needs):
+        needs = [req[0] for req in PIZZA_ORDER_REQUIRED_FIELDS
+                 if req[0] not in ud]
+        if needs:
             return ('NEEDS DATA - USER', needs)
 
         card = {
@@ -119,7 +125,7 @@ class DominosService(Service):
         res = order_pizzas(ud['phone'], ud['name'], ud['address'],
                            card, [pizza])
         if res.get('msg', '') == 'Pizza complete.':
-            return "I just finished ordering! Your pizza is on it's way!"
+            return "I just finished ordering! Your pizza is on its way!"
         else:
             msg, dts = res.get('msg', ''), res.get('details', '')
             return ('ERROR', "Sorry, I couldn't finish the order.<br><br>{}"
