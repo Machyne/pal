@@ -76,20 +76,40 @@ function handleFacebook(payload) {
 }
 
 function speakIfAppropriate(message) {
-  if($('#speak-check').is(':checked')) {
-    var utterance = new SpeechSynthesisUtterance(message);
-    utterance.rate = 1.1;
-    window.speechSynthesis.speak(utterance);
-  }
+    if($('#speak-check').is(':checked')) {
+        var utterance = new SpeechSynthesisUtterance(message);
+        utterance.rate = 1.1;
+        if ('maleVoice' in window){
+            utterance.voice = window.maleVoice;
+            utterance.rate = 1.3;
+            console.log(window.maleVoice.name + " is speaking.");
+        }
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+function chooseVoice() {
+    var maleVoices = [
+        "Google UK English Male",
+        "Daniel",
+        "Alex",
+        "Bruce",
+        "Fred"
+    ];
+    var allVoices = window.speechSynthesis.getVoices();
+    var voices = allVoices.filter(function(voice){
+        return ($.inArray(voice.name, maleVoices) !== -1);
+    });
+    window.maleVoice = (voices.length > 0) ? voices[0] : null;
 }
 
 var mapGo;
 
 $(document).ready(function () {
-
     // show speak checkbox only if browser supports it
     if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false) {
         $("#speak").show();
+        window.speechSynthesis.onvoiceschanged = chooseVoice;
         // load user preference on speech from cookie
         if (document.cookie) {
             if (document.cookie === 'speech=true') {
