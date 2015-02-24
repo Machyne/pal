@@ -40,6 +40,8 @@
         (https://query.yahooapis.com/v1/public/yql?))
     - [x] High/low temperatures
     - [x] Snow/rain
+    - [x] General forecast
+    - [x] Geolocation
 
 - Wolfram|Alpha (requests using Wolfram|Alpha's API)
     - [x] Run queries on natural language and get numerical output
