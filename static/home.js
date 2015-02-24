@@ -1,4 +1,30 @@
-var queryPAL = function(query, usdat, clidat, callback) {
+function SelectText(element) {
+    //Taken from http://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse
+    var doc = document
+        , text = doc.getElementById(element)
+        , range, selection
+    ;
+    if (doc.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else if (window.getSelection) {
+        selection = window.getSelection();
+        range = document.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+}
+
+var resetQueryBar = function () {
+  $('#prompt').removeAttr('disabled');
+  $('#go-btn').removeAttr('disabled');
+  document.getElementById('prompt').focus();
+  document.getElementById('prompt').select();
+};
+
+var queryPAL = function (query, usdat, clidat, callback) {
   $.ajax({
     type: 'POST',
     url: '/api/pal',
@@ -13,8 +39,7 @@ var queryPAL = function(query, usdat, clidat, callback) {
     },
     error: function () {
       console.log('server error');
-      $('.prompt').removeAttr('disabled');
-      $('#go-btn').removeAttr('disabled');
+      resetQueryBar();
     }
   });
 };
@@ -59,8 +84,7 @@ function handleFacebook(payload) {
             FB.XFBML.parse(document.getElementById('.history')); // changes XFBML to valid HTML
             fbMessage = payload; // remember the message if/when the user gets logged in (async is hell)
         }
-        $('#prompt').removeAttr('disabled');
-        $('#go-btn').removeAttr('disabled');
+        resetQueryBar();
     });
 }
 
@@ -257,10 +281,7 @@ $(document).ready(function () {
             speakIfAppropriate(no_html);
         }
 
-        $prompt.val('')
-               .focus()
-               .removeAttr('disabled');
-        $goBtn.removeAttr('disabled');
+        resetQueryBar();
     };
 
     var getUserData = function () {
@@ -319,4 +340,6 @@ $(document).ready(function () {
       userData['location'] = lat + ',' + lng;
       queryPAL(div.find('.q').val(), userData, {}, showResult);
     };
+
+    prompt.focus();
 });

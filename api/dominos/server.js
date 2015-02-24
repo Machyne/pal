@@ -25,7 +25,7 @@ var processReq = function (req, res, callback) {
 };
 
 var dominosHandler = function (req, res, post) {
-  console.log(post);
+  console.log('\nReceived post:\n', post);
   // Handle needed top level parameters.
   var need = ['phone', 'firstName', 'lastName', 'address', 'card'];
   for (var i = 0; i < need.length; i++) {
@@ -74,9 +74,10 @@ var placeOrder = function (data, callback) {
 
   dominos.store.find(data.address, function (storeData) {
     if (!storeData.success) {
-      console.log('No store found');
+      console.log('\nNo store found');
       return callback({msg: 'no stores found'});
     };
+    console.log('\nAddress Data:\n', storeData.result.Address);
     order.Order.Address = storeData.result.Address;
     order.Order.StoreID = storeData.result.Stores[0].StoreID;
 
@@ -107,6 +108,7 @@ var placeOrder = function (data, callback) {
         cardInfo.Expiration = data.card.expire;
         cardInfo.SecurityCode = data.card.cvv;
         cardInfo.PostalCode = data.card.zip;
+        cardInfo.Type = 'DebitCard';
 
         order.Order.Payments.push(cardInfo);
 
@@ -118,7 +120,7 @@ var placeOrder = function (data, callback) {
         // Place order
         dominos.order.place(order, function (orderData) {
           var curOrder = orderData.result.Order;
-          console.log('Order placed:\n', curOrder);
+          console.log('\nOrder placed:\n', curOrder);
           if (curOrder.Status < 0) {
               var details = JSON.stringify(curOrder.StatusItems) +
                 '\n' +
@@ -134,11 +136,11 @@ var placeOrder = function (data, callback) {
           }
 
           dominos.track.phone(orderData.result.Order.Phone, function (pizzaData) {
-            console.log('Tracking data: ', pizzaData);
+            console.log('\nTracking data: ', pizzaData);
             return callback();
           });
         });
       });
     });
-  });
+  }, 'Delivery');
 };

@@ -5,6 +5,7 @@ from pal.grammars.parser import extract
 from pal.grammars.parser import parent
 from pal.grammars.parser import parse
 from pal.grammars.parser import search
+from pal.grammars.text_to_int import text_to_int
 from pal.services.service import Service
 from pal.services.service import wrap_response
 
@@ -51,7 +52,7 @@ class DominosService(Service):
         crust_type = extract('crust_type', parse_tree) or 'regular'
         crust = '{} {}'.format(crust_size, crust_type)
 
-        num_pizzas = 1 # TODO
+        num_pizzas = text_to_int(extract('number', parse_tree) or 'one')
 
         toppings = []
         for t in yes_tops:
@@ -117,4 +118,19 @@ class DominosService(Service):
         if len(needs):
             return ('NEEDS DATA - USER', needs)
 
-        return 'pizza coming soon'
+        card = {
+            'num': ud['cc-number'].strip(),
+            'type': ud['cc-type'].strip(),
+            'expire': ud['cc-expiration'].strip(),
+            'cvv': ud['cvv'].strip(),
+            'zip': ud['cc-zip'].strip(),
+        }
+        res = order_pizzas(ud['phone'], ud['name'], ud['address'],
+                           card, [pizza])
+        if res.get('msg', '') == 'Pizza complete.':
+            return "I just finished ordering! Your pizza is on it's way!"
+        else:
+            msg, dts = res.get('msg', ''), res.get('details', '')
+            return ('ERROR', "Sorry, I couldn't finish the order.<br><br>{}"
+                             "<br>{}<br><br>But you could try calling "
+                             "Dominos?".format(msg, dts))

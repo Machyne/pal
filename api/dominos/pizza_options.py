@@ -168,7 +168,7 @@ if __name__ == '__main__':
     card = _DUMMY_CARD
     phone = '2024561111'
     name = 'Test Tester'
-    address = '1 N College St, Northfield, MN 55057'
+    address = '320 3rd Street East room Weitz236, Northfield, MN 55057'
     pizza = {
         'crust': 'medium thin',
         'quantity': 1,
@@ -179,5 +179,5 @@ if __name__ == '__main__':
             ('jalapeno', 'normal'),
         ],
     }
-    print price_pizza([pizza])
-    print order_pizza(phone, name, address, card, [pizza])
+    print price_pizzas([pizza], address)
+    print order_pizzas(phone, name, address, card, [pizza])
