@@ -39,7 +39,7 @@ class WAService(Service):
 
         # parse the WA results
         root = ET.fromstring(response.text)
-        return_value = "Error: Could not determine a repsonse."
+        return_value = "Error: Could not determine a response."
 
         # return parsed output
         if root[0][0].tag == 'subpod':
