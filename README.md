@@ -35,6 +35,7 @@
     - [x] From English to {Spanish, French, German, Italian, Portuguese}
     - [x] From {Spanish, French, German, Italian, Portuguese} to English
     - [x] Between {Spanish, French, German, Italian, Portuguese}
+    - [ ] Use correct SpeechSynthesisVoice for the destination language
 
 - Weather (requests to [Yahoo weather API]
         (https://query.yahooapis.com/v1/public/yql?))
