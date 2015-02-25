@@ -73,3 +73,6 @@ pal/heuristics/climbed_*_values.txt
 
 # API keys
 config.py
+
+# Photoshop files
+psd
