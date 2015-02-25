@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Dominos server for PAL.",
   "dependencies": {
-    "dominos": "^0.1.2",
+    "dominos": "git://github.com/Machyne/node-dominos-pizza-api.git#347a122",
     "request": "^2.53.0"
   },
   "scripts": {

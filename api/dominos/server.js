@@ -94,11 +94,19 @@ var placeOrder = function (data, callback) {
 
     dominos.order.validate(order, function (orderData) {
       if (!orderData.success) {
-        console.log('Order could not be validated');
+        console.log('\nOrder could not be validated\n');
         return callback({msg: 'cannot validate order'});
       };
 
       dominos.order.price(orderData.result, function (priceData) {
+        console.log('\nPrice Data:\n', priceData);
+        if ('StatusItems' in priceData.result) {
+          console.log('\nResult status items:\n', priceData.result.StatusItems);
+        }
+        if ('StatusItems' in priceData.result.Order) {
+          console.log('\nOrder status items:\n', priceData.result.Order.StatusItems);
+          return callback({msg: 'Bad address format'});
+        }
 
         var cardInfo = new dominos.class.Payment();
         cardInfo.Amount = priceData.result.Order.Amounts.Customer;
@@ -155,5 +163,5 @@ var placeOrder = function (data, callback) {
         });
       });
     });
-  }, 'Delivery');
+  });
 };

@@ -19,9 +19,13 @@ PIZZA_ORDER_REQUIRED_FIELDS = [
         'type': 'str',
         'name': 'phone number',
     }),
-    ('address', {
+    ('line1', {
         'type': 'str',
-        'name': 'address',
+        'name': 'address line 1',
+    }),
+    ('line2', {
+        'type': 'str',
+        'name': 'address line 2',
     }),
     ('cc-number', {
         'type': 'hidden',
@@ -122,7 +126,8 @@ class DominosService(Service):
             'cvv': ud['cvv'].strip(),
             'zip': ud['cc-zip'].strip(),
         }
-        res = order_pizzas(ud['phone'], ud['name'], ud['address'],
+        address = [ud['line1'], ud['line2']]
+        res = order_pizzas(ud['phone'], ud['name'], address,
                            card, [pizza])
         if res.get('msg', '') == 'Pizza complete.':
             return "I just finished ordering! Your pizza is on its way!"
