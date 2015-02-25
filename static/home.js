@@ -23,18 +23,6 @@ function expandData (el) {
     $(el).parent().toggleClass('expanded');
     return true;
 }
-window.fbAsyncInit = function() {
-    FB.init({
-        appId   : '363891403803678',
-        xfbml   : true,
-        version : 'v2.2',
-        cookie  : true
-    });
-
-    FB.Event.subscribe('auth.authResponseChange', function(fbResponse) {
-        handleFacebook(fbMessage);
-    });
-};
 
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -145,6 +133,17 @@ $(document).ready(function () {
     var $speakCheck = $('#speak-check');
     var $history = $('.history');
     var lastQuery = '';
+
+    FB.init({
+        appId   : '363891403803678',
+        xfbml   : true,
+        version : 'v2.2',
+        cookie  : true
+    });
+
+    FB.Event.subscribe('auth.authResponseChange', function(fbResponse) {
+        handleFacebook(fbMessage);
+    });
     
     // show speak checkbox only if browser supports it
     if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false) {
