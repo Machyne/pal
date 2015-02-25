@@ -27,6 +27,10 @@ PIZZA_ORDER_REQUIRED_FIELDS = [
         'type': 'str',
         'name': 'address line 2',
     }),
+    ('instructions', {
+        'type': 'str',
+        'name': 'delivery instructions',
+    }),
     ('cc-number', {
         'type': 'hidden',
         'name': 'credit card number',

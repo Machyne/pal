@@ -27,7 +27,7 @@ var processReq = function (req, res, callback) {
 var dominosHandler = function (req, res, post) {
   console.log('\nReceived post:\n', post);
   // Handle needed top level parameters.
-  var need = ['phone', 'firstName', 'lastName', 'address', 'card'];
+  var need = ['phone', 'firstName', 'lastName', 'address', 'card', 'instr'];
   for (var i = 0; i < need.length; i++) {
     var key = need[i];
     if (!post.hasOwnProperty(key)) {
@@ -70,7 +70,7 @@ var placeOrder = function (data, callback) {
   order.Order.Phone = data.phone;
   order.Order.FirstName = data.firstName;
   order.Order.LastName = data.lastName;
-  order.Order.Email = '';
+  order.Order.Email = 'pizza@pal.rocks';
 
   dominos.store.find(data.address, function (storeData) {
     if (!storeData.success || !storeData.result.Stores[0]) {
@@ -79,6 +79,7 @@ var placeOrder = function (data, callback) {
     };
     console.log('\nAddress Data:\n', storeData.result.Address);
     order.Order.Address = storeData.result.Address;
+    order.Order.Address.DeliveryInstructions = data['instr'];
     order.Order.StoreID = storeData.result.Stores[0].StoreID;
 
     for (var i = 0; i < data.pizzas.length; i++) {
@@ -116,7 +117,6 @@ var placeOrder = function (data, callback) {
         cardInfo.Expiration = data.card.expire;
         cardInfo.SecurityCode = data.card.cvv;
         cardInfo.PostalCode = data.card.zip;
-        cardInfo.Type = 'DebitCard';
 
         order.Order.Payments.push(cardInfo);
 

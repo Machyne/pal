@@ -131,7 +131,7 @@ def _pizzas_to_products(pizzas):
     return products
 
 
-def order_pizzas(phone, name, address, card, pizzas):
+def order_pizzas(phone, name, address, card, pizzas, instructions=''):
     name_parts = name.rpartition(' ')
     data = {
         'phone': phone,
@@ -139,6 +139,7 @@ def order_pizzas(phone, name, address, card, pizzas):
         'lastName': name_parts[-1],
         'address': address,
         'card': card,
+        'instr': instructions,
         'pizzas': _pizzas_to_products(pizzas),
     }
 
@@ -148,13 +149,15 @@ def order_pizzas(phone, name, address, card, pizzas):
     return r.json()
 
 
-def price_pizzas(pizzas, address='1 N College St, Northfield, MN 55057'):
+def price_pizzas(pizzas, address='1 N College St, Northfield, MN 55057',
+                 instructions=''):
     data = {
         'phone': '2024561111',
         'firstName': 'Pizza',
         'lastName': 'Price',
         'address': address,
         'card': _DUMMY_CARD,
+        'instr': instructions,
         'pizzas': _pizzas_to_products(pizzas),
         'onlyPrice': True,
     }
@@ -169,7 +172,8 @@ if __name__ == '__main__':
     card = _DUMMY_CARD
     phone = '2024561111'
     name = 'Test Tester'
-    address = '320 3rd Street East room Weitz236, Northfield, MN 55057'
+    address = ['1 N College St', 'Northfield, MN 55057']
+    instructions = 'Please come to the Weitz Center, room 236.'
     pizza = {
         'crust': 'medium thin',
         'quantity': 1,
@@ -180,5 +184,5 @@ if __name__ == '__main__':
             ('jalapeno', 'normal'),
         ],
     }
-    print price_pizzas([pizza], address)
-    print order_pizzas(phone, name, address, card, [pizza])
+    print price_pizzas([pizza], address, instructions)
+    print order_pizzas(phone, name, address, card, [pizza], instructions)
