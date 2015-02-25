@@ -82,7 +82,6 @@ function speakIfAppropriate(message) {
         utterance.rate = 1.1;
         if ('maleVoice' in window){
             utterance.voice = window.maleVoice;
-            utterance.rate = 1.3;
             console.log(window.maleVoice.name + " is speaking.");
         }
         window.speechSynthesis.speak(utterance);
@@ -91,18 +90,33 @@ function speakIfAppropriate(message) {
 
 function chooseVoice() {
     var maleVoices = [
-        "Google UK English Male",
-        "Daniel",
+        "Google UK English Male", // Sexy British male
+        "Daniel", // Generic British male
+        "Bruce", // Stephen Hawking-ish
         "Alex",
-        "Bruce",
         "Fred"
     ];
-    var allVoices = window.speechSynthesis.getVoices();
-    var voices = allVoices.filter(function(voice){
-        return ($.inArray(voice.name, maleVoices) !== -1);
-    });
-    window.maleVoice = (voices.length > 0) ? voices[0] : null;
-    return window.maleVoice;
+    var voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+
+        // filter the male voices
+        var filteredVoices = {};
+        $.each(voices, function(index, voice){
+            if ($.inArray(voice.name, maleVoices) !== -1){
+                filteredVoices[voice.name] = voice;
+            }
+        });
+
+        // pick the first one in maleVoices order
+        for(var i=0; i<maleVoices.length; i++) {
+            var voiceName = maleVoices[i];
+            if (filteredVoices.hasOwnProperty(voiceName)) {
+                window.maleVoice = filteredVoices[voiceName];
+                return window.maleVoice;
+            }
+        }
+        return null;
+    }
 }
 
 var mapGo;
@@ -118,7 +132,7 @@ $(document).ready(function () {
     // show speak checkbox only if browser supports it
     if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false) {
         $("#speak").show();
-        window.speechSynthesis.onvoiceschanged = chooseVoice;
+        chooseVoice();
         // load user preference on speech from cookie
         if (document.cookie) {
             if (document.cookie === 'speech=true') {
@@ -241,6 +255,9 @@ $(document).ready(function () {
 
     var sendQuery = function () {
         var query = $prompt.val();
+
+        ($speakCheck.is(":checked") && !window.maleVoice) && chooseVoice();
+
         if (query.length > 0) {
             $prompt.attr('disabled', 'disabled');
             $goBtn.attr('disabled', 'disabled');
