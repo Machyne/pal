@@ -21,7 +21,7 @@ class WAService(Service):
     def get_confidence(self, params):
         my_confidence = (super(self.__class__, self)
                          .get_confidence(params))
-        fall_back = 15
+        fall_back = 9
         return max(my_confidence, fall_back)
 
     @wrap_response
@@ -39,14 +39,14 @@ class WAService(Service):
 
         # parse the WA results
         root = ET.fromstring(response.text)
-        return_value = "Error: No Valid Response from Wolfram Alpha"
+        return_value = "Error: Could not determine a repsonse."
 
         # return parsed output
         if root[0][0].tag == 'subpod':
             for element in root[0][0]:
                 if element.tag == 'plaintext':
                     return_value = element.text
-                    return ('SUCCESS', return_value, return_value)
+                    return ('SUCCESS', return_value)
 
         return ('ERROR', return_value)
 
