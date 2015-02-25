@@ -1,9 +1,7 @@
 from pprint import pprint
-from collections import defaultdict
 from os import path
 
 from pal.grammars import get_grammar_for_service
-from pal.grammars.parser import extract
 from pal.grammars.parser import parse
 from pal.test import parse_examples
 
@@ -37,10 +35,6 @@ def test_grammar(service_name):
                 if parse_tree:
                     # pprint(parse_tree)
                     # print example
-                    # print '\torder:', not extract(parse_tree, 'price_query')
-                    # print '\tnumber:', extract(parse_tree, 'number') or 'one'
-                    # print '\tcrust_type:', extract(parse_tree, 'crust_type', True)
-                    # print '\tcrust_size:', extract(parse_tree, 'crust_size', True)
                     hits += 1
                 else:
                     print '>', example
