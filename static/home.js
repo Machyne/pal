@@ -45,6 +45,7 @@ window.fbAsyncInit = function() {
 }(document, 'script', 'facebook-jssdk'));
 
 function handleFacebook(payload) {
+    var $history = $('.history');
     FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
             // post if app is authorized
@@ -53,7 +54,7 @@ function handleFacebook(payload) {
                 $('#facebook_login').remove();
                 // show confirmation that the post was successful
                 var message = "Ok, I've posted that to Facebook";
-                $('.history').prepend('<li><div class="result">' + message +
+                $history.prepend('<li><div class="result">' + message +
                 '</div></li>');
                 speakIfAppropriate(message);
             });
@@ -64,7 +65,7 @@ function handleFacebook(payload) {
                 '"auto_logout_link="false" scope="publish_actions"></fb:login-button>';
 
             var message = "Before I can post, you'll need to login to Facebook"
-            $('.history').prepend('<li id="facebook_login"><div class="result">' + message +'<br>' +
+            $history.prepend('<li id="facebook_login"><div class="result">' + message +'<br>' +
             fb_login_button + '</div>');
             speakIfAppropriate(message);
             FB.XFBML.parse(document.getElementById('.history')); // changes XFBML to valid HTML
@@ -76,31 +77,87 @@ function handleFacebook(payload) {
 }
 
 function speakIfAppropriate(message) {
-  if($('#speak-check').is(':checked')) {
-    var utterance = new SpeechSynthesisUtterance(message);
-    utterance.rate = 1.1;
-    window.speechSynthesis.speak(utterance);
-  }
+    if($('#speak-check').is(':checked')) {
+        var utterance = new SpeechSynthesisUtterance(message);
+        utterance.rate = 1.1;
+        if ('maleVoice' in window){
+            utterance.voice = window.maleVoice;
+            utterance.lang = utterance.voice.lang;
+            console.log(window.maleVoice.name + " is speaking.");
+        }
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+function chooseVoice() {
+    // One-liner to query the options:
+    // $.each(window.speechSynthesis.getVoices(), function(index, voice) { voice.lang.indexOf("es") !== -1 && console.log(voice) })
+    var maleVoices = [
+        "Google UK English Male", // Sexy British male
+        "Daniel", // Generic British male
+        "Fred", // Stephen Hawking-ish
+        "Alex", // Polite American
+        "Bruce", // Fast robot
+        "Ralph", // Deep robot
+        "English United Kingdom" // the only male voice available on Android
+    ];
+    var languageVoices = {
+        deu: ["Google Deutsch", "Anna"],
+        spa: ["Google Español", "Diego"],
+        fra: ["Google Français", "Thomas"],
+        ita: ["Google Italiano", "Alice"],
+        por: ["Google Español", "Diego"]
+        // Spanish is closer than any of the english voices
+    };
+    var voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+        var voiceOptions = {};
+        $.each(voices, function(index, voice){
+            voiceOptions[voice.name] = voice;
+        });
+        window.voiceOptions = voiceOptions;
+        // filter the male voices
+        var filteredVoices = {};
+        $.each(voices, function(index, voice){
+            if ($.inArray(voice.name, maleVoices) !== -1){
+                filteredVoices[voice.name] = voice;
+            }
+        });
+
+        // pick the first one in maleVoices order
+        for(var i=0; i<maleVoices.length; i++) {
+            var voiceName = maleVoices[i];
+            if (filteredVoices.hasOwnProperty(voiceName)) {
+                window.maleVoice = filteredVoices[voiceName];
+                return window.maleVoice;
+            }
+        }
+        return null;
+    }
 }
 
 var mapGo;
 
 $(document).ready(function () {
-
+    var $prompt = $('#prompt');
+    var $goBtn = $('#go-btn');
+    var $userData = $('#user-data');
+    var $speakCheck = $('#speak-check');
+    var $history = $('.history');
+    var lastQuery = '';
+    
     // show speak checkbox only if browser supports it
     if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false) {
         $("#speak").show();
+        $goBtn.on("click", chooseVoice);
         // load user preference on speech from cookie
         if (document.cookie) {
             if (document.cookie.indexOf('speech=true') > -1) {
                 // speech=true is in the cookie
-                $("#speak-check").attr("checked", true);
+                $speakCheck.attr("checked", true);
             }
         }
     }
-
-    var prompt = $('#prompt');
-    var lastQuery = '';
 
     // FOR THE LOVE OF GOD PLEASE COMMENT ME WHOEVER WROTE THIS
     var showResult = function (query, result) {
@@ -115,8 +172,8 @@ $(document).ready(function () {
             var needs = result.needs_client;
             var keys = Object.keys(needs);
             var sendError = function (msg) {
-                $('#user-data').html('');
-                $('.history').prepend('<li class="error"><div class="query">' +
+                $userData.html('');
+                $history.prepend('<li class="error"><div class="query">' +
                 query + '</div><div class="result">' +
                 msg + '</div></li>');
             };
@@ -125,7 +182,7 @@ $(document).ready(function () {
                     queryPAL(query, getUserData(), data, showResult);
                     return true;
                 }
-                ;
+
                 var need = keys[i];
                 var type = needs[need].type;
                 var msg = needs[need].msg;
@@ -147,20 +204,20 @@ $(document).ready(function () {
                     default:
                         return sendError(msg);
                 }
-                ;
+
             };
             handleIndex(0, {});
         }
         else if (result.status == 2) {
-            $('#user-data').html('');
+            $userData.html('');
             for (need in result.needs_user) {
                 var type = result.needs_user[need].type;
                 var def = result.needs_user[need].default;
                 switch (type) {
                     case 'str':
-                        $('#user-data').append(
+                        $userData.append(
                             '<li data-type="' + type + '" data-param="' + need + '">' +
-                            need + ': ' + '<input type="text" value="' + def + '"></li>')
+                            need + ': ' + '<input type="text" value="' + def + '"></li>');
                         break;
                     default:
                         console.log('unknown requested data type')
@@ -168,41 +225,40 @@ $(document).ready(function () {
             }
         }
         else if (result.status == 1) {
-            $('#user-data').html('');
+            $userData.html('');
             var data = '';
             if (result.hasOwnProperty('data')) {
                 data = '<div class="data"><span class="data-toggler" onclick="expandData(this);">...</span>' +
                 result.data.replace(/\n+/ig, '<br>') + '</div>'
             }
-            $('.history').prepend('<li><div class="query">' + query +
+            $history.prepend('<li><div class="query">' + query +
             '</div><div class="result">' +
             result.summary.replace(/\n+/ig, '<br>') +
             '</div>' + data + '</li>');
         }
         else {
-            $('#user-data').html('');
-            $('.history').prepend('<li class="error"><div class="query">' +
+            $userData.html('');
+            $history.prepend('<li class="error"><div class="query">' +
             query + '</div><div class="result">' +
             result.summary.replace(/\n+/ig, '<br>') +
             '</div></li>');
         }
-        ;
 
-        if ($('#speak-check').is(':checked') && result.status <= 1) {
+        if ($speakCheck.is(':checked') && result.status <= 1) {
             // to avoid pronouncing 'li' etc.
             var no_html = result.summary.replace(/(<([^>]+)>)/ig, '');
             speakIfAppropriate(no_html);
         }
 
-        $('#prompt').val('');
-        $('#prompt').focus();
-        prompt.removeAttr('disabled');
-        $('#go-btn').removeAttr('disabled');
+        $prompt.val('')
+               .focus()
+               .removeAttr('disabled');
+        $goBtn.removeAttr('disabled');
     };
 
     var getUserData = function () {
-        var ret = {}
-        $('#user-data li').each(function () {
+        var ret = {};
+        $userData.find('li').each(function () {
             var li = $(this);
             var need = li.attr('data-param');
             var type = li.attr('data-type');
@@ -216,16 +272,19 @@ $(document).ready(function () {
     };
 
     var sendQuery = function () {
-        var query = prompt.val();
+        var query = $prompt.val();
+
+        ($speakCheck.is(":checked") && !window.maleVoice) && chooseVoice();
+
         if (query.length > 0) {
-            prompt.attr('disabled', 'disabled');
-            $('#go-btn').attr('disabled', 'disabled');
+            $prompt.attr('disabled', 'disabled');
+            $goBtn.attr('disabled', 'disabled');
             lastQuery = query;
             queryPAL(query, getUserData(), {}, showResult);
         }
-    }
+    };
 
-    prompt.on('keypress', function (e) {
+    $prompt.on('keypress', function (e) {
       // 'enter' key
       if (e.which == 13) {
         sendQuery();
@@ -233,8 +292,8 @@ $(document).ready(function () {
     });
 
     // remember if user has checked the speech checbox
-    $("#speak-check").on('click', function(event) {
-      if($('#speak-check').is(':checked')) {
+    $speakCheck.on('click', function(event) {
+      if($speakCheck.is(':checked')) {
         document.cookie = 'speech=true;';
       }
       else {
@@ -242,7 +301,7 @@ $(document).ready(function () {
       }
     });
 
-    $('#go-btn').on('click', sendQuery);
+    $goBtn.on('click', sendQuery);
 
     mapGo = function (el) {
       var div = $(el).parent();

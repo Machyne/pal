@@ -168,6 +168,18 @@ html, body {
   cursor: pointer;
 }
 
+.mic-wrapper {
+  position: absolute;
+  right: 48px;
+  z-index: 100;
+}
+
+#mic {
+  position: relative;
+  height: 32px;
+  width: 32px;
+}
+
 @media screen and (max-width: 400px) {
   .title {
     font-size: 20px;
@@ -175,5 +187,16 @@ html, body {
   .prompt {
     height: 20px;
     width: 80%;
+  }
+  .mic-wrapper {
+    position: absolute;
+    right: 48px;
+    z-index: 100;
+  }
+
+  #mic {
+    position: relative;
+    height: 20px;
+    width: 20px;
   }
 }
