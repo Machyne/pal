@@ -46,14 +46,21 @@ class DirectoryService(Service):
                 raise NotEnoughInformationException(
                     "Too many matches found for name: {0} {1}".format(
                         first_name, last_name))
-
+            if (lenstudents + lenfacstaff) == 0:
+                raise NotEnoughInformationException(
+                    "Couldn't find anyone named {0} {1} at Carleton.".format(
+                        first_name, last_name))
             noun_words = [x[0].lower() for x in nouns if x[1] != 'PERSON']
 
             # answer where a student lives
-            room_keywords = set(['room', 'dorm', 'house', 'hall'])
+            room_keywords = {'room', 'dorm', 'house', 'hall'}
             if (len(room_keywords.intersection(set(noun_words))) or
                     len(room_keywords.intersection(set(keywords))) > 0 or
                     question_type == 'LOC'):
+                if lenstudents == 0:
+                    raise NotEnoughInformationException(
+                        "Couldn't find any student named {0} {1}.".format(
+                            first_name, last_name))
                 matching_students = matching_people['students']
                 student = matching_students[0]
                 building_name = directory.get_name_for_id(
@@ -63,11 +70,11 @@ class DirectoryService(Service):
                     building_name, student.room)
 
             # answer where a faculty/staff office is
-            office_keywords = set(['office'])
+            office_keywords = {'office'}
             if (len(office_keywords.intersection(set(noun_words))) or
                     len(room_keywords.intersection(set(keywords))) > 0):
                 matching_facstaff = matching_people['facstaff']
-                if len(matching_facstaff) == 0:
+                if lenfacstaff == 0:
                     raise NotEnoughInformationException(
                         "Could not find {0} {1}".format(first_name, last_name))
                 facstaff = matching_facstaff[0]
@@ -78,7 +85,7 @@ class DirectoryService(Service):
                     building_name, facstaff.office)
 
             # answer phone numbers
-            phone_keywords = set(['phone', 'number', 'call'])
+            phone_keywords = {'phone', 'number', 'call'}
             if (len(phone_keywords.intersection(noun_words)) > 0 or
                     len(phone_keywords.intersection(set(keywords)))):
                 phones = []
