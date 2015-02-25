@@ -89,16 +89,31 @@ function speakIfAppropriate(message) {
 }
 
 function chooseVoice() {
+    // One-liner to query the options:
+    // $.each(window.speechSynthesis.getVoices(), function(index, voice) { voice.lang.indexOf("es") !== -1 && console.log(voice) })
     var maleVoices = [
         "Google UK English Male", // Sexy British male
         "Daniel", // Generic British male
-        "Bruce", // Stephen Hawking-ish
-        "Alex",
-        "Fred"
+        "Fred", // Stephen Hawking-ish
+        "Alex", // Polite American
+        "Bruce", // Fast robot
+        "Ralph" // Deep robot
     ];
+    var languageVoices = {
+        deu: ["Google Deutsch", "Anna"],
+        spa: ["Google Español", "Diego"],
+        fra: ["Google Français", "Thomas"],
+        ita: ["Google Italiano", "Alice"],
+        por: ["Google Español", "Diego"]
+        // Spanish is closer than any of the english voices
+    };
     var voices = window.speechSynthesis.getVoices();
     if (voices.length > 0) {
-
+        var voiceOptions = {};
+        $.each(voices, function(index, voice){
+            voiceOptions[voice.name] = voice;
+        });
+        window.voiceOptions = voiceOptions;
         // filter the male voices
         var filteredVoices = {};
         $.each(voices, function(index, voice){
