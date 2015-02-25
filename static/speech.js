@@ -1,7 +1,7 @@
 
 (function($, window, document){
 
-    var DEBUG = true;
+    var DEBUG = false;
     // Log a message if DEBUG is true
     function debugLog(message){
         DEBUG && console.log(message);
@@ -13,6 +13,7 @@
         var start_timestamp;
         var $prompt = $("#prompt");
         var $mic = $("#mic");
+        var $goBtn = $("#go-btn");
 
         var micStates = {
             notListening: "/static/mic.gif",
@@ -25,13 +26,17 @@
         }
 
         // Currently only supported in Chrome
-        if (('webkitSpeechRecognition' in window)) {
+        if (!('webkitSpeechRecognition' in window)) {
+            $mic.hide();
+        }
+        else{
             $mic.show();
 
             function stopListening() {
                 setMic('notListening');
                 recognition.isListening = false;
                 recognition.stop();
+                debugLog("Stopped listening");
             }
 
             var recognition = new webkitSpeechRecognition();
@@ -58,16 +63,19 @@
 
             recognition.onend = function () {
                 if (ignore_onend || !final_transcript) {
+                    debugLog("Ignoring onend");
                     return;
                 }
                 stopListening();
                 debugLog("Ending recognition");
                 $prompt.val(final_transcript);
+                $prompt.focus();
             };
 
             recognition.onresult = function (event) {
                 if (final_transcript){
                     $prompt.val(final_transcript);
+                    stopListening();
                     return;
                 }
                 var interim_transcript = '';
@@ -84,23 +92,25 @@
                     }
                 }
             };
-        }
-        else {
-            $mic.hide();
-        }
 
-        $mic.on("click", function (event) {
-            debugLog("clicked mic");
-            if (recognition.isListening) {
-                stopListening();
-                return;
-            }
-            final_transcript = '';
-            $prompt.val('');
-            ignore_onend = false;
-            setMic('disabled');
-            recognition.start();
-            start_timestamp = event.timeStamp;
-        });
+            $mic.on("click", function(event) {
+                debugLog("clicked mic");
+                if (recognition.isListening) {
+                    stopListening();
+                    return;
+                }
+                final_transcript = '';
+                $prompt.val('');
+                ignore_onend = false;
+                setMic('disabled');
+                recognition.start();
+                start_timestamp = event.timeStamp;
+            });
+
+            // If the user clicks Go or starts typing,
+            // we shouldn't be listening
+            $goBtn.on("click", stopListening);
+            $prompt.on("keypress", stopListening);
+        }
     });
 })(jQuery, window, document);
