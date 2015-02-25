@@ -82,6 +82,7 @@ function speakIfAppropriate(message) {
         utterance.rate = 1.1;
         if ('maleVoice' in window){
             utterance.voice = window.maleVoice;
+            utterance.lang = utterance.voice.lang;
             console.log(window.maleVoice.name + " is speaking.");
         }
         window.speechSynthesis.speak(utterance);
@@ -97,7 +98,8 @@ function chooseVoice() {
         "Fred", // Stephen Hawking-ish
         "Alex", // Polite American
         "Bruce", // Fast robot
-        "Ralph" // Deep robot
+        "Ralph", // Deep robot
+        "English United Kingdom" // the only male voice available on Android
     ];
     var languageVoices = {
         deu: ["Google Deutsch", "Anna"],
@@ -147,7 +149,7 @@ $(document).ready(function () {
     // show speak checkbox only if browser supports it
     if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false) {
         $("#speak").show();
-        chooseVoice();
+        $goBtn.on("click", chooseVoice);
         // load user preference on speech from cookie
         if (document.cookie) {
             if (document.cookie.indexOf('speech=true') > -1) {
