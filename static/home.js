@@ -253,7 +253,7 @@ $(document).ready(function () {
             var prependString = '<li><div class="query">' + query +
             '</div><div class="result">' +
             result.summary.replace(/\n+/ig, '<br>') +
-            data + '<div class="attribution">' + 
+            data + '<br><div class="attribution">' + 
             attributionImageForService(service) + '</div></div></li>';
             $history.prepend(prependString);
         }
