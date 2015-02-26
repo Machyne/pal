@@ -29,7 +29,7 @@ class MovieService(Service):
 
         parse_ = parse(query, self.grammar)
         self.cached_parse = (query, parse_)
-        return 100 if parse_ else 0
+        return 75 if parse_ else 0
 
     @wrap_response
     def go(self, params):

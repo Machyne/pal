@@ -27,7 +27,7 @@ office, 20
 ], 30
 [
     roommate
-    rommmates
+    roommates
     roomate
     roomates
 ], 60
