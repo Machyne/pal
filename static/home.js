@@ -9,7 +9,7 @@ var queryPAL = function(query, usdat, clidat, callback) {
       'client-data': clidat
     },
     success: function (response) {
-      callback(query, response.result);
+      callback(query, response);
     },
     error: function () {
       console.log('server error');
@@ -124,6 +124,23 @@ function chooseVoice() {
     }
 }
 
+function attributionImageForService(service) {
+    // return HTML for with logo for API attribution
+    switch(service) {
+        case "weather":
+            return '<a href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29"/></a>';
+        case "yelp":
+            var yelpImage = './static/yelp_logo_50x25.png';
+            return '<a href="http://yelp.com/" target="_blank"> <img src="' + yelpImage + '" width="50" height="25"/></a>'
+        case "wa":
+            var waImage = './static/wa-logo.jpg'
+            return '<a href="http://wolframalpha.com/" target="_blank"> <img src="' + waImage + '" height="25"/></a>'
+        // TODO: Movies once it's fixed            
+        default:
+            return "";
+    }
+}
+
 var mapGo;
 
 $(document).ready(function () {
@@ -159,7 +176,9 @@ $(document).ready(function () {
     }
 
     // FOR THE LOVE OF GOD PLEASE COMMENT ME WHOEVER WROTE THIS
-    var showResult = function (query, result) {
+    var showResult = function (query, response) {
+        var result = response.result;
+        var service = response.service;
         // external stuff
         if (result.status == 4) {
             if (result.external === 'facebook') {
@@ -230,10 +249,12 @@ $(document).ready(function () {
                 data = '<div class="data"><span class="data-toggler" onclick="expandData(this);">...</span>' +
                 result.data.replace(/\n+/ig, '<br>') + '</div>'
             }
-            $history.prepend('<li><div class="query">' + query +
+            var prependString = '<li><div class="query">' + query +
             '</div><div class="result">' +
             result.summary.replace(/\n+/ig, '<br>') +
-            '</div>' + data + '</li>');
+            data + '<div class="attribution">' + 
+            attributionImageForService(service) + '</div></div></li>';
+            $history.prepend(prependString);
         }
         else {
             $userData.html('');
