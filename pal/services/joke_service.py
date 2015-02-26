@@ -16,6 +16,7 @@ class JokeService(Service):
             "existence as long as such protection does not conflict with the "
             "First or Second Law.",
         'knock knock': "Who's there?",
+        'tom hanks': "As far as I'm concerned, Tom Hanks was in 1 movies.",
     }
 
     def applies_to_me(self, client, feature_request_type):
