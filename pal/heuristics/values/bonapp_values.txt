@@ -5,7 +5,13 @@
     sayles
     sayles-hill
     weitz
-], 70
+], 50
+[
+    open
+    opened
+    close
+    closed
+], 30
 [
     breakfast
     brunch

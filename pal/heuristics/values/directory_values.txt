@@ -1,10 +1,20 @@
 where, 10
-who, 10
+find, 10
+[
+    who
+    who's
+], 20
 which, 10
 hasProperNouns, 50
 [
     major
     majors
+    majoring
+], 30
+[
+    concentrate
+    concentrating
+    concentrators
 ], 30
 email, 45
 phone, 45
@@ -12,15 +22,32 @@ address, 40
 live, 40
 office, 20
 [
+    student
+    students
+], 30
+[
     roommate
+    rommmates
+    roomate
     roomates
 ], 60
 [
     graduate
     graduated
 ], 40
+[
+    freshman
+    freshmen
+    freshmans
+    sophomore
+    sophomores
+    junior
+    juniors
+    senior
+    seniors
+], 40
 number, 30
-room, 45
+room, 55
 faculty, 30
 department, 40
 building, 30
@@ -156,4 +183,4 @@ eat, -40
     burton
     ldc
     language & dining center
-], 40
+], 51
