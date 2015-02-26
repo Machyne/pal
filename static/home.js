@@ -122,6 +122,9 @@ function chooseVoice() {
         }
         return null;
     }
+    else {
+        window.speechSynthesis.onvoicesloaded = chooseVoice;
+    }
 }
 
 var mapGo;
@@ -275,7 +278,7 @@ $(document).ready(function () {
 
         ($speakCheck.is(":checked") && !window.maleVoice) && chooseVoice();
 
-        if (query.length > 0) {
+        if (query.length > 0 && !($prompt.attr('disabled') === 'disabled')) {
             $prompt.attr('disabled', 'disabled');
             $goBtn.attr('disabled', 'disabled');
             lastQuery = query;
