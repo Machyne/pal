@@ -27,6 +27,17 @@
         - [ ] All professors in a department
         - [ ] "Show me all the Brians on campus"
 
+- Dominos (requests to [Dominos online order]
+        (https://order.dominos.com/en/pages/order/))
+    - Pizza cost
+        - [x] price of a single pizza
+        - [x] price of multiple same pizzas
+        - [ ] price of multiple different pizzas
+    - Pizza cost
+        - [x] order a single pizza
+        - [x] order multiple same pizzas
+        - [ ] order multiple different pizzas
+
 - Facebook (requests to [Facebook Graph API](https://developers.facebook.com/docs/graph-api))
     - [x] Post to timeline on behalf of user
 
