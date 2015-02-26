@@ -6,6 +6,7 @@ what, 20
     mean
     means
 ], 70
+look, 20
 [
     synonyms
     synonym
