@@ -323,5 +323,5 @@ $(document).ready(function () {
       queryPAL(div.find('.q').val(), userData, {}, showResult);
     };
 
-    prompt.focus();
+    $prompt.focus();
 });
