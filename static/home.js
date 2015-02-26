@@ -128,7 +128,8 @@ function attributionImageForService(service) {
     // return HTML for with logo for API attribution
     switch(service) {
         case "weather":
-            return '<a href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="https://poweredby.yahoo.com/purple.png" width="134" height="29"/></a>';
+            var yahooImage ='./static/yahoo_purple_retina.png'
+            return '<a href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="' + yahooImage + '" height="25"/></a>';
         case "yelp":
             var yelpImage = './static/yelp_logo_50x25.png';
             return '<a href="http://yelp.com/" target="_blank"> <img src="' + yelpImage + '" width="50" height="25"/></a>'
