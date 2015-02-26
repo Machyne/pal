@@ -131,8 +131,8 @@ function attributionImageForService(service) {
             var yahooImage ='./static/yahoo_purple_retina.png'
             return '<a href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="' + yahooImage + '" height="25"/></a>';
         case "yelp":
-            var yelpImage = './static/yelp_logo_50x25.png';
-            return '<a href="http://yelp.com/" target="_blank"> <img src="' + yelpImage + '" width="50" height="25"/></a>'
+            var yelpImage = './static/yelp_logo_100x50.png';
+            return '<a href="http://yelp.com/" target="_blank"> <img src="' + yelpImage + '" height="25"/></a>'
         case "wa":
             var waImage = './static/wa-logo.jpg'
             return '<a href="http://wolframalpha.com/" target="_blank"> <img src="' + waImage + '" height="25"/></a>'
