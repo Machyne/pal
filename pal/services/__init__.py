@@ -1,18 +1,15 @@
 from pal.services.bonapp_service import BonAppService
 from pal.services.dictionary_service import DictionaryService
 from pal.services.directory_service import DirectoryService
-<<<<<<< HEAD
-from pal.services.joke_service import JokeService
-=======
 from pal.services.dominos_service import DominosService
 from pal.services.facebook_service import FacebookService
->>>>>>> add start for dominos service
+from pal.services.joke_service import JokeService
 from pal.services.movie_service import MovieService
 from pal.services.service import wrap_response
 from pal.services.ultralingua_service import UltraLinguaService
+from pal.services.wa_service import WAService
 from pal.services.weather_service import WeatherService
 from pal.services.yelp_service import YelpService
-from pal.services.wa_service import WAService
 
 
 _SERVICE_CLASSES = [
