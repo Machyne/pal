@@ -101,10 +101,12 @@ class DirectoryService(Service):
                     return ("{0} {1} doesn't seem to have any phone numbers "
                             "listed.".format(first_name, last_name))
                 elif len(phones) == 1:
-                    return "{0} {1}'s phone number is {2}.".format(
+                    return ("{0} {1}'s phone number is "
+                        "<a href=\"tel:{2}\">{2}</a>.").format(
                         first_name, last_name, phones[0])
                 else:
-                    pnums = ', '.join([str(p) for p in phones])
+                    pnums = ', '.join(["<a href=tel:" + str(p) + ">" + 
+                                        str(p) + "</a>" for p in phones])
                     return "{0} {1}'s phone numbers are {2}.".format(
                         first_name, last_name, pnums)
 
@@ -125,7 +127,8 @@ class DirectoryService(Service):
                     return ("{0} {1} doesn't seem to have an email address "
                             "listed.".format(first_name, last_name))
                 else:
-                    return "{0} {1}'s email address is {2}.".format(
+                    return ("{0} {1}'s email address is <a href=\"mailto:{2}\">"
+                            "{2}</a>.").format(
                         first_name, last_name, email)
         elif len(full_names) > 1:
             # these types of questions pertain to 2 or more people
