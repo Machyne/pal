@@ -17,7 +17,7 @@ class JokeService(Service):
             "First or Second Law.",
         'knock knock': "Who's there?",
         'tom hanks': "As far as I'm concerned, Tom Hanks was in 1 movies.",
-        "where's waldo": "He's right there, can't you see him?",
+        "wheres waldo": "He's right there, can't you see him?",
     }
 
     def applies_to_me(self, client, feature_request_type):
