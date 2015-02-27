@@ -35,7 +35,7 @@
             function stopListening() {
                 setMic('notListening');
                 recognition.isListening = false;
-                recognition.stop();
+                recognition.abort();
                 debugLog("Stopped listening");
             }
 
@@ -70,6 +70,11 @@
                 debugLog("Ending recognition");
                 $prompt.val(final_transcript);
                 $prompt.focus();
+
+                // Automatically send the query if PAL is going to talk back
+                if ($('#speak-check').is(':checked')) {
+                    $goBtn.click();
+                }
             };
 
             recognition.onresult = function (event) {
@@ -82,12 +87,18 @@
                 for (var i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
                         final_transcript += event.results[i][0].transcript;
+                        if (final_transcript.lastIndexOf("Hal") !== -1) {
+                            final_transcript = final_transcript.replace(/[ph]al/i, "PAL");
+                        }
                         debugLog("Final: " + final_transcript);
                         $prompt.val(final_transcript);
                         stopListening();
                     } else {
                         interim_transcript += event.results[i][0].transcript;
                         debugLog("Interim: " + interim_transcript);
+                        if (interim_transcript.lastIndexOf("Hal") !== -1) {
+                            interim_transcript = interim_transcript.replace(/[ph]al/i, "PAL");
+                        }
                         $prompt.val(interim_transcript);
                     }
                 }
