@@ -16,6 +16,10 @@ class YelpService(Service):
         return True
 
     def get_confidence(self, params):
+        # Yelp has ho idea what to do with people
+        for noun in params["nouns"]:
+            if noun[1] == "PERSON":
+                return 0
         return super(self.__class__, self).get_confidence(params)
 
     @wrap_response
