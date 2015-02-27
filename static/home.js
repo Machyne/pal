@@ -16,7 +16,7 @@ var queryPAL = function (query, usdat, clidat, callback) {
       'client-data': clidat
     },
     success: function (response) {
-      callback(query, response.result);
+      callback(query, response);
     },
     error: function () {
       console.log('server error');
@@ -127,6 +127,27 @@ function chooseVoice() {
         }
         return null;
     }
+    else {
+        window.speechSynthesis.onvoicesloaded = chooseVoice;
+    }
+}
+
+function attributionImageForService(service) {
+    // return HTML for with logo for API attribution
+    switch(service) {
+        case "weather":
+            var yahooImage ='./static/yahoo_purple_retina.png'
+            return '<a href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="' + yahooImage + '" height="25"/></a>';
+        case "yelp":
+            var yelpImage = './static/yelp_logo_100x50.png';
+            return '<a href="http://yelp.com/" target="_blank"> <img src="' + yelpImage + '" height="25"/></a>'
+        case "wa":
+            var waImage = './static/wa-logo.png'
+            return '<a href="http://wolframalpha.com/" target="_blank"> <img src="' + waImage + '" height="25"/></a>'
+        // TODO: Movies once it's fixed            
+        default:
+            return "";
+    }
 }
 
 var mapGo;
@@ -164,7 +185,9 @@ $(document).ready(function () {
     }
 
     // FOR THE LOVE OF GOD PLEASE COMMENT ME WHOEVER WROTE THIS
-    var showResult = function (query, result) {
+    var showResult = function (query, response) {
+        var result = response.result;
+        var service = response.service;
         // external stuff
         if (result.status == 4) {
             if (result.external === 'facebook') {
@@ -244,10 +267,12 @@ $(document).ready(function () {
                 data = '<div class="data"><span class="data-toggler" onclick="expandData(this);">...</span>' +
                 result.data.replace(/\n+/ig, '<br>') + '</div>'
             }
-            $history.prepend('<li><div class="query">' + query +
+            var prependString = '<li><div class="query">' + query +
             '</div><div class="result">' +
             result.summary.replace(/\n+/ig, '<br>') +
-            '</div>' + data + '</li>');
+            data + '<br><div class="attribution">' + 
+            attributionImageForService(service) + '</div></div></li>';
+            $history.prepend(prependString);
         }
         else {
             $userData.html('');
@@ -287,7 +312,7 @@ $(document).ready(function () {
 
         ($speakCheck.is(":checked") && !window.maleVoice) && chooseVoice();
 
-        if (query.length > 0) {
+        if (query.length > 0 && !($prompt.attr('disabled') === 'disabled')) {
             $prompt.attr('disabled', 'disabled');
             $goBtn.attr('disabled', 'disabled');
             lastQuery = query;
