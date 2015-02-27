@@ -321,7 +321,9 @@ $(document).ready(function () {
     var sendQuery = function () {
         var query = $prompt.val();
 
-        (!window.maleVoice) && chooseVoice();
+        if ('SpeechSynthesisUtterance' in window) {
+            (!window.maleVoice) && chooseVoice();
+        }
 
         if (query.length > 0 && !($prompt.attr('disabled') === 'disabled')) {
             $prompt.attr('disabled', 'disabled');
