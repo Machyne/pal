@@ -4,23 +4,30 @@ var resetQueryBar = function () {
   document.getElementById('prompt').focus();
   document.getElementById('prompt').select();
 };
+var genericError = {
+    result: {
+        status: 0,
+        summary: "I got confused, please try again later."
+    },
+    service: "unknown"
+};
 
 var queryPAL = function (query, usdat, clidat, callback) {
   $.ajax({
     type: 'POST',
     url: '/api/pal',
     data: {
-      query: query,
-      client: 'web',
-      'user-data': usdat,
-      'client-data': clidat
+        query: query,
+        client: 'web',
+        'user-data': usdat,
+        'client-data': clidat
     },
     success: function (response) {
-      callback(query, response);
+        callback(query, response);
     },
     error: function () {
-      console.log('server error');
-      resetQueryBar();
+        console.log('server error');
+        callback(query, genericError);
     }
   });
 };
@@ -140,7 +147,7 @@ function attributionImageForService(service) {
             return '<a href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="' + yahooImage + '" height="25"/></a>';
         case "yelp":
             var yelpImage = './static/yelp_logo_100x50.png';
-            return '<a href="http://yelp.com/" target="_blank"> <img src="' + yelpImage + '" height="25"/></a>'
+            return '<a href="//yelp.com/" target="_blank"> <img src="' + yelpImage + '" height="25"/></a>';
         case "wa":
             var waImage = './static/wa-logo.png';
             return '<a href="http://wolframalpha.com/" target="_blank"> <img src="' + waImage + '" height="25"/></a>'
