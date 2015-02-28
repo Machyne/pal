@@ -145,8 +145,11 @@ def order_pizzas(phone, name, address, card, pizzas, instructions=''):
 
     data = json.dumps(data)
     headers = {'Content-Type': 'application/json'}
-    r = requests.post("http://localhost:8000", data=data, headers=headers)
-    return r.json()
+    try:
+        r = requests.post("http://localhost:8000", data=data, headers=headers)
+        return r.json()
+    except Exception:
+        return {'msg': "Couldn't communicate with Dominos."}
 
 
 def price_pizzas(pizzas, address='1 N College St, Northfield, MN 55057',
@@ -164,8 +167,11 @@ def price_pizzas(pizzas, address='1 N College St, Northfield, MN 55057',
     data = json.dumps(data)
     headers = {'Content-Type': 'application/json'}
     r = requests.post("http://localhost:8000", data=data, headers=headers)
-    resp = r.json()
-    return resp.get('price', False)
+    try:
+        resp = r.json()
+        return resp.get('price', False)
+    except Exception:
+        return False
 
 
 if __name__ == '__main__':

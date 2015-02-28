@@ -74,6 +74,11 @@ def extract_pizza_features(parse_tree):
             amount = extract(parent_, 'topping_amount') or amount
         toppings.append((item, amount))
 
+    for t in non_tops:
+        item = extract(t, 'topping_item')
+        amount = 'none'
+        toppings.append((item, amount))
+
     return {
         'crust': crust,
         'quantity': num_pizzas,
