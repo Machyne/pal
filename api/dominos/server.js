@@ -99,6 +99,10 @@ var placeOrder = function (data, callback) {
         return callback({msg: 'cannot validate order'});
       };
 
+      console.log('\nValidated data:\n', orderData);
+      console.log('\nAddress data:\n', orderData.result.Order.Address);
+      console.log('\nPizza data:\n', orderData.result.Order.Products[0]);
+
       dominos.order.price(orderData.result, function (priceData) {
         console.log('\nPrice Data:\n', priceData);
         if ('StatusItems' in priceData.result) {
