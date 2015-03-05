@@ -15,7 +15,7 @@ SLOW_DOWN_PER_STEP   = .9  # each step is 90% of the size of the
                            # previous one unless it was a jump
 BASE_STEP_SIZE       = 5   # This is a guess. But, if we got our initial
                            # numbers close, I think it will work
-STEPS_BETWEEN_WRITES = 10
+STEPS_BETWEEN_WRITES = 1
 
 
 
@@ -24,6 +24,7 @@ class service_data (object):
     def __init__(self, name):
         self.name = name
         self.correctness = sys.maxint
+        self.max_correctness = 0
         self.prev_correctness = 1 # This doesn't get used, so it doesn't
                                   # really matter what it is set to.
         self.values = dict()
@@ -129,13 +130,16 @@ def climbing(examples, my_service_holder):
                     to_be_climbed.add(params['service'])
                 to_be_climbed.add(service)
 
+        if cur_service.correctness > cur_service.max_correctness:
+            cur_service.max_correctness = cur_service.correctness
+
     return to_be_climbed
 
 
 # Steps the service
 def service_stepper(service, my_service_holder):
     data = my_service_holder.get_service(service)
-    if data.correctness < data.prev_correctness:
+    if data.correctness <= data.max_correctness:
         change_directions(my_service_holder, service)
 
     for key, value in data.values.iteritems():
@@ -270,6 +274,7 @@ def main():
         # Write to file every 5th step, that way we don't lose too much
         # progress if we end early
         if counter % STEPS_BETWEEN_WRITES == 0:
+            print "WRITING!!"
             for service in my_service_holder.services:
                 # Write to file
                 dict_to_file(my_service_holder.services[service])
