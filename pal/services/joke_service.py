@@ -10,6 +10,8 @@ def get_jokes():
                                         "jokes.txt"))
     with open(file_path, 'rb') as joke_file:
         for line in joke_file.readlines():
+            if line.startswith("#"):
+                continue
             yield line.strip().split(" :: ", 1)
 
 

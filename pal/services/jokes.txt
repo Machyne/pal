@@ -1,3 +1,6 @@
+# entries in this file should look like:
+# <something to match in the query> :: <What PAL should respond>
+# TODO: Have jokes that use data as well as summary
 how many movies was tom hanks in :: As far as I'm concerned, Tom Hanks was in 1 movies.
 wheres waldo :: He's right there, can't you see him?
 knock knock :: Who's there?
