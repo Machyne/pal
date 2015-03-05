@@ -151,6 +151,13 @@ function attributionImageForService(service) {
         case "wa":
             var waImage = './static/wa-logo.png';
             return '<a href="http://wolframalpha.com/" target="_blank"> <img src="' + waImage + '" height="25"/></a>'
+        case "ultralingua":
+            var ulImage = './static/ultralingua.png'
+            return '<a href="http://developer.ultralingua.com" target="_blank"> '
+                    + '<img src=' + ulImage + ' height="25" title="Ultralingua, Inc"/></a>'
+        case "movie":
+            var tmdbImage = './static/tmdb.png'
+            return '<a href="http://www.themoviedb.org" target="_blank"> <img src="' + tmdbImage + '" height="25"/></a>'
         // TODO: Movies once it's fixed            
         default:
             return "";
