@@ -1,4 +1,5 @@
 # A service for the Carleton directory
+import re
 
 from api.directory.models import Building
 from api.directory.directory_api import Directory
@@ -9,6 +10,20 @@ from pal.services.service import wrap_response
 
 class NotEnoughInformationException(Exception):
     pass
+
+
+def format_phone_num(num):
+    if not isinstance(num, str):
+        num = str(num)
+    num = re.sub(r'\D', '', num)
+    if len(num) == 11:
+        base = '+{} '.format(num[0])
+        num = num[1:]
+    elif len(num) == 10:
+        base = ''
+    else: return num
+    base += '({}) {}-{}'
+    return base.format(num[:3], num[3:6], num[6:])
 
 
 class DirectoryService(Service):
@@ -101,10 +116,13 @@ class DirectoryService(Service):
                     return ("{0} {1} doesn't seem to have any phone numbers "
                             "listed.".format(first_name, last_name))
                 elif len(phones) == 1:
-                    return "{0} {1}'s phone number is {2}.".format(
-                        first_name, last_name, phones[0])
+                    num, pretty = phones[0], format_phone_num(phones[0])
+                    return ("{0} {1}'s phone number is "
+                        "<a href=\"tel:{2}\">{3}</a>.").format(
+                        first_name, last_name, num, pretty)
                 else:
-                    pnums = ', '.join([str(p) for p in phones])
+                    pnums = ', '.join(["<a href=tel:{}>{}</a>".format(
+                        p, format_phone_num(p)) for p in phones])
                     return "{0} {1}'s phone numbers are {2}.".format(
                         first_name, last_name, pnums)
 
@@ -125,7 +143,8 @@ class DirectoryService(Service):
                     return ("{0} {1} doesn't seem to have an email address "
                             "listed.".format(first_name, last_name))
                 else:
-                    return "{0} {1}'s email address is {2}.".format(
+                    return ("{0} {1}'s email address is <a href=\"mailto:{2}\">"
+                            "{2}</a>.").format(
                         first_name, last_name, email)
         elif len(full_names) > 1:
             # these types of questions pertain to 2 or more people
