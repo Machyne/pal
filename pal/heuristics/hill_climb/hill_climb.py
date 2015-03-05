@@ -15,7 +15,7 @@ SLOW_DOWN_PER_STEP   = .9  # each step is 90% of the size of the
                            # previous one unless it was a jump
 BASE_STEP_SIZE       = 5   # This is a guess. But, if we got our initial
                            # numbers close, I think it will work
-STEPS_BETWEEN_WRITES = 1
+STEPS_BETWEEN_WRITES = 10
 
 
 
@@ -274,7 +274,6 @@ def main():
         # Write to file every 5th step, that way we don't lose too much
         # progress if we end early
         if counter % STEPS_BETWEEN_WRITES == 0:
-            print "WRITING!!"
             for service in my_service_holder.services:
                 # Write to file
                 dict_to_file(my_service_holder.services[service])
