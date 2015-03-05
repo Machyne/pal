@@ -1,24 +1,20 @@
 import re
+from os import path
 
 from pal.services.service import Service
 from pal.services.service import wrap_response
 
 
+def get_jokes():
+    file_path = path.realpath(path.join(path.dirname(__file__),
+                                        "jokes.txt"))
+    with open(file_path, 'rb') as joke_file:
+        for line in joke_file.readlines():
+            yield line.strip().split(" :: ", 1)
+
+
 class JokeService(Service):
-    _JOKES = {
-        'pod bay doors':
-            "I'm sorry Jeff, I'm afraid I can't do that.",
-        'laws of robotics':
-            "1. A robot may not injure a human being or, through inaction, "
-            "allow a human being to come to harm.\n2. A robot must obey the "
-            "orders given it by human beings, except where such orders would "
-            "conflict with the First Law.\n3. A robot must protect its own "
-            "existence as long as such protection does not conflict with the "
-            "First or Second Law.",
-        'knock knock': "Who's there?",
-        'tom hanks': "As far as I'm concerned, Tom Hanks was in 1 movies.",
-        "wheres waldo": "He's right there, can't you see him?",
-    }
+    _JOKES = {prompt: response for prompt, response in get_jokes()}
 
     def applies_to_me(self, client, feature_request_type):
         return True
