@@ -7,8 +7,8 @@ from api.movie.tmdb_api import load_movie_for_title
 from pal.grammars import get_grammar_for_service
 from pal.grammars.parser import extract
 from pal.grammars.parser import parse
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 def verb_phrase_from_role(role):

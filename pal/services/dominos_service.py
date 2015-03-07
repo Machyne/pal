@@ -6,8 +6,8 @@ from pal.grammars.parser import parent
 from pal.grammars.parser import parse
 from pal.grammars.parser import search
 from pal.grammars.text_to_int import text_to_int
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 PIZZA_ORDER_REQUIRED_FIELDS = [

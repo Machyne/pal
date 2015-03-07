@@ -3,7 +3,7 @@
 
 import requests
 
-from pal.services.service import Service, wrap_response
+from pal.services.base_service import Service, wrap_response
 
 
 API_URL = ("http://api.ultralingua.com/api/definitions/{from_}/{to_}/{word}"
