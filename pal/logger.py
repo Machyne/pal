@@ -2,7 +2,7 @@ import logging
 import re
 
 
-class Logger:
+class Logger(object):
     LOGGER = logging.getLogger('PAL Engine')
 
     @classmethod

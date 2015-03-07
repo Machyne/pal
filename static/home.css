@@ -177,6 +177,7 @@ html, body {
   position: absolute;
   right: 48px;
   z-index: 100;
+  cursor: pointer;
 }
 
 #mic {
