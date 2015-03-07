@@ -6,8 +6,8 @@ from pal.grammars.parser import parent
 from pal.grammars.parser import parse
 from pal.grammars.parser import search
 from pal.grammars.text_to_int import text_to_int
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 PIZZA_ORDER_REQUIRED_FIELDS = [
@@ -72,6 +72,11 @@ def extract_pizza_features(parse_tree):
         parent_ = parent(parse_tree, t)
         if parent and parent_[0] == 'ingredient':
             amount = extract(parent_, 'topping_amount') or amount
+        toppings.append((item, amount))
+
+    for t in non_tops:
+        item = extract(t, 'topping_item')
+        amount = 'none'
         toppings.append((item, amount))
 
     return {

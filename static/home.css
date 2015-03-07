@@ -126,6 +126,7 @@ html, body {
   width: 100%;
   box-sizing: border-box;
   color: inherit;
+  overflow: hidden;
 }
 
 .history li .data {
@@ -166,6 +167,10 @@ html, body {
   font-size: 15px;
   color: #333;
   cursor: pointer;
+}
+
+.history li .attribution {
+  float: right;
 }
 
 .mic-wrapper {

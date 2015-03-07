@@ -3,7 +3,7 @@ temperature, 70
     weather
     forecast
 ], 80
-[   
+[
     cold
     cool
 ], 50
@@ -11,13 +11,15 @@ temperature, 70
     hot
     warm
 ], 50
-[ 
+[
     high
     low
 ], 30
 [
     snow
+    snowing
     rain
+    raining
 ], 70
 [
     monday
@@ -27,5 +29,6 @@ temperature, 70
     friday
     saturday
     sunday
-    Tomorrow
+    tomorrow
+    today
 ], 30

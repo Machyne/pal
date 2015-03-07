@@ -7,8 +7,8 @@ from api.movie.tmdb_api import load_movie_for_title
 from pal.grammars import get_grammar_for_service
 from pal.grammars.parser import extract
 from pal.grammars.parser import parse
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 def verb_phrase_from_role(role):
@@ -36,7 +36,7 @@ class MovieService(Service):
         query = params['query']
         parse_ = parse(query, self.grammar)
         self.cached_parse = (query, parse_)
-        return 100 if parse_ else 0
+        return 75 if parse_ else 0
 
     @wrap_response
     def go(self, params):

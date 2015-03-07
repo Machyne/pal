@@ -4,23 +4,30 @@ var resetQueryBar = function () {
   document.getElementById('prompt').focus();
   document.getElementById('prompt').select();
 };
+var genericError = {
+    result: {
+        status: 0,
+        summary: "I got confused, please try again later."
+    },
+    service: "unknown"
+};
 
 var queryPAL = function (query, usdat, clidat, callback) {
   $.ajax({
     type: 'POST',
     url: '/api/pal',
     data: {
-      query: query,
-      client: 'web',
-      'user-data': usdat,
-      'client-data': clidat
+        query: query,
+        client: 'web',
+        'user-data': usdat,
+        'client-data': clidat
     },
     success: function (response) {
-      callback(query, response.result);
+        callback(query, response);
     },
     error: function () {
-      console.log('server error');
-      resetQueryBar();
+        console.log('server error');
+        callback(query, genericError);
     }
   });
 };
@@ -76,6 +83,7 @@ function speakIfAppropriate(message) {
         if ('maleVoice' in window){
             utterance.voice = window.maleVoice;
             utterance.lang = utterance.voice.lang;
+            utterance.rate = 1.0;
             console.log(window.maleVoice.name + " is speaking.");
         }
         window.speechSynthesis.speak(utterance);
@@ -86,7 +94,6 @@ function chooseVoice() {
     // One-liner to query the options:
     // $.each(window.speechSynthesis.getVoices(), function(index, voice) { voice.lang.indexOf("es") !== -1 && console.log(voice) })
     var maleVoices = [
-        "Google UK English Male", // Sexy British male
         "Daniel", // Generic British male
         "Fred", // Stephen Hawking-ish
         "Alex", // Polite American
@@ -127,6 +134,34 @@ function chooseVoice() {
         }
         return null;
     }
+    else {
+        window.speechSynthesis.onvoicesloaded = chooseVoice;
+    }
+}
+
+function attributionImageForService(service) {
+    // return HTML for with logo for API attribution
+    switch(service) {
+        case "weather":
+            var yahooImage ='./static/yahoo_purple_retina.png';
+            return '<a href="https://www.yahoo.com/?ilc=401" target="_blank"> <img src="' + yahooImage + '" height="25"/></a>';
+        case "yelp":
+            var yelpImage = './static/yelp_logo_100x50.png';
+            return '<a href="//yelp.com/" target="_blank"> <img src="' + yelpImage + '" height="25"/></a>';
+        case "wa":
+            var waImage = './static/wa-logo.png';
+            return '<a href="http://wolframalpha.com/" target="_blank"> <img src="' + waImage + '" height="25"/></a>'
+        case "ultralingua":
+            var ulImage = './static/ultralingua.png'
+            return '<a href="http://developer.ultralingua.com" target="_blank"> '
+                    + '<img src=' + ulImage + ' height="25" title="Ultralingua, Inc"/></a>'
+        case "movie":
+            var tmdbImage = './static/tmdb.png'
+            return '<a href="http://www.themoviedb.org" target="_blank"> <img src="' + tmdbImage + '" height="25"/></a>'
+        // TODO: Movies once it's fixed            
+        default:
+            return "";
+    }
 }
 
 var mapGo;
@@ -154,6 +189,10 @@ $(document).ready(function () {
     if ('SpeechSynthesisUtterance' in window && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false) {
         $("#speak").show();
         $goBtn.on("click", chooseVoice);
+
+        // Initialize speech
+        var utt = new SpeechSynthesisUtterance("");
+        window.speechSynthesis.speak(utt);
         // load user preference on speech from cookie
         if (document.cookie) {
             if (document.cookie.indexOf('speech=true') > -1) {
@@ -164,7 +203,9 @@ $(document).ready(function () {
     }
 
     // FOR THE LOVE OF GOD PLEASE COMMENT ME WHOEVER WROTE THIS
-    var showResult = function (query, result) {
+    var showResult = function (query, response) {
+        var result = response.result;
+        var service = response.service;
         // external stuff
         if (result.status == 4) {
             if (result.external === 'facebook') {
@@ -244,10 +285,12 @@ $(document).ready(function () {
                 data = '<div class="data"><span class="data-toggler" onclick="expandData(this);">...</span>' +
                 result.data.replace(/\n+/ig, '<br>') + '</div>'
             }
-            $history.prepend('<li><div class="query">' + query +
+            var prependString = '<li><div class="query">' + query +
             '</div><div class="result">' +
             result.summary.replace(/\n+/ig, '<br>') +
-            '</div>' + data + '</li>');
+            data + '<br><div class="attribution">' + 
+            attributionImageForService(service) + '</div></div></li>';
+            $history.prepend(prependString);
         }
         else {
             $userData.html('');
@@ -285,9 +328,11 @@ $(document).ready(function () {
     var sendQuery = function () {
         var query = $prompt.val();
 
-        ($speakCheck.is(":checked") && !window.maleVoice) && chooseVoice();
+        if ('SpeechSynthesisUtterance' in window) {
+            (!window.maleVoice) && chooseVoice();
+        }
 
-        if (query.length > 0) {
+        if (query.length > 0 && !($prompt.attr('disabled') === 'disabled')) {
             $prompt.attr('disabled', 'disabled');
             $goBtn.attr('disabled', 'disabled');
             lastQuery = query;
@@ -298,7 +343,7 @@ $(document).ready(function () {
     $prompt.on('keypress', function (e) {
       // 'enter' key
       if (e.which == 13) {
-        sendQuery();
+            sendQuery();
       }
     });
 

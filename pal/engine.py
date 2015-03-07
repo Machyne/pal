@@ -71,7 +71,18 @@ class Engine(Resource):
                     data[key[len(data_type) + 1:-1]] = params[key]
                     del params[key]
                 params[data_type] = data
-        Engine.process(params)
+        try:
+            Engine.process(params)
+        except Exception, e:
+            print e
+            # no 500's ever
+            params = {
+              'result': {
+                'status': 0,
+                'summary': "Sorry, I got confused. Please ask later."
+              },
+              'service': "PAL"
+            }
         return params, 200, {'Access-Control-Allow-Origin': '*'}
 
     @classmethod

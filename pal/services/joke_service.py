@@ -1,13 +1,13 @@
 import re
 
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 class JokeService(Service):
     _JOKES = {
-        'open the pod bay doors pal':
-            "I'm sorry, Jeff, I'm afraid I can't do that.",
+        'pod bay doors':
+            "I'm sorry Jeff, I'm afraid I can't do that.",
         'laws of robotics':
             "1. A robot may not injure a human being or, through inaction, "
             "allow a human being to come to harm.\n2. A robot must obey the "
@@ -16,6 +16,8 @@ class JokeService(Service):
             "existence as long as such protection does not conflict with the "
             "First or Second Law.",
         'knock knock': "Who's there?",
+        'tom hanks': "As far as I'm concerned, Tom Hanks was in 1 movies.",
+        "wheres waldo": "He's right there, can't you see him?",
     }
 
     def applies_to_me(self, client, feature_request_type):
