@@ -1,8 +1,29 @@
-temperature, 70
+temperature,70
+[
+    high
+    low
+], 31
+[
+    raining
+    snowing
+    snow
+    rain
+], 70
+[
+    tuesday
+    saturday
+    sunday
+    thursday
+    today
+    tomorrow
+    monday
+    friday
+    wednesday
+], 31
 [
     weather
     forecast
-], 80
+], 81
 [
     cold
     cool
@@ -11,24 +32,3 @@ temperature, 70
     hot
     warm
 ], 50
-[
-    high
-    low
-], 30
-[
-    snow
-    snowing
-    rain
-    raining
-], 70
-[
-    monday
-    tuesday
-    wednesday
-    thursday
-    friday
-    saturday
-    sunday
-    tomorrow
-    today
-], 30

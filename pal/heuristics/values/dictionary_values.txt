@@ -1,25 +1,25 @@
-what, 20
+what,19
+look,20
+pronounce,-50
 [
-    define
+    words
+    word
+], 30
+[
     definition
-    meaning
-    mean
     means
+    meaning
+    define
+    mean
 ], 70
-look, 20
 [
-    synonyms
     synonym
-    similar
     same
+    synonyms
+    similar
 ], 65
 [
     antonyms
-    antonym
     opposite
+    antonym
 ], 65
-pronounce, -50
-[
-    word
-    words
-], 30

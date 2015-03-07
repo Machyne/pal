@@ -8,30 +8,20 @@ from pal.nlp.feature_extractor import FeatureExtractor
 
 random.seed(1337 - 1453) #Totally not a reference to Quinn's comps...
 
-# These numbers are touchy feely. If anyone has thoughts about them
-# being different, feel free to change them
-ODDS_NOT_TO_JUMP     = .99 # .99 might be high or low, I'm not sure
-SLOW_DOWN_PER_STEP   = .9  # each step is 90% of the size of the
-                           # previous one unless it was a jump
-BASE_STEP_SIZE       = 5   # This is a guess. But, if we got our initial
-                           # numbers close, I think it will work
-STEPS_BETWEEN_WRITES = 10
+STEPS_BETWEEN_WRITES = 10 # The interval between data writes
 
+QUERIES_ARE_GOOD = False # This is protection against bad test queries
 
 
 class service_data (object):
     # Each service maintains a list of its values and associated metadata
     def __init__(self, name):
         self.name = name
-        self.correctness = sys.maxint
-        self.max_correctness = 0
-        self.prev_correctness = 1 # This doesn't get used, so it doesn't
-                                  # really matter what it is set to.
         self.values = dict()
 
     def add_value(self, word, mag):
-        self.values[word] = [mag, 0, BASE_STEP_SIZE]
-                            # [Magnitude, Direction, Acceleration]
+        self.values[word] = [mag, 0]
+                            # [Magnitude, Direction]
 
     def _get_score(self, word):
         score = self.values.get(word, 0)
@@ -112,8 +102,6 @@ def climbing(examples, my_service_holder):
     to_be_climbed = set()
     for service, queries in examples.iteritems():
         cur_service = my_service_holder.get_service(service)
-        cur_service.prev_correctness = cur_service.correctness
-        cur_service.correctness = 0
         for query in queries:
             params = {
             'query': query,
@@ -122,52 +110,65 @@ def climbing(examples, my_service_holder):
             StandardNLP.process(params)
             FeatureExtractor.process(params)
             ghetto_classifier(params, my_service_holder)
-            if params['service'] == service:
-                cur_service.correctness += 1
-            else:
-                cur_service.correctness -= 1
+            if params['service'] != service:
+                # This is the key piece of new code.
+                # Note that if the query isn't sorted into anything,
+                # we currently don't want to futz with it.
+                # That leads to bad queries causing climbing...
+                # and nobody wants that.
                 if params['service'] != 'Unsorted':
-                    to_be_climbed.add(params['service'])
-                to_be_climbed.add(service)
+                    set_steps(params['features']['keywords'], params['service'],
+                                                  my_service_holder, -1)
+                    set_steps(params['features']['keywords'], service,
+                                                  my_service_holder, 1)
 
-        if cur_service.correctness > cur_service.max_correctness:
-            cur_service.max_correctness = cur_service.correctness
+                    to_be_climbed.add(params['service'])
+                    to_be_climbed.add(service)
+                    # We are preserving to_be_climbed,
+                    # because it is good for efficiency
 
     return to_be_climbed
 
+# Sets the queries that should be stepped on.
+def set_steps(words, service, my_service_holder, direction):
+    service_to_step = my_service_holder.get_service(service)
+    for word in words:
+        if word in service_to_step.values:
+            # Handle those damn dummy variables
+            if type(service_to_step.values[word][0]) is str:
+                placeholder = service_to_step.values[word][0]
+                if service_to_step.values[placeholder][1] != direction:
+                    service_to_step.values[placeholder][1] += direction
 
-# Steps the service
+            elif service_to_step.values[word][1] != direction:
+                service_to_step.values[word][1] += direction
+                # Direction is set to -1 for the query whose values
+                # should be decreased, and 1 for the query whose
+                # values should be increased. This also makes sure
+                # that all steps are always small
+
+            if direction == 1:
+                QUERIES_ARE_GOOD = True
+                # If at least some keywords are getting hit
+                # in the service the query should be sorted into,
+                # then we know we don't only have dud queries...
+                # ...this round.
+
+# Steps the service.
+# This has been significantly cut down. Deal with it.
 def service_stepper(service, my_service_holder):
     data = my_service_holder.get_service(service)
-    if data.correctness <= data.max_correctness:
-        change_directions(my_service_holder, service)
 
     for key, value in data.values.iteritems():
         if type(value[0]) is str and value[0].startswith('dummy_var_'):
             #don't climb on dummy variables ever
             pass
         else:
-            new_magnitude = (data.values[key][0] +
-                         data.values[key][1] * data.values[key][2])
-                        #  magnitude + direction * acceleration
-        # Every once in awhile, we want to take a big step to prevent
-        # getting stuck
-            if random.random() > ODDS_NOT_TO_JUMP:
-                new_accel = BASE_STEP_SIZE
-            else:
-                new_accel = data.values[key][2] * SLOW_DOWN_PER_STEP
-
-            data.values[key] = [new_magnitude, data.values[key][1], new_accel]
-
-
-# Creates new directions for each value in the service
-def change_directions(my_service_holder, service):
-    data = my_service_holder.get_service(service)
-    for key in data.values:
-        new_direction = random.randint(-1,1)
-        data.values[key] = [data.values[key][0], new_direction,
-                            data.values[key][2]]
-
+            new_magnitude = (data.values[key][0] + data.values[key][1])
+                        #  magnitude + direction
+        # We were all sneaky-like, and set the directions manually
+        # We will then reset them back to 0.
+            data.values[key] = [new_magnitude, 0]
 
 # Blatently "borrowed" from Alex's test code
 # Reads in the example query file and returns a dictionary with service
@@ -265,12 +266,15 @@ def main():
 
     counter = 0
     while len(services_to_step) > 0:
+        QUERIES_ARE_GOOD = False
         sys.stdout.flush()
         counter += 1
         for service in services_to_step:
             sys.stdout.flush()
             service_stepper(service, my_service_holder) # Steps the service
         services_to_step = climbing(examples, my_service_holder)
+        if QUERIES_ARE_GOOD == False:
+            break
         # Write to file every 5th step, that way we don't lose too much
         # progress if we end early
         if counter % STEPS_BETWEEN_WRITES == 0:
