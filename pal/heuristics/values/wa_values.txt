@@ -1,27 +1,27 @@
-plus,40
-minus,40
-multiply,40
-times,20
 divide,40
-difference,20
+area,20
 sum,20
-add,40
-subtract,40
 squared,40
-root,35
+add,40
 power,40
+minus,40
 factorial,40
+multiply,40
+difference,20
+subtract,40
 distance,25
+times,20
+plus,40
+root,35
 [
-    radius
-    circumfrence
     diameter
+    circumfrence
+    radius
     perimeter
 ], 50
-area, 20
 [
-    +
     -
-    /
     !
+    /
+    +
 ], 40

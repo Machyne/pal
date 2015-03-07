@@ -1,41 +1,41 @@
-[
-    burton
-    ldc
-    east hall
-    sayles
-    sayles-hill
-    weitz
-], 50
-[
-    open
-    opened
-    close
-    closed
-], 30
-[
-    breakfast
-    brunch
-    lunch
-    dinner
-], 90
+eat,79
 [
     dining hall
     cafe
     food
     meal
-], 85
-eat, 80
+], 86
 [
-    monday
     tuesday
-    wednesday
-    thursday
-    friday
-    mon
     tues
     wed
-    thurs
     fri
-    today
+    thurs
+    thursday
     tomorrow
+    today
+    monday
+    friday
+    mon
+    wednesday
+], 31
+[
+    ldc
+    burton
+    sayles
+    sayles-hill
+    east hall
+    weitz
+], 51
+[
+    close
+    open
+    opened
+    closed
 ], 30
+[
+    breakfast
+    lunch
+    brunch
+    dinner
+], 91
