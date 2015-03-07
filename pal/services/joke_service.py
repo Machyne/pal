@@ -12,7 +12,8 @@ def get_jokes():
         for line in joke_file.readlines():
             if line.startswith("#"):
                 continue
-            yield line.strip().split(" :: ", 1)
+            prompt, response = map(str.strip, line.split("::", 1))
+            yield prompt, response.replace("\\n", "\n")
 
 
 class JokeService(Service):
