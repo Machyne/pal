@@ -68,12 +68,12 @@ wh_phrase: wh_word, aux?
 wh_time_phrase: wh_time_word, aux?
 wh_word: ["which", "what", wh_count]
 wh_count: "how many"
-wh_time_word: ["when", ("what", "year"), ("which", "year")]
+wh_time_word: ["when", ("what year"), ("which year")]
 name: "*", name?
 title: "the"?, ["*", "#"], title?
 adj_phrase: ["main", year]
 year: "#"
-prep_phrase: ["recently", ("this year")]
+prep_phrase: ["recently", "this year", ("in", year)]
 
 aux: [have, be, do, (have, be)]
 be: ["be", "'s", "is", "are", "been", "was", "were"]
