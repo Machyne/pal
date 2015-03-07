@@ -38,7 +38,8 @@
         - [x] order multiple same pizzas
         - [ ] order multiple different pizzas
 
-- Facebook (requests to [Facebook Graph API](https://developers.facebook.com/docs/graph-api))
+- Facebook (requests to [Facebook Graph API]
+    (https://developers.facebook.com/docs/graph-api))
     - [x] Post to timeline on behalf of user
 
 - Movies (using the TMDB API)
@@ -63,7 +64,8 @@
     - [x] General forecast
     - [x] Geolocation
 
-- Wolfram|Alpha (requests using Wolfram|Alpha's API)
+- Wolfram|Alpha (requests using [Wolfram|Alpha's API]
+    (http://products.wolframalpha.com/api/))
     - [x] Run queries on natural language and get numerical output
     - [ ] Keep track of our limited number of queries (difficult due to concurrency issues)
 
