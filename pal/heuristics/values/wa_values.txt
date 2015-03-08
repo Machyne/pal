@@ -1,18 +1,18 @@
 divide,40
+squared,40
 area,20
 sum,20
-squared,40
 add,40
 power,40
-minus,40
 factorial,40
 multiply,40
 difference,20
 subtract,40
-distance,25
+distance,30
 times,20
 plus,40
 root,35
+minus,40
 [
     diameter
     circumfrence
@@ -20,8 +20,8 @@ root,35
     perimeter
 ], 50
 [
-    -
     !
+    -
     /
     +
 ], 40

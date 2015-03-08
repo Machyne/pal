@@ -1,9 +1,20 @@
-what,19
+what,11
 look,20
 pronounce,-50
 [
-    words
+    synonyms
+    same
+    synonym
+    similar
+], 76
+[
+    opposite
+    antonyms
+    antonym
+], 65
+[
     word
+    words
 ], 30
 [
     definition
@@ -11,15 +22,4 @@ pronounce,-50
     meaning
     define
     mean
-], 70
-[
-    synonym
-    same
-    synonyms
-    similar
-], 65
-[
-    antonyms
-    opposite
-    antonym
-], 65
+], 69

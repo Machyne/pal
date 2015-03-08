@@ -1,2 +1,2 @@
-post, 70
-facebook, 100
+post,100
+facebook,116
