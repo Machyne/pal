@@ -27,8 +27,28 @@
         - [ ] All professors in a department
         - [ ] "Show me all the Brians on campus"
 
-- Facebook (requests to [Facebook Graph API](https://developers.facebook.com/docs/graph-api))
+- Dominos (requests to [Dominos online order]
+        (https://order.dominos.com/en/pages/order/))
+    - Pizza cost
+        - [x] price of a single pizza
+        - [x] price of multiple same pizzas
+        - [ ] price of multiple different pizzas
+    - Pizza orders
+        - [x] order a single pizza
+        - [x] order multiple same pizzas
+        - [ ] order multiple different pizzas
+
+- Facebook (requests to [Facebook Graph API]
+    (https://developers.facebook.com/docs/graph-api))
     - [x] Post to timeline on behalf of user
+
+- Movies (using the TMDB API)
+    - [x] What movies was this person involved in (acting, directing, etc.)
+    - [x] Was this person involved in this movie?
+    - [x] How many movies was this person involved in?
+    - [x] When did this movie come out?
+    - [x] Who acted/directed/etc. in this movie?
+    - [ ] Who played this character in this movie?
 
 - Translations (requests through [UltraLingua REST API]
     (http://api.ultralingua.com/ulapi/rest)
@@ -44,7 +64,8 @@
     - [x] General forecast
     - [x] Geolocation
 
-- Wolfram|Alpha (requests using Wolfram|Alpha's API)
+- Wolfram|Alpha (requests using [Wolfram|Alpha's API]
+    (http://products.wolframalpha.com/api/))
     - [x] Run queries on natural language and get numerical output
     - [ ] Keep track of our limited number of queries (difficult due to concurrency issues)
 

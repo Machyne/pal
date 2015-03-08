@@ -85,7 +85,7 @@ _DUMMY_CARD = {
 }
 
 
-def _topping_amt(full=None, left=None, right=None):
+def _topping_amount(full=None, left=None, right=None):
     if sum(AMOUNTS[x or 0] for x in (full, left, right)) == 0:
         return 0
     if full is not None:
@@ -109,7 +109,7 @@ def _get_crust(size, crust):
     return '12SCREEN'
 
 
-def _topping_code(topping):
+def _get_topping_code(topping):
     for code, names in TOPPINGS.iteritems():
         if topping in names:
             return code
@@ -126,7 +126,8 @@ def _pizzas_to_products(pizzas):
         for topping, amount in pizza['options']:
             if not isinstance(amount, dict):
                 amount = {'full': amount}
-            pie['options'][_topping_code(topping)] = _topping_amt(**amount)
+            code = _get_topping_code(topping)
+            pie['options'][code] = _topping_amount(**amount)
         products.append(pie)
     return products
 

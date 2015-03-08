@@ -1,7 +1,7 @@
 import re
 
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 class JokeService(Service):

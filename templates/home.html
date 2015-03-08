@@ -10,7 +10,7 @@
 <body>
   <div id="fb-root"></div>
   <div class="top">
-	<h1 class="title">Hi, I'm PAL, what can I do for you?</h1>
+  <h1 class="title">Hi, I'm PAL, what can I do for you?</h1>
       <div class="row">
         <div class="col-lg-6 col-md-8 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-2 col-sm-offset-2">
           <div class="input-group">
@@ -19,9 +19,9 @@
               <input type="checkbox" id="speak-check">
             </span>
             <input type="text" class="form-control" id="prompt">
-              <div class="mic-wrapper">
-                <img src="{{ url_for('static', filename='mic.gif') }}" id="mic">
-              </div>
+            <div class="mic-wrapper" title="Voice Input">
+              <img src="{{ url_for('static', filename='mic.gif') }}" id="mic">
+            </div>
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" id="go-btn">Go!</button>
             </span>
