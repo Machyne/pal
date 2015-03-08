@@ -12,7 +12,13 @@ root,35
 power,40
 factorial,40
 distance,25
-mean,25
+[
+    radius
+    circumfrence
+    diameter
+    perimeter
+], 50
+area, 20
 [
     +
     -

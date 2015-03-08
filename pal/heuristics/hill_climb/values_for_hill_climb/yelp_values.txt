@@ -1,7 +1,7 @@
 [
     find
     get
-], 70
+], 60
 [
     where
     where's

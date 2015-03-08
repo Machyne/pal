@@ -1,48 +1,48 @@
+yelp,80
+movies,-10
+[
+    bars
+    thirsty
+    drinks
+    beverages
+    drink
+    bar
+    beverage
+], 71
+[
+    nearest
+    close
+    local
+    closest
+    near
+    nearby
+], 61
+[
+    breakfast
+    dinner
+    lunch
+    brunch
+], 51
+[
+    ldc
+    burton
+    sayles
+], -60
 [
     find
     get
-], 60
+], 61
 [
-    where
     where's
-], 40
+    where
+], 41
 [
-    food
-    eat
-    eats
-    eatery
     eateries
-    hungry
+    food
+    eatery
+    eats
+    eat
     restaurant
+    hungry
     restaurants
-], 70
-[
-    drink
-    drinks
-    bar
-    bars
-    beverage
-    beverages
-    thirsty
-], 70
-[
-    nearby
-    local
-    close
-    closest
-    near
-    nearest
-], 60
-[
-    lunch
-    breakfast
-    dinner
-    brunch
-], 50
-yelp, 80
-movies, -10
-[
-    burton
-    ldc
-    sayles
-], -60
+], 71
