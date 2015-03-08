@@ -1,11 +1,21 @@
-yelp,80
+yelp,69
 movies,-10
+[
+    eats
+    eateries
+    food
+    eatery
+    eat
+    restaurant
+    hungry
+    restaurants
+], 71
 [
     bars
     thirsty
     drinks
-    beverages
     drink
+    beverages
     bar
     beverage
 ], 71
@@ -36,13 +46,3 @@ movies,-10
     where's
     where
 ], 41
-[
-    eateries
-    food
-    eatery
-    eats
-    eat
-    restaurant
-    hungry
-    restaurants
-], 71

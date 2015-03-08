@@ -2,7 +2,7 @@
     language
     translation
     translate
-], 70
+], 53
 [
     portuguese
     german
@@ -10,10 +10,10 @@
     french
     english
     italian
-], 81
+], 65
 [
     in
-    from
     into
     to
-], 21
+    from
+], -4

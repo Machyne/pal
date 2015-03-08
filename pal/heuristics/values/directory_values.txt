@@ -16,9 +16,37 @@ faculty,30
 building,30
 contact,-20
 [
+    ldc
+    burton
+    language & dining center
+], 49
+[
+    students
+    student
+], 30
+[
+    graduated
+    graduate
+], 40
+[
+    sophomore
+    seniors
+    juniors
+    freshmen
+    sophomores
+    freshmans
+    junior
+    freshman
+    senior
+], 40
+[
+    who's
+    who
+], 20
+[
     scott
-    douglas
-    rogers
+    facilities building
+    hoppin
     sayles-hill campus center
     owens
     bald spot
@@ -32,7 +60,7 @@ contact,-20
     goodsell
     prairie warehouse
     dacie moses
-    water tower
+    hill
     nason
     alumni guest
     chaney
@@ -49,8 +77,8 @@ contact,-20
     cmc
     bird
     olin
-    hulings
-    bell field
+    sevy
+    page
     scoville
     cowling gymnasium
     kettle hole marsh
@@ -61,26 +89,27 @@ contact,-20
     hillside prairie
     severance
     willis
-    facilities building
-    hill
+    douglas
+    water tower
     rec
     prentice
     the druid circle
+    watson
     brooks
     strong
     whittier
     center for math & computing
-    sevy
+    hulings
     musser
     softball field
-    page
+    bell field
     faculty club
     headley cottage
     mudd
     davis
     myers
     mai fete island
-    hoppin
+    turtle pond
     evans
     the council ring
     laird stadium
@@ -96,17 +125,16 @@ contact,-20
     jones
     oxbow pond
     stadium
-    turtle pond
     sperry
     postage stamp prairie
     berg
-    weitz
     parr
     west field
     rice
     benton
     henrickson
     hunt cottage
+    rogers
     henry
     the wind turbine
     west gymnasium
@@ -136,43 +164,9 @@ contact,-20
     spring creek
     faculty club annex
     johnson
-    watson
+    weitz
     dow
-], 70
-[
-    ldc
-    burton
-    language & dining center
-], 51
-[
-    students
-    student
-], 30
-[
-    roomates
-    roommate
-    roomate
-    roommates
-], 60
-[
-    graduated
-    graduate
-], 40
-[
-    freshmans
-    sophomore
-    seniors
-    juniors
-    freshmen
-    sophomores
-    junior
-    freshman
-    senior
-], 40
-[
-    who's
-    who
-], 20
+], 62
 [
     majors
     majoring
@@ -183,3 +177,9 @@ contact,-20
     concentrators
     concentrating
 ], 30
+[
+    roomates
+    roommate
+    roomate
+    roommates
+], 60
