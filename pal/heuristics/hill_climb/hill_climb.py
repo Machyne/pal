@@ -28,10 +28,9 @@ class service_data (object):
         if score != 0:
             score = score[0]
         while isinstance(score, str):
-            score = self.values.get(score[0], 0)
+            score = self.values.get(score, 0)
             if score != 0:
                 score = score[0]
-        print self.name, score, word
         return score
 
     def run_heuristic(self, query_keywords):
@@ -66,8 +65,8 @@ class service_holder (object):
         data = service_data(service)
         file_ = path.realpath(
             path.join(
-                path.dirname(__file__),
-                'values_for_hill_climb',
+                path.dirname(path.dirname(__file__)),
+                'values',
                 service + '_values.txt'))
         lines = []
 
@@ -132,8 +131,8 @@ def climbing(examples, my_service_holder):
                     print "was supposed to be in", service
                     print "was in", params['service']
                     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                    #to_be_climbed.add(params['service'])
-                    #to_be_climbed.add(service)
+                    to_be_climbed.add(params['service'])
+                    to_be_climbed.add(service)
                     # We are preserving to_be_climbed,
                     # because it is good for efficiency
 
@@ -216,7 +215,6 @@ def ghetto_classifier(params, my_service_holder):
     conf_levels = {service_name: my_service_holder.services[service_name]
                     .run_heuristic(features['keywords'])
                     for service_name in my_service_holder.services}
-    print conf_levels
     params['confidences'] = conf_levels
     params['service'] = (max(conf_levels, key=conf_levels.get) if
                          max(conf_levels.itervalues()) > 0 else "Unsorted")
