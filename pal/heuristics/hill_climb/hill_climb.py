@@ -10,7 +10,7 @@ random.seed(1337 - 1453) #Totally not a reference to Quinn's comps...
 
 STEPS_BETWEEN_WRITES = 10 # The interval between data writes
 
-QUERIES_ARE_GOOD = False # This is protection against bad test queries
+#QUERIES_ARE_GOOD = False # This is protection against bad test queries
 
 
 class service_data (object):
@@ -31,10 +31,14 @@ class service_data (object):
             score = self.values.get(score[0], 0)
             if score != 0:
                 score = score[0]
+        print self.name, score, word
         return score
 
     def run_heuristic(self, query_keywords):
-        return sum(self._get_score(word) for word in query_keywords)
+        sum = 0
+        for word in query_keywords:
+            sum += self._get_score(word)
+        return sum
 
 class service_holder (object):
     # Holds a dictionary representing the values file and hillclimb
@@ -42,6 +46,8 @@ class service_holder (object):
 
     def __init__(self):
         self.services = dict()
+        # This is protection against bad test queries
+        self.queries_are_good = False
 
     def add_service(self, service):
         if not service in self.services:
@@ -122,8 +128,12 @@ def climbing(examples, my_service_holder):
                     set_steps(params['features']['keywords'], service,
                                                   my_service_holder, 1)
 
-                    to_be_climbed.add(params['service'])
-                    to_be_climbed.add(service)
+                    print query
+                    print "was supposed to be in", service
+                    print "was in", params['service']
+                    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                    #to_be_climbed.add(params['service'])
+                    #to_be_climbed.add(service)
                     # We are preserving to_be_climbed,
                     # because it is good for efficiency
 
@@ -148,7 +158,7 @@ def set_steps(words, service, my_service_holder, direction):
                 # that all steps are always small
 
             if direction == 1:
-                QUERIES_ARE_GOOD = True
+                my_service_holder.queries_are_good = True
                 # If at least some keywords are getting hit
                 # in the service the query should be sorted into,
                 # then we know we don't only have dud queries...
@@ -206,6 +216,7 @@ def ghetto_classifier(params, my_service_holder):
     conf_levels = {service_name: my_service_holder.services[service_name]
                     .run_heuristic(features['keywords'])
                     for service_name in my_service_holder.services}
+    print conf_levels
     params['confidences'] = conf_levels
     params['service'] = (max(conf_levels, key=conf_levels.get) if
                          max(conf_levels.itervalues()) > 0 else "Unsorted")
@@ -266,14 +277,14 @@ def main():
 
     counter = 0
     while len(services_to_step) > 0:
-        QUERIES_ARE_GOOD = False
+        my_service_holder.queries_are_good = False
         sys.stdout.flush()
         counter += 1
         for service in services_to_step:
             sys.stdout.flush()
             service_stepper(service, my_service_holder) # Steps the service
         services_to_step = climbing(examples, my_service_holder)
-        if QUERIES_ARE_GOOD == False:
+        if my_service_holder.queries_are_good == False:
             break
         # Write to file every 5th step, that way we don't lose too much
         # progress if we end early
