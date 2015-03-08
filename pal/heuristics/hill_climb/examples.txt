@@ -64,8 +64,6 @@ Kevin Wolfe's email
 Look up jeff ondich's phone number.
 Roommate of Hami Abdi
 Roommates of shen wang
-What country is Shen Wang from?
-What country is Shenlun Wang from?
 What is Kyle Schiller's major?
 What major is ken schiller?
 What's Alex's dorm number?
@@ -177,7 +175,6 @@ square root 49
 4 factorial
 four factorial
 2 ^ 100
-mean 1,2,3,4,5,6,7
 
 yelp
 What restaurants are nearby?
@@ -206,3 +203,4 @@ facebook "test post, please ignore"
 facebook "bookface"
 facebook "define translate"
 facebook "translate define into spanish"
+
