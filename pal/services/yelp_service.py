@@ -45,7 +45,9 @@ class YelpService(Service):
                 location = places[0]
                 if len(orgs):
                     location += ', ' + orgs[0]
-                location = '{},{}'.format(*geocode(location))
+                # default to Carleton College in case the geocoding fails.
+                location = '{},{}'.format(
+                    *geocode(location, [44.4615357, -93.1524873]))
         nouns = features['nouns']
         nouns = filter(lambda n: (n[0].lower() not in ['me', 'i'] and
                                   n[1] not in ['GPE', 'GSP',
