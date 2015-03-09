@@ -43,20 +43,23 @@ What's foie gras?
 What's panacea mean?
 What's sashimi?
 What's teriyaki sauce?
-define yelp
-Define translate
 
 directory
 Burton 413
 Does Greg Fournier live on first Cassat?
+Find Brian Charous
 Find Greg Fournier's room
+Find me all people named Robert.
 Give me DLN's email address
 Give me students name Peter.
 How any students in the class of 2015 are named Matt?
 How big is fourth Cassat?
 How many Art History Majors are Computer Science majors?
 How many people live in Parish house?
+How many Quinn's are there on campus?
+How many quints are there?
 Is Brian Charous an Art History Major?
+Is Quinn Radich from Washington?
 Jeff Ondich's email
 Jeff ondich's phone
 Kevin Wolfe's email
@@ -67,6 +70,8 @@ What country is Shen Wang from?
 What country is Shenlun Wang from?
 What is Kyle Schiller's major?
 What major is ken schiller?
+What state is Matt Cotter from?
+What state is Matthew Cotter from?
 What's Alex's dorm number?
 What's Alex's room number?
 What's Anna Rafferty's email?
@@ -75,7 +80,13 @@ What's Greg's phone number?
 What's Ken Schiller's room number?
 What's Kevin Wolfe's email?
 What's matt cotter's address?
+What's mister Cotter's first name?
+What's Ms. Meng's first name?
+What's the guy to girl ratio on First Burton?
 Where does Matt Cotter live?
+Where is Suyu Meng from?
+Where's Brian Charous from
+Where's Brian live?
 Which dorm has the most Computer Science majors?
 Who are Matt's roommates?
 Who lives in Myers 411
@@ -87,11 +98,68 @@ Who's a senior in burton?
 Who's a sophomore in james hall?
 Who's a sophomore in memo?
 Who's a sophomore in memorial hall?
+Who's a women's and gender studies concentrator?
 Who's a women's and gender studies major?
 Who's concentrating in cross-cultural studies?
 Who's concentrating in ed studies?
 Who's in room 405 of memo hall?
 Who's in Watson 311?
+
+movie
+Did Daniel Radcliffe play Harry Potter in Harry Potter?
+Did Harrison Ford act in Blade Runner?
+Did Kubrick direct 2001 a Space Odyssey?
+Did Ridley Scott act in Blade Runner?
+Did Ridley Scott direct Blade Runner?
+Did tom hanks act in Blade Runner?
+How many films has tom hanks acted in
+How many films has tom hanks been in
+How many movies are there that have been directed by kubrick
+How many movies are there with tom hanks
+How many movies has Tom Hanks starred in?
+How many movies has Wes Anderson directed?
+How many movies have been directed by wes Anderson
+How many movies have Tom Hanks
+How many movies was tom hanks in?
+Name all Wes Anderson movies
+Name everything Wes Anderson has directed
+Show me everything directed by Tom Hanks
+Was Ridley Scott in Blade Runner?
+Was Ridley Scott the director of Blade Runner?
+Was tom hanks in Blade Runner?
+Was tom hanks in the 2014 film the grand budapest hotel
+What has Naomi Watts starred in?
+What movie was tom hanks just in?
+What movies has Benedict Cumberbatch been in this year?
+What movies has Benedict Cumberbatch been in?
+What was that 2010 movie with tom hanks?
+What was tom hanks just in?
+What year did 21 Jump Street come out?
+What year did Fight Club come out?
+what year was blade runner made?
+what year was cloud atlas released
+what year was cloud atlas?
+what year was the film cloud atlas released?
+what year was the movie blade runner?
+what year was the movie cloud atlas
+what year was the movie cloud atlas released?
+What's tom hanks' most recent film
+When did fight club come out?
+When was blade runner made?
+When was cloud atlas released?
+Which actor starred as the main character of Fight Club?
+Who acted in Blade Runner?
+Who acted in Fight Club?
+Who directed the grand budapest hotel?
+Who played Harry Potter in Harry Potter?
+Who played Neville Longbottom in Harry Potter and the Deathly Hallows part 1?
+Who played Severus Snape in Harry Potter?
+Who starred in 2001 a space odyssey?
+Who starred in Fight Club?
+Who was in Fight Club?
+Who was it that directed 2001 A Space Odyssey?
+Who was it that starred in Blade Runner?
+Who wrote 2001 A Space Odyssey?
 
 weather
 Do you think it'll rain?
@@ -151,6 +219,25 @@ When does LDC close tomorrow morning?
 When does Sayles close tonight?
 When is LDC open for lunch tomorrow?
 
+dominos
+Buy me a pizza with mushrooms but no cheese or sauce
+Cost of fifteen pizzas with mushrooms
+extra large pizza extra sauce triple hot sauce
+Get me pizza
+how much for pizza
+How much is an extra large pizza with olives?
+I'll take two gluten free pizzas with peppers without cheese or sauce
+large pan pizza with premium chicken and onions
+medium pizza with pineapple but no cheese, sauce, or mushrooms
+medium pizza with pineapple no cheese and with mushrooms
+one large mushroom pizza thanks pal
+one large pepperoni pizza
+Order me a thin crust pizza extra sauce mushrooms jalapenos
+Price of two pizzas
+seven pizzas with feta
+Thin pizza no cheese with onions and pineapple
+we'll have a small steak and banana pepper pizza please
+
 ultralingua
 Translate "chair" to French
 Translate "baseball" from English to Spanish
@@ -200,4 +287,6 @@ post "Assuming direct control of this facebook account -PAL"
 post "BEEP BLOOP DESTROY ALL HUMANS" to facebook
 post "How much wood could a woodchuck chuck if a woodchuck could chuck wood?"
 facebook "test post, please ignore"
-facebook "bookface"
+
+
+

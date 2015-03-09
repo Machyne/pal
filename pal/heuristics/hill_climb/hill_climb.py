@@ -1,4 +1,3 @@
-import random
 import sys
 from os import path
 
@@ -6,11 +5,7 @@ from pal.nlp.standard_nlp import StandardNLP
 from pal.nlp.feature_extractor import FeatureExtractor
 
 
-random.seed(1337 - 1453) #Totally not a reference to Quinn's comps...
-
 STEPS_BETWEEN_WRITES = 10 # The interval between data writes
-
-#QUERIES_ARE_GOOD = False # This is protection against bad test queries
 
 
 class service_data (object):
@@ -65,7 +60,8 @@ class service_holder (object):
         data = service_data(service)
         file_ = path.realpath(
             path.join(
-                path.dirname(path.dirname(__file__)),
+                path.dirname(__file__),
+                '..',
                 'values',
                 service + '_values.txt'))
         lines = []
