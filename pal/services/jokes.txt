@@ -1,0 +1,8 @@
+# entries in this file should look like:
+# <something to match in the query> :: <What PAL should respond>
+# TODO: Have jokes that use data as well as summary
+how many movies was tom hanks in :: As far as I'm concerned, Tom Hanks was in 1 movies.
+wheres waldo :: He's right there, can't you see him?
+knock knock :: Who's there?
+laws of robotics :: 1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings, except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Law.
+pod bay doors :: I'm sorry Jeff, I'm afraid I can't do that.
