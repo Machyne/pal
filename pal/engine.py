@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 from flask import request
 from flask.ext.restful import abort
 from flask.ext.restful import Resource

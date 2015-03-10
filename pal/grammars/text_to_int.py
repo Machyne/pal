@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#
 # Taken from:
 # http://stackoverflow.com/questions/493174/is-there-a-way-to-convert-number-
 #                                           words-to-integers-python

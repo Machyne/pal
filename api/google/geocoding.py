@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 import requests
 
 API_KEY = 'AIzaSyAT6m1naoO9zYBIuR_Fxbkplt1-uqR5rLk'

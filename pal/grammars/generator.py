@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 from pal.grammars.grammars import is_terminal
 from pal.grammars.grammars import make_chomsky_normal_form
 from pal.grammars.grammars import parse_grammar_from_file
