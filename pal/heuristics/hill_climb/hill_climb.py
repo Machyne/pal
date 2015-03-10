@@ -253,7 +253,7 @@ def dict_to_file(service_data):
     to_be_opened = path.realpath(
             path.join(
                 path.dirname(__file__),
-                'values_for_hill_climb',
+                'climbed_values',
                 name + '_climbed_values.txt'))
 
     f = open(to_be_opened, 'wb')
