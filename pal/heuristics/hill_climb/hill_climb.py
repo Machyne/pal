@@ -8,7 +8,7 @@ from pal.nlp.feature_extractor import FeatureExtractor
 STEPS_BETWEEN_WRITES = 10 # The interval between data writes
 
 
-class service_data (object):
+class ServiceData(object):
     # Each service maintains a list of its values and associated metadata
     def __init__(self, name):
         self.name = name
@@ -29,12 +29,12 @@ class service_data (object):
         return score
 
     def run_heuristic(self, query_keywords):
-        sum = 0
+        sum_ = 0
         for word in query_keywords:
-            sum += self._get_score(word)
-        return sum
+            sum_ += self._get_score(word)
+        return sum_
 
-class service_holder (object):
+class ServiceHolder(object):
     # Holds a dictionary representing the values file and hillclimb
     # direction as the value and the name of the service as the key
 
@@ -56,8 +56,7 @@ class service_holder (object):
     def _generate_service_values(self, service):
         # read input file into new dictionary with keyword as key and
         # heuristic score as value
-
-        data = service_data(service)
+        data = ServiceData(service)
         file_ = path.realpath(
             path.join(
                 path.dirname(__file__),
@@ -99,18 +98,18 @@ class service_holder (object):
 
 
 # Returns the set of services to climb on. Otherwise, an empty set
-def climbing(examples, my_service_holder):
+def climbing(examples, service_holder):
     to_be_climbed = set()
     for service, queries in examples.iteritems():
-        cur_service = my_service_holder.get_service(service)
+        cur_service = service_holder.get_service(service)
         for query in queries:
             params = {
-            'query': query,
-            'client': "web"
+                'query': query,
+                'client': "web"
             }
             StandardNLP.process(params)
             FeatureExtractor.process(params)
-            ghetto_classifier(params, my_service_holder)
+            classifier(params, service_holder)
             if params['service'] != service:
                 # This is the key piece of new code.
                 # Note that if the query isn't sorted into anything,
@@ -119,9 +118,9 @@ def climbing(examples, my_service_holder):
                 # and nobody wants that.
                 if params['service'] != 'Unsorted':
                     set_steps(params['features']['keywords'], params['service'],
-                                                  my_service_holder, -1)
+                                                  service_holder, -1)
                     set_steps(params['features']['keywords'], service,
-                                                  my_service_holder, 1)
+                                                  service_holder, 1)
 
                     print query
                     print "was supposed to be in", service
@@ -135,8 +134,8 @@ def climbing(examples, my_service_holder):
     return to_be_climbed
 
 # Sets the queries that should be stepped on.
-def set_steps(words, service, my_service_holder, direction):
-    service_to_step = my_service_holder.get_service(service)
+def set_steps(words, service, service_holder, direction):
+    service_to_step = service_holder.get_service(service)
     for word in words:
         if word in service_to_step.values:
             # Handle those damn dummy variables
@@ -153,7 +152,7 @@ def set_steps(words, service, my_service_holder, direction):
                 # that all steps are always small
 
             if direction == 1:
-                my_service_holder.queries_are_good = True
+                service_holder.queries_are_good = True
                 # If at least some keywords are getting hit
                 # in the service the query should be sorted into,
                 # then we know we don't only have dud queries...
@@ -161,8 +160,8 @@ def set_steps(words, service, my_service_holder, direction):
 
 # Steps the service.
 # This has been significantly cut down. Deal with it.
-def service_stepper(service, my_service_holder):
-    data = my_service_holder.get_service(service)
+def service_stepper(service, service_holder):
+    data = service_holder.get_service(service)
 
     for key, value in data.values.iteritems():
         if type(value[0]) is str and value[0].startswith('dummy_var_'):
@@ -180,14 +179,14 @@ def service_stepper(service, my_service_holder):
 # names as keys and a list of queries as values.
 def parse_examples():
     file_path = path.realpath(path.join(path.dirname(__file__),
-                                        "examples.txt"))
+                                        'examples.txt'))
     examples = {}
 
     with open(file_path) as ex_file:
         service = ex_file.next().strip()
         queries = []
         for line in ex_file:
-            if line == "\n":
+            if line == '\n':
                 examples[service] = queries
                 queries = []
                 try:
@@ -201,26 +200,26 @@ def parse_examples():
     return examples
 
 
-def ghetto_classifier(params, my_service_holder):
+def classifier(params, service_holder):
     features = params['features']
     client = params['client']
     request_type = (features['questionType'] if 'questionType' in features
                         else features['actionType'])
     key = client, request_type
     # Pick the service with the highest confidence!
-    conf_levels = {service_name: my_service_holder.services[service_name]
+    conf_levels = {service_name: service_holder.services[service_name]
                     .run_heuristic(features['keywords'])
-                    for service_name in my_service_holder.services}
+                    for service_name in service_holder.services}
     params['confidences'] = conf_levels
     params['service'] = (max(conf_levels, key=conf_levels.get) if
-                         max(conf_levels.itervalues()) > 0 else "Unsorted")
+                         max(conf_levels.itervalues()) > 0 else 'Unsorted')
 
 
-def dict_to_file(my_service_data):
-    name = my_service_data.name
-    value_dict = my_service_data.values
+def dict_to_file(service_data):
+    name = service_data.name
+    value_dict = service_data.values
 
-    class Dummy_holder (object):
+    class DummyHolder(object):
         def __init__(self, value):
             self.value = value
             self.names = []
@@ -229,27 +228,27 @@ def dict_to_file(my_service_data):
     dummy_dict = dict()
 
     for key in value_dict:
-        if key.startswith("dummy_var"):
+        if key.startswith('dummy_var'):
             if key not in dummy_dict:
-                dummy_dict[key] = Dummy_holder(value_dict[key][0])
-        elif str(value_dict[key][0]).startswith("dummy_var"):
+                dummy_dict[key] = DummyHolder(value_dict[key][0])
+        elif str(value_dict[key][0]).startswith('dummy_var'):
             if value_dict[key][0] in dummy_dict:
                 # If it is in the dummy_dict already, add it
                 dummy_dict[value_dict[key][0]].names.append(key)
             else:
                 # create a new entry to dummy_dict and add it
-                dummy_dict[value_dict[key][0]] = Dummy_holder(
+                dummy_dict[value_dict[key][0]] = DummyHolder(
                     value_dict[value_dict[key][0]][0])
 
                 dummy_dict[value_dict[key][0]].names.append(key)
         else:
-            to_be_written.append(key + "," + str(value_dict[key][0]) + "\n")
+            to_be_written.append(key + ',' + str(value_dict[key][0]) + '\n')
 
     for key in dummy_dict:
         to_be_written.append('[\n')
         for entry in dummy_dict[key].names:
-            to_be_written.append("    " + entry + "\n")
-        to_be_written.append("], " + str(dummy_dict[key].value) + '\n')
+            to_be_written.append('    {}\n'.format(entry))
+        to_be_written.append('], {}\n'.format(dummy_dict[key].value))
 
     to_be_opened = path.realpath(
             path.join(
@@ -257,7 +256,7 @@ def dict_to_file(my_service_data):
                 'values_for_hill_climb',
                 name + '_climbed_values.txt'))
 
-    f = open(to_be_opened,"wb")
+    f = open(to_be_opened, 'wb')
     for line in to_be_written:
         f.write(line)
     f.close()
@@ -265,31 +264,31 @@ def dict_to_file(my_service_data):
 
 def main():
     examples = parse_examples()
-    my_service_holder = service_holder()
+    service_holder = ServiceHolder()
 
-    services_to_step = climbing(examples, my_service_holder)
+    services_to_step = climbing(examples, service_holder)
 
     counter = 0
     while len(services_to_step) > 0:
-        my_service_holder.queries_are_good = False
+        service_holder.queries_are_good = False
         sys.stdout.flush()
         counter += 1
         for service in services_to_step:
             sys.stdout.flush()
-            service_stepper(service, my_service_holder) # Steps the service
-        services_to_step = climbing(examples, my_service_holder)
-        if my_service_holder.queries_are_good == False:
+            service_stepper(service, service_holder) # Steps the service
+        services_to_step = climbing(examples, service_holder)
+        if service_holder.queries_are_good == False:
             break
         # Write to file every 5th step, that way we don't lose too much
         # progress if we end early
         if counter % STEPS_BETWEEN_WRITES == 0:
-            for service in my_service_holder.services:
+            for service in service_holder.services:
                 # Write to file
-                dict_to_file(my_service_holder.services[service])
+                dict_to_file(service_holder.services[service])
 
-    for service in my_service_holder.services:
+    for service in service_holder.services:
         # Write to file
-        dict_to_file(my_service_holder.services[service])
+        dict_to_file(service_holder.services[service])
 
     print "Success! You did it! Hills have been climbed!"
 
