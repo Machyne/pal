@@ -1,8 +1,9 @@
 var resetQueryBar = function () {
-  $('#prompt').removeAttr('disabled');
-  $('#go-btn').removeAttr('disabled');
-  document.getElementById('prompt').focus();
-  document.getElementById('prompt').select();
+    $('#prompt').removeAttr('disabled');
+    $('#go-btn').removeAttr('disabled');
+    $('#loader').hide();
+    document.getElementById('prompt').focus();
+    document.getElementById('prompt').select();
 };
 var genericError = {
     result: {
@@ -183,6 +184,7 @@ $(document).ready(function () {
     var $userData = $('#user-data');
     var $speakCheck = $('#speak-check');
     var $history = $('.history');
+    var $loader = $('#loader');
     var lastQuery = '';
 
     FB.init({
@@ -343,6 +345,7 @@ $(document).ready(function () {
         if (query.length > 0 && !($prompt.attr('disabled') === 'disabled')) {
             $prompt.attr('disabled', 'disabled');
             $goBtn.attr('disabled', 'disabled');
+            $loader.show();
             lastQuery = query;
             queryPAL(query, getUserData(), {}, showResult);
         }
