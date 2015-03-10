@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 from pal.services.base_service import wrap_response
 from pal.services.bonapp_service import BonAppService
 from pal.services.dictionary_service import DictionaryService

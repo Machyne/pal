@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+#
 # A place to collect utility functions that could be useful across components
 
 from datetime import date

@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 import logging
 from logging import Formatter
 
