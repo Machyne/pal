@@ -45,12 +45,17 @@ api_pal.add_resource(TenseClassifier, '/features/tense')
 
 @app.route('/docs')
 def docs():
-    return redirect('/static/docs.html')
+    return redirect('/api/spec.html')
 
 
 @app.route('/')
 def index():
     return render_template('home.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 @app.route('/debug')
