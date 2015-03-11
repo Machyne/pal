@@ -27,9 +27,11 @@ office, 20
 ], 30
 [
     roommate
-    rommmates
+    roommates
     roomate
     roomates
+    room mate
+    room mates
 ], 60
 [
     graduate
