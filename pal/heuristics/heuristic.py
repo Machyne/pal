@@ -22,17 +22,13 @@ class Heuristic(object):
     def read_input_file(self):
         # read input file into dictionary with keyword as key and
         # heuristic score as value
-        file_ = path.realpath(
-            path.join(
-                path.dirname(__file__),
-                'values',
-                self._name + '_values.txt'))
+        file_ = self.climbed_file_name
         lines = []
         try:
-            with open(self.climb_file_name, 'rb') as input_file:
+            with open(file_, 'rb') as input_file:
                 lines = input_file.readlines()
-            file_ = self.climb_file_name
         except Exception:
+            file_ = self.unclimbed_file_name
             with open(file_, 'rb') as input_file:
                 lines = input_file.readlines()
         dummy_count = 0
@@ -99,11 +95,21 @@ class Heuristic(object):
         return map(self._get_key_or_list, keys)
 
     @property
-    def climb_file_name(self):
+    def climbed_file_name(self):
         return path.realpath(
             path.join(
                 path.dirname(__file__),
-                'climbed_{}_values.txt'.format(self._name)))
+                'hill_climb',
+                'climbed_values',
+                '{}_climbed_values.txt'.format(self._name)))
+
+    @property
+    def unclimbed_file_name(self):
+        return path.realpath(
+            path.join(
+                path.dirname(__file__),
+                'values',
+                '{}_values.txt'.format(self._name)))
 
 if __name__ == '__main__':
     my_heur = Heuristic('movie')

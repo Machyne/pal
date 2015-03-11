@@ -8,7 +8,8 @@ from pal.services import get_all_service_names
 from pal.test import parse_examples
 
 STEPS_BETWEEN_WRITES = 10 # The interval between data writes
-THRESHOLD = 15
+THRESHOLD = 15  # The minimum confidence to consider it classified
+FIRST_STEP_SIZE = 15  # The first amount to increment/decrement by
 
 
 def get_confs_kws(query, services):
@@ -21,7 +22,7 @@ def get_confs_kws(query, services):
     return confidences, keywords
 
 # Returns the set of services to climb on. Otherwise, an empty set
-def climbing(examples, services):
+def climbing(examples, services, step_size):
     to_be_climbed = set()
     for service, queries in examples.iteritems():
         current = services[service]
@@ -37,12 +38,12 @@ def climbing(examples, services):
                         # traverse through dummies
                         while isinstance(chosen._variables[kw], str):
                             kw = chosen._variables[kw]
-                        chosen._variables[kw] -= 1
+                        chosen._variables[kw] -= step_size
                     if kw in current._variables:
                         # traverse through dummies
                         while isinstance(current._variables[kw], str):
                             kw = current._variables[kw]
-                        current._variables[kw] += 1
+                        current._variables[kw] += step_size
 
                 print '"{}"'.format(query)
                 print 'was supposed to be in {}'.format(service)
@@ -58,13 +59,17 @@ def main():
     examples = parse_examples()
     services = {s: Heuristic(s) for s in get_all_service_names()}
 
-    services_to_step = climbing(examples, services)
+    step_size = FIRST_STEP_SIZE
+    services_to_step = climbing(examples, services, step_size)
 
     counter = 0
     while len(services_to_step):
+        if step_size != 1:
+            step_size -= 1
+
         counter += 1
         sys.stdout.flush()
-        services_to_step = climbing(examples, services)
+        services_to_step = climbing(examples, services, step_size)
 
         # Write to file after so many steps, that way we don't lose
         # progress if we end early.
