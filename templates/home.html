@@ -29,6 +29,9 @@
             <button class="btn btn-default" type="button" id="go-btn">Go!</button>
           </span>
         </div>
+        <div class="loading-wrapper">
+            <img src="{{ url_for('static', filename='ajax-loader.gif') }}" id="loader" style="display: none;">
+        </div>
         <ul id="user-data"></ul>
       </div>
     </div>

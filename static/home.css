@@ -2,22 +2,26 @@
   font-family: Helvetica, Arial, sans-serif;
   color: #333;
 }
+
 html, body {
   width: 100%;
   height: 100%;
   margin: 0 auto;
   padding: 10px;
 }
+
 h1 {
   font-size: 36px;
   font-weight: 500;
   margin-bottom: 10px;
 }
+
 h2 {
   font-size: 24px;
   font-weight: 500;
   margin-bottom: 10px;
 }
+
 hr {
   width: 60%;
   margin: 20px 20%;
@@ -65,7 +69,7 @@ hr {
   padding-top: 10px;
 }
 
-#user-data .map{
+#user-data .map {
   display: inline-block;
   margin-top: 5px;
 }
@@ -81,6 +85,7 @@ hr {
   line-height: 20px;
   text-align: center;
 }
+
 .footer-left {
   float: left;
 }
@@ -88,9 +93,11 @@ hr {
 .bottom .row {
   height: 100%;
 }
+
 .bottom .col-sm-12 {
   height: 100%;
 }
+
 .history {
   list-style-type: none;
   margin: 0;
@@ -198,16 +205,28 @@ hr {
   width: 32px;
 }
 
+.loading-wrapper {
+  padding-top: 20px;
+}
+
+#loader {
+  height: 66px;
+  width: 66px;
+}
+
 .pal-team {
   list-style-type: none;
   padding: 0;
 }
+
 .pal-team li {
   display: inline-block;
 }
+
 .pal-team li:before {
   content: " | ";
 }
+
 .pal-team li:first-child:before {
   content: "";
 }
@@ -222,10 +241,12 @@ p.about {
   display: inline-block;
   padding: 0;
 }
+
 .try-me li {
   text-align: left;
   margin-bottom: 5px;
 }
+
 .try-me li:before {
   content: '— ';
 }
@@ -251,6 +272,7 @@ p.about {
     height: 20px;
     width: 80%;
   }
+
   .mic-wrapper {
     position: absolute;
     right: 48px;
@@ -267,6 +289,7 @@ p.about {
     display: block;
     margin-bottom: 5px;
   }
+
   .pal-team li:before {
     content: "";
   }
