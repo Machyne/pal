@@ -1,185 +1,186 @@
-office,20
-find,9
-eat,-40
-number,30
-where,9
-email,45
-address,40
-live,40
-call,-20
-phone,45
-room,55
-which,10
-department,40
-hasProperNouns,50
-faculty,30
-building,30
-contact,-20
+where, 10
+find, 10
 [
-    ldc
-    burton
-    language & dining center
-], 49
-[
-    students
-    student
-], 30
-[
-    graduated
-    graduate
-], 40
-[
-    sophomore
-    seniors
-    juniors
-    freshmen
-    sophomores
-    freshmans
-    junior
-    freshman
-    senior
-], 40
-[
-    who's
     who
+    who's
 ], 20
+which, 10
+hasProperNouns, 50
 [
-    scott
-    facilities building
-    hoppin
-    sayles-hill campus center
-    owens
-    bald spot
-    stimson
-    hill of three oaks
-    music
-    mini bald spot
-    dixon
-    stewsie island
-    weitz center for creativity
-    goodsell
-    prairie warehouse
-    dacie moses
-    hill
-    nason
-    alumni guest
-    chaney
-    libe
-    colwell
-    gould library
-    hall
-    chapel
-    jewett
-    nutting
-    collier
-    james
-    hunt
-    cmc
-    bird
-    olin
-    sevy
-    page
-    scoville
-    cowling gymnasium
-    kettle hole marsh
-    music & drama center
-    library
-    little bald spot
-    huntington
-    hillside prairie
-    severance
-    willis
-    douglas
-    water tower
-    rec
-    prentice
-    the druid circle
-    watson
-    brooks
-    strong
-    whittier
-    center for math & computing
-    hulings
-    musser
-    softball field
-    bell field
-    faculty club
-    headley cottage
-    mudd
-    davis
-    myers
-    mai fete island
-    turtle pond
-    evans
-    the council ring
-    laird stadium
-    grounds garage/warehouse
-    goodhue
-    skinner memorial chapel
-    leighton
-    pollock
-    nourse
-    recreation center
-    williams
-    rayment
-    jones
-    oxbow pond
-    stadium
-    sperry
-    postage stamp prairie
-    berg
-    parr
-    west field
-    rice
-    benton
-    henrickson
-    hunt cottage
-    rogers
-    henry
-    the wind turbine
-    west gymnasium
-    arb office
-    ryberg
-    laird
-    college warehouse
-    the japanese garden
-    geffert
-    goodsell observatory
-    boliou
-    hilton
-    eugster
-    cassat
-    allen
-    lyman lake
-    sayles
-    baseball field
-    wilson
-    headley
-    parish
-    sand volleyball court
-    west gym
-    clader
-    fac club
-    farm
-    spring creek
-    faculty club annex
-    johnson
-    weitz
-    dow
-], 62
-[
+    major
     majors
     majoring
-    major
-], 31
-[
-    concentrate
-    concentrators
-    concentrating
 ], 30
 [
-    roomates
+    concentrate
+    concentrating
+    concentrators
+], 30
+email, 45
+phone, 45
+address, 40
+live, 40
+office, 20
+[
+    student
+    students
+], 30
+[
     roommate
+    rommmates
     roomate
-    roommates
+    roomates
 ], 60
+[
+    graduate
+    graduated
+], 40
+[
+    freshman
+    freshmen
+    freshmans
+    sophomore
+    sophomores
+    junior
+    juniors
+    senior
+    seniors
+], 40
+number, 30
+room, 55
+faculty, 30
+department, 40
+building, 30
+call, -20
+contact, -20
+eat, -40
+[
+    allen
+    alumni guest
+    arb office
+    bald spot
+    baseball field
+    bell field
+    bell field
+    benton
+    berg
+    bird
+    boliou
+    brooks
+    cassat
+    center for math & computing
+    chaney
+    chapel
+    clader
+    cmc
+    college warehouse
+    collier
+    colwell
+    cowling gymnasium
+    dacie moses
+    davis
+    dixon
+    douglas
+    dow
+    eugster
+    evans
+    fac club
+    facilities building
+    faculty club
+    faculty club annex
+    farm
+    geffert
+    goodhue
+    goodsell
+    goodsell observatory
+    gould library
+    grounds garage/warehouse
+    hall
+    headley
+    headley cottage
+    henrickson
+    henry
+    hill
+    hill of three oaks
+    hillside prairie
+    hilton
+    hoppin
+    hulings
+    hunt
+    hunt cottage
+    huntington
+    james
+    jewett
+    johnson
+    jones
+    kettle hole marsh
+    laird
+    laird stadium
+    leighton
+    libe
+    library
+    little bald spot
+    lyman lake
+    mai fete island
+    mini bald spot
+    mudd
+    music
+    music & drama center
+    musser
+    myers
+    nason
+    nourse
+    nutting
+    olin
+    owens
+    oxbow pond
+    page
+    parish
+    parr
+    pollock
+    postage stamp prairie
+    prairie warehouse
+    prentice
+    rayment
+    rec
+    recreation center
+    rice
+    rogers
+    ryberg
+    sand volleyball court
+    sayles
+    sayles-hill campus center
+    scott
+    scoville
+    severance
+    sevy
+    skinner memorial chapel
+    softball field
+    sperry
+    spring creek
+    stadium
+    stewsie island
+    stimson
+    strong
+    the council ring
+    the druid circle
+    the japanese garden
+    the wind turbine
+    turtle pond
+    water tower
+    watson
+    weitz
+    weitz center for creativity
+    west field
+    west gym
+    west gymnasium
+    whittier
+    williams
+    willis
+    wilson
+], 70
+[
+    burton
+    ldc
+    language & dining center
+], 50

@@ -1,19 +1,19 @@
 [
-    language
-    translation
     translate
-], 53
+    translation
+    language
+], 70
 [
-    portuguese
-    german
-    spanish
-    french
     english
+    french
+    spanish
+    german
+    portuguese
     italian
-], 65
+], 80
 [
+    from
+    to
     in
     into
-    to
-    from
-], -4
+], 20
