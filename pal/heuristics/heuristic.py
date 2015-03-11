@@ -60,6 +60,22 @@ class Heuristic(object):
                 cur_line = map(str.strip, line.split(','))
                 self._variables[cur_line[0]] = int(cur_line[1])
 
+    def write_to_file(self, fname):
+        with open(fname, 'w') as file_:
+            in_dummy = False
+            for k, v in self._variables.iteritems():
+                if isinstance(v, int) and not in_dummy:
+                    file_.write('{}, {}\n'.format(k, v))
+                elif isinstance(v, str):
+                    if not in_dummy:
+                        file_.write('[\n')
+                        in_dummy = True
+                    file_.write('    {}\n'.format(k))
+                else:
+                    file_.write('], {}\n'.format(v))
+                    in_dummy = False
+
+
     def get_input_list_values(self):
         return filter(lambda x: isinstance(x, int),
                       self._variables.itervalues())
