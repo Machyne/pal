@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+#
 # From the Wolfram Site
 # APP NAME: PAL
 # APPID: QG6645-R77PAAXQX9
@@ -9,8 +15,8 @@ import xml.etree.ElementTree as ET
 
 import requests
 
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 class WAService(Service):

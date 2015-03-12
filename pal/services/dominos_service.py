@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 from api.dominos.pizza_options import order_pizzas
 from api.dominos.pizza_options import price_pizzas
 from pal.grammars import get_grammar_for_service
@@ -6,8 +12,8 @@ from pal.grammars.parser import parent
 from pal.grammars.parser import parse
 from pal.grammars.parser import search
 from pal.grammars.text_to_int import text_to_int
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 PIZZA_ORDER_REQUIRED_FIELDS = [
@@ -97,11 +103,9 @@ class DominosService(Service):
 
     def get_confidence(self, params):
         query = params['query']
-        parse_ = parse(query, self.grammar)
-        self.cached_parse = (query, parse_)
-        if parse_:
-            return 60 + super(self.__class__, self).get_confidence(params)
-        return 0
+        parsed = parse(query, self.grammar)
+        self.cached_parse = (query, parsed)
+        return 100 if parsed else 0
 
     @wrap_response
     def go(self, params):
@@ -144,4 +148,4 @@ class DominosService(Service):
             msg, dts = res.get('msg', ''), res.get('details', '')
             return ('ERROR', "Sorry, I couldn't finish the order.<br><br>{}"
                              "<br>{}<br><br>But you could try calling "
-                             "Dominos?".format(msg, dts))
+                             "Dominos.".format(msg, dts))

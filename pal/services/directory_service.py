@@ -1,11 +1,17 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+#
 # A service for the Carleton directory
 import re
 
 from api.directory.models import Building
 from api.directory.directory_api import Directory
 
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 class NotEnoughInformationException(Exception):

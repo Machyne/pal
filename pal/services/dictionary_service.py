@@ -1,10 +1,16 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+#
 # A service for definitions and synonyms
 
 from bs4 import BeautifulSoup
 import requests
 
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 class DictionaryService(Service):

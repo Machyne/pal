@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+#
 # Tests that the grammars modules do what they're supposed to.
 
 from pal.grammars.generator import generate_language

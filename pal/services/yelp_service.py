@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 import random
 import re
 
@@ -5,8 +11,8 @@ from flask import render_template
 
 from api.yelp import yelp_api
 from api.google.geocoding import geocode
-from pal.services.service import Service
-from pal.services.service import wrap_response
+from pal.services.base_service import Service
+from pal.services.base_service import wrap_response
 
 
 class YelpService(Service):
@@ -45,7 +51,9 @@ class YelpService(Service):
                 location = places[0]
                 if len(orgs):
                     location += ', ' + orgs[0]
-                location = '{},{}'.format(*geocode(location))
+                # default to Carleton College in case the geocoding fails.
+                location = '{},{}'.format(
+                    *geocode(location, [44.4615357, -93.1524873]))
         nouns = features['nouns']
         nouns = filter(lambda n: (n[0].lower() not in ['me', 'i'] and
                                   n[1] not in ['GPE', 'GSP',
