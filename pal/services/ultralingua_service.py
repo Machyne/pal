@@ -8,11 +8,12 @@
 
 import requests
 
+from config import UL_KEY
 from pal.services.base_service import Service, wrap_response
 
 
 API_URL = ("http://api.ultralingua.com/api/definitions/{from_}/{to_}/{word}"
-           "?token=palrocks")
+           "?token=" + UL_KEY)
 
 
 class UltraLinguaService(Service):
