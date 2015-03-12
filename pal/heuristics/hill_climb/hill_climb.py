@@ -2,6 +2,7 @@ import sys
 from os import path
 
 from pal.heuristics.heuristic import Heuristic
+from pal.logger import Logger
 from pal.nlp.keyword_finder import find_keywords
 from pal.nlp.standard_nlp import StandardNLP
 from pal.services import get_all_service_names
@@ -47,10 +48,12 @@ def climbing(examples, services, step_size):
                             kw = current._variables[kw]
                         current._variables[kw] += step_size
 
-                print '"{}"'.format(query)
-                print 'was supposed to be in {}'.format(service)
-                print 'was in {}'.format(chosen_name)
-                print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                Logger.log_heuristic('"{}"'.format(query))
+                Logger.log_heuristic(
+                    'was supposed to be in {}'.format(service))
+                Logger.log_heuristic('was in {}'.format(chosen_name))
+                Logger.log_heuristic(
+                    '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
                 to_be_climbed.add(chosen_name)
                 to_be_climbed.add(service)
 
