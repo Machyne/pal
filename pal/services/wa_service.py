@@ -5,7 +5,6 @@
 # All rights reserved. See LICENSE for details.
 
 import urllib
-
 import xml.etree.ElementTree as ET
 
 import requests
