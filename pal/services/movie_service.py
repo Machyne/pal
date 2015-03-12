@@ -36,6 +36,8 @@ class MovieService(Service):
         query = params['query']
         parse_ = parse(query, self.grammar)
         self.cached_parse = (query, parse_)
+        # Right now 61 is returned due to conflicts with hill climbed values
+        # and the grammar parses. This should be fixed.
         return 61 if parse_ else 0
 
     @wrap_response

@@ -22,14 +22,14 @@ class Heuristic(object):
     def read_input_file(self):
         # read input file into dictionary with keyword as key and
         # heuristic score as value
-        file_ = self.climbed_file_name
+        fname = self.climbed_file_name
         lines = []
         try:
-            with open(file_, 'rb') as input_file:
+            with open(fname, 'rb') as input_file:
                 lines = input_file.readlines()
-        except Exception:
-            file_ = self.unclimbed_file_name
-            with open(file_, 'rb') as input_file:
+        except IOError:
+            fname = self.unclimbed_file_name
+            with open(fname, 'rb') as input_file:
                 lines = input_file.readlines()
         dummy_count = 0
         in_list = False
@@ -39,7 +39,7 @@ class Heuristic(object):
                 if in_list:
                     raise SyntaxError(
                         'File "{}", line {}, nested lists not supported'
-                        .format(file_, i + 1))
+                        .format(fname, i + 1))
                 in_list = True
                 dummy_count += 1
 
@@ -70,7 +70,6 @@ class Heuristic(object):
                 else:
                     file_.write('], {}\n'.format(v))
                     in_dummy = False
-
 
     def get_input_list_values(self):
         return filter(lambda x: isinstance(x, int),

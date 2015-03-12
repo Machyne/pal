@@ -21,8 +21,10 @@ def get_confs_kws(query, services):
         confidences[name] = heuristic.run_heuristic(keywords)
     return confidences, keywords
 
-# Returns the set of services to climb on. Otherwise, an empty set
+
 def climbing(examples, services, step_size):
+    """ Returns the set of services to climb on. Otherwise, an empty set
+    """
     to_be_climbed = set()
     for service, queries in examples.iteritems():
         current = services[service]
