@@ -252,7 +252,6 @@ Translate "define" into Spanish
 
 wa
 2 * 2
-2*2
 What is the distance from the earth to the moon?
 2 + 2
 2 / 2
@@ -263,7 +262,7 @@ square root 49
 4 factorial
 four factorial
 2 ^ 100
-mean 1,2,3,4,5,6,7
+mean 1, 2, 3, 4, 5, 6, 7
 
 yelp
 What restaurants are nearby?

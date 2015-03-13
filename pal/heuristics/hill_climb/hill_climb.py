@@ -10,7 +10,7 @@ from pal.test import parse_examples
 
 STEPS_BETWEEN_WRITES = 10 # The interval between data writes
 THRESHOLD = 15  # The minimum confidence to consider it classified
-FIRST_STEP_SIZE = 15  # The first amount to increment/decrement by
+FIRST_STEP_SIZE = 20  # The first amount to increment/decrement by
 
 
 def get_confs_kws(query, services):
@@ -20,7 +20,7 @@ def get_confs_kws(query, services):
     confidences = {}
     for name, heuristic in services.iteritems():
         confidences[name] = heuristic.run_heuristic(keywords)
-    return confidences, keywords
+    return confidences, keywords + ['BIAS']
 
 
 def climbing(examples, services, step_size):
@@ -37,11 +37,13 @@ def climbing(examples, services, step_size):
                 # Here the query was misclassified
                 chosen = services[chosen_name]
                 for kw in keywords:
+                    original = kw
                     if kw in chosen._variables:
                         # traverse through dummies
                         while isinstance(chosen._variables[kw], str):
                             kw = chosen._variables[kw]
                         chosen._variables[kw] -= step_size
+                    kw = original
                     if kw in current._variables:
                         # traverse through dummies
                         while isinstance(current._variables[kw], str):
@@ -64,17 +66,17 @@ def main():
     examples = parse_examples()
     services = {s: Heuristic(s) for s in get_all_service_names()}
 
-    step_size = FIRST_STEP_SIZE
-    services_to_step = climbing(examples, services, step_size)
+    step_size = float(FIRST_STEP_SIZE)
+    services_to_step = climbing(examples, services, int(step_size))
 
     counter = 0
     while len(services_to_step):
-        if step_size != 1:
-            step_size -= 1
+        if step_size != 1.0:
+            step_size -= 0.5
 
         counter += 1
         sys.stdout.flush()
-        services_to_step = climbing(examples, services, step_size)
+        services_to_step = climbing(examples, services, int(step_size))
 
         # Write to file after so many steps, that way we don't lose
         # progress if we end early.

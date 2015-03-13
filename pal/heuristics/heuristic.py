@@ -17,7 +17,8 @@ class Heuristic(object):
 
     # Returns a heuristic value for a list of keywords
     def run_heuristic(self, keywords):
-        return sum(self._get_score(word) for word in keywords)
+        kws = keywords + ['BIAS']
+        return sum(self._get_score(word) for word in kws)
 
     def read_input_file(self):
         # read input file into dictionary with keyword as key and

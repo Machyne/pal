@@ -1,22 +1,63 @@
-movie, 75
-film, 75
-movies, 75
-hasProperNouns, 50
-actor, 60
-acted, 60
-actress, 60
-released, 40
+BIAS, 0
+[
+    movie
+    movies
+    film
+    films
+], 75
+[
+    actor
+    actors
+    actress
+    actresses
+    role
+    roles
+    act
+    acted
+], 60
+[
+    star
+    starred
+    stars
+], 50
+[
+    lead
+    leads
+], 50
+[
+    play
+    plays
+    played
+], 50
+[
+    direct
+    directed
+    directs
+    director
+    directors
+], 70
+in, 20
+[
+    release
+    released
+    come out
+    came out
+], 40
+year, 20
 rating, 60
 review, 50
 plot, 50
-lead, 50
-leads, 50
 genre, 40
-produce, 40
-produced, 40
-writer, 50
-written, 50
-wrote, 50
+[
+    produce
+    produced
+], 40
+made, 30
+[
+    writer
+    written
+    wrote
+], 50
 ticket, -50
 purchase, -50
 buy, -50

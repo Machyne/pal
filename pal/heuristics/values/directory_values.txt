@@ -1,3 +1,4 @@
+BIAS, 0
 where, 10
 find, 10
 [
@@ -52,10 +53,22 @@ number, 30
 room, 55
 faculty, 30
 department, 40
+campus, 50
 building, 30
 call, -20
 contact, -20
 eat, -40
+[
+    basement
+    ground
+    first
+    second
+    third
+    fourth
+    fifth
+    sixth
+    seventh
+], 40
 [
     allen
     alumni guest

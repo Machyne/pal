@@ -28,6 +28,7 @@ def _load_keyword_data():
                 if '[' in line or ']' in line:
                     continue
                 word = line.split(',')[0].strip()
+                word = re.sub(r'([\*\+\.\]\[\(\)\?])', r'\\\1', word)
                 _KEYWORDS.add(word)
 
 
