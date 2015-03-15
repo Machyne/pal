@@ -1,3 +1,4 @@
+BIAS, 0
 cheese, 10
 [
     robust inspired tomato sauce
@@ -81,4 +82,11 @@ spinach, 10
 ], 10
 hot sauce, 10
 crust, 50
-pizza, 50
+[
+    pizza
+    pizzas
+], 50
+[
+    price
+    cost
+], 25

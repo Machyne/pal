@@ -1,4 +1,9 @@
+BIAS, 0
 what, 20
+[
+    what is
+    what 's
+], 30
 [
     define
     definition
@@ -6,7 +11,7 @@ what, 20
     mean
     means
 ], 70
-look, 20
+look up, 50
 [
     synonyms
     synonym
