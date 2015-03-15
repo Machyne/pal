@@ -128,5 +128,4 @@ Finally, scrape the directory with
 `python stalkernet_scraper.py -s`
 
 ### Installing in Apache
-PAL can be run by Apache HTTP Server by using the `mod_wsgi` module. The Flask documentation has pretty detailed instructions on how to set this up. Please see `http://flask.pocoo.org/docs/0.10/deploying/mod_wsgi/`
-
+PAL can be run by Apache HTTP Server by using the `mod_wsgi` module. The (Flask documentation)[http://flask.pocoo.org/docs/0.10/deploying/mod_wsgi/] has pretty detailed instructions on how to set this up.
