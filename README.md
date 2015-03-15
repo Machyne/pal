@@ -128,35 +128,5 @@ Finally, scrape the directory with
 `python stalkernet_scraper.py -s`
 
 ### Installing in Apache
-PAL can be run by Apache HTTP Server by using the `mod_wsgi` module. Modify the `pal.wsgi` file by changing the absolute path to the `pal` directory on the server. The last known functioning Apache configuration file is 
-
-~~~
-<VirtualHost *:443>
-        Servername pal.rocks
-
-        SSLEngine On
-        SSLCertificateFile /etc/ssl/pal_rocks.crt
-        SSLCertificateKeyFile /etc/ssl/palserver.key
-        SSLCertificateChainFile /etc/ssl/pal_rocks.ca-bundle
-
-        WSGIDaemonProcess pal user=pal-server group=servergroup threads=5
-        WSGIScriptAlias / /var/www/pal/pal.wsgi
-        DocumentRoot /var/www/pal
-        ErrorLog /var/www/pal/error.log
-        LogLevel debug
-        Alias /favicon.ico /var/www/pal/pal.ico
-        <Directory /var/www/pal>
-                WSGIApplicationGroup %{GLOBAL}
-                Order allow,deny
-                Allow from all
-        </Directory>
-</VirtualHost>
-
-<VirtualHost *:80>
-        ServerAlias cmc307-01.mathcs.carleton.edu
-        Servername pal.rocks
-        Redirect permanent / https://www.pal.rocks
-</VirtualHost>
-~~~
-
+PAL can be run by Apache HTTP Server by using the `mod_wsgi` module. The Flask documentation has pretty detailed instructions on how to set this up. Please see `http://flask.pocoo.org/docs/0.10/deploying/mod_wsgi/`
 
