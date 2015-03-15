@@ -1,0 +1,12 @@
+GOOGLE_GEOCODE_KEY = 'key'
+
+YELP_CONSUMER_KEY = 'key'
+YELP_CONSUMER_SECRET = 'key'
+YELP_TOKEN = 'key'
+YELP_TOKEN_SECRET = 'key'
+
+TMDB_KEY = 'key'
+
+WA_KEY = 'key'
+
+UL_KEY = 'key'
