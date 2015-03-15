@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 from os import path, listdir
 import re
 
@@ -28,6 +34,7 @@ def _load_keyword_data():
                 if '[' in line or ']' in line:
                     continue
                 word = line.split(',')[0].strip()
+                word = re.sub(r'([\*\+\.\]\[\(\)\?])', r'\\\1', word)
                 _KEYWORDS.add(word)
 
 

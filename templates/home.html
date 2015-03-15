@@ -9,36 +9,42 @@
 </head>
 <body>
   <div id="fb-root"></div>
+  <nav class="home-abt">
+    <a href="/">home</a> | <a href="/about">about</a>
+  </nav>
   <div class="top">
-	<h1 class="title">Hi, I'm PAL, what can I do for you?</h1>
+  <h1 class="title">Hi, I'm PAL, what can I do for you?</h1>
+    <div class="row">
+      <div class="col-lg-6 col-md-8 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-2 col-sm-offset-2">
+        <div class="input-group">
+          <span class="input-group-addon" id="speak" style="display: none;">
+            Speak
+            <input type="checkbox" id="speak-check">
+          </span>
+          <input type="text" class="form-control" id="prompt">
+          <div class="mic-wrapper" title="Voice Input">
+            <img src="{{ url_for('static', filename='mic.gif') }}" id="mic">
+          </div>
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" id="go-btn">Go!</button>
+          </span>
+        </div>
+        <div class="loading-wrapper">
+            <img src="{{ url_for('static', filename='ajax-loader.gif') }}" id="loader" style="display: none;">
+        </div>
+        <ul id="user-data"></ul>
+      </div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="container">
       <div class="row">
-        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-2 col-sm-offset-2">
-          <div class="input-group">
-            <span class="input-group-addon" id="speak" style="display: none;">
-              Speak
-              <input type="checkbox" id="speak-check">
-            </span>
-            <input type="text" class="form-control" id="prompt">
-              <div class="mic-wrapper">
-                <img src="{{ url_for('static', filename='mic.gif') }}" id="mic">
-              </div>
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" id="go-btn">Go!</button>
-            </span>
-          </div>
-          <ul id="user-data"></ul>
+        <div class="col-sm-12">
+          <ul class="history"></ul>
         </div>
       </div>
     </div>
-    <div class="bottom">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12">
-            <ul class="history"></ul>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
   <div class="navbar navbar-default navbar-fixed-bottom footer" style="padding-top: 14px;">
     <div class="container">
       <span class="footer-left"><a href="/debug">Debug view</a></span>

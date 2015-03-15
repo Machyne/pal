@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+#
+# A place to collect utility functions that could be useful across components
+
 from os import path
 from collections import OrderedDict
 
@@ -17,23 +25,20 @@ class Heuristic(object):
 
     # Returns a heuristic value for a list of keywords
     def run_heuristic(self, keywords):
-        return sum(self._get_score(word) for word in keywords)
+        kws = keywords + ['BIAS']
+        return sum(self._get_score(word) for word in kws)
 
     def read_input_file(self):
         # read input file into dictionary with keyword as key and
         # heuristic score as value
-        file_ = path.realpath(
-            path.join(
-                path.dirname(__file__),
-                'values',
-                self._name + '_values.txt'))
+        fname = self.climbed_file_name
         lines = []
         try:
-            with open(self.climb_file_name, 'rb') as input_file:
+            with open(fname, 'rb') as input_file:
                 lines = input_file.readlines()
-            file_ = self.climb_file_name
-        except Exception:
-            with open(file_, 'rb') as input_file:
+        except IOError:
+            fname = self.unclimbed_file_name
+            with open(fname, 'rb') as input_file:
                 lines = input_file.readlines()
         dummy_count = 0
         in_list = False
@@ -43,7 +48,7 @@ class Heuristic(object):
                 if in_list:
                     raise SyntaxError(
                         'File "{}", line {}, nested lists not supported'
-                        .format(file_, i + 1))
+                        .format(fname, i + 1))
                 in_list = True
                 dummy_count += 1
 
@@ -59,6 +64,21 @@ class Heuristic(object):
             elif ',' in line:
                 cur_line = map(str.strip, line.split(','))
                 self._variables[cur_line[0]] = int(cur_line[1])
+
+    def write_to_file(self, fname):
+        with open(fname, 'w') as file_:
+            in_dummy = False
+            for k, v in self._variables.iteritems():
+                if isinstance(v, int) and not in_dummy:
+                    file_.write('{}, {}\n'.format(k, v))
+                elif isinstance(v, str):
+                    if not in_dummy:
+                        file_.write('[\n')
+                        in_dummy = True
+                    file_.write('    {}\n'.format(k))
+                else:
+                    file_.write('], {}\n'.format(v))
+                    in_dummy = False
 
     def get_input_list_values(self):
         return filter(lambda x: isinstance(x, int),
@@ -83,11 +103,21 @@ class Heuristic(object):
         return map(self._get_key_or_list, keys)
 
     @property
-    def climb_file_name(self):
+    def climbed_file_name(self):
         return path.realpath(
             path.join(
                 path.dirname(__file__),
-                'climbed_{}_values.txt'.format(self._name)))
+                'hill_climb',
+                'climbed_values',
+                '{}_climbed_values.txt'.format(self._name)))
+
+    @property
+    def unclimbed_file_name(self):
+        return path.realpath(
+            path.join(
+                path.dirname(__file__),
+                'values',
+                '{}_values.txt'.format(self._name)))
 
 if __name__ == '__main__':
     my_heur = Heuristic('movie')

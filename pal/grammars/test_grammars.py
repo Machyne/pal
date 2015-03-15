@@ -1,4 +1,9 @@
-from pprint import pprint
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+
 from os import path
 
 from pal.grammars import get_grammar_for_service

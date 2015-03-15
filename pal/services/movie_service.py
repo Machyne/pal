@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
+#
 # A service for movie info
 
 from api.movie.tmdb_api import get_credits
@@ -36,7 +42,9 @@ class MovieService(Service):
         query = params['query']
         parse_ = parse(query, self.grammar)
         self.cached_parse = (query, parse_)
-        return 75 if parse_ else 0
+        # FIXME: Right now 61 is returned due to conflicts with hill climbed
+        # values and the grammar parses.
+        return 61 if parse_ else 0
 
     @wrap_response
     def go(self, params):

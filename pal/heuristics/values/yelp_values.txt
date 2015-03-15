@@ -1,3 +1,4 @@
+BIAS, 0
 [
     find
     get
@@ -6,13 +7,23 @@
     where
     where's
 ], 40
+gourmet, 50
 [
     food
+    hungry
     eat
     eats
+], 50
+[
+    place
+    places
+    location
+    locations
+    locals
+], 60
+[
     eatery
     eateries
-    hungry
     restaurant
     restaurants
 ], 70

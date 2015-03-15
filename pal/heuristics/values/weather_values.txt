@@ -1,3 +1,4 @@
+BIAS, 0
 temperature, 70
 [
     weather
