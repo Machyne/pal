@@ -93,9 +93,9 @@ PAL is now ready to run locally. Start it by running `python server.py`. PAL can
 ### Hill Climb Instructions
 To ensure that queries are properly sorted into the proper services, hill climbing should be run. From the base directory, run
 
-'python -m pal.heuristics/hill_climb.hill_climb'
+`python -m pal.heuristics/hill_climb.hill_climb`
 
-After running hill climbing, updated heuristics values can be found in the 'pal/heuristics/hill_climb/climbed_values' directory, and will be automatically referenced by the rest of PAL. Hill climbing should be re-run whenever a new service is added to PAL.
+After running hill climbing, updated heuristics values can be found in the `pal/heuristics/hill_climb/climbed_values` directory, and will be automatically referenced by the rest of PAL. Hill climbing should be re-run whenever a new service is added to PAL.
 
 ### Pizza Service Installation
 The pizza service requires Node.js or io.js. Install one of these and `npm`. Navigate to the `api/dominos` directory and run 
