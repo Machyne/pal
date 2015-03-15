@@ -3,7 +3,7 @@
 
 ## Services
 - Bon Appetit (actively scraped from [Bon Appetit website]
-    (http://carleton.cafebonappetit.com/cafe/))
+        (http://carleton.cafebonappetit.com/cafe/))
     - [x] Single dining hall, single day, any or all meals
 
 - Dictionary/Thesaurus (actively scraped from [dictionary]
@@ -27,11 +27,32 @@
         - [ ] All professors in a department
         - [ ] "Show me all the Brians on campus"
 
-- Facebook (requests to [Facebook Graph API](https://developers.facebook.com/docs/graph-api))
+- Dominos (requests to [Dominos online order]
+        (https://order.dominos.com/en/pages/order/))
+    - Pizza cost
+        - [x] price of a single pizza
+        - [x] price of multiple same pizzas
+        - [ ] price of multiple different pizzas
+    - Pizza orders
+        - [x] order a single pizza
+        - [x] order multiple same pizzas
+        - [ ] order multiple different pizzas
+
+- Facebook (requests to [Facebook Graph API]
+        (https://developers.facebook.com/docs/graph-api))
     - [x] Post to timeline on behalf of user
 
+- Movies (using the [TMDB API]
+        (https://www.themoviedb.org/documentation/api))
+    - [x] What movies was this person involved in (acting, directing, etc.)
+    - [x] Was this person involved in this movie?
+    - [x] How many movies was this person involved in?
+    - [x] When did this movie come out?
+    - [x] Who acted/directed/etc. in this movie?
+    - [ ] Who played this character in this movie?
+
 - Translations (requests through [UltraLingua REST API]
-    (http://api.ultralingua.com/ulapi/rest)
+        (http://api.ultralingua.com/ulapi/rest)
     - [x] From English to {Spanish, French, German, Italian, Portuguese}
     - [x] From {Spanish, French, German, Italian, Portuguese} to English
     - [x] Between {Spanish, French, German, Italian, Portuguese}
@@ -44,17 +65,19 @@
     - [x] General forecast
     - [x] Geolocation
 
-- Wolfram|Alpha (requests using Wolfram|Alpha's API)
+- Wolfram|Alpha (requests using [Wolfram|Alpha's API]
+        (http://products.wolframalpha.com/api/))
     - [x] Run queries on natural language and get numerical output
     - [ ] Keep track of our limited number of queries (difficult due to concurrency issues)
 
 - Yelp (requests to [Yelp API]
-    (http://www.yelp.com/developers/documentation))
+        (http://www.yelp.com/developers/documentation))
     - [x] Businesses by search terms
     - [x] Ratings, URL, Phone Number
     - [x] Find by location
     - [ ] Businesses appear on map
-    
+
+
 ## Installation & Running
 --------------------------------
 ### Requirements
