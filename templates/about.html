@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>About PAL</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+  <nav class="home-abt">
+    <a href="/">home</a> | <a href="/about">about</a>
+  </nav>
+  <div class="top" style="padding: 35px 0 60px 0">
+    <h1>About PAL</h1>
+    <p class="about">
+      PAL is a Personal Assistant here to help you! PAL's modular back-end
+      makes PAL readily extensible. Right now PAL can handle questions /
+      commands related to Bon Appetit dining service, word definitions or
+      synonyms, pizza, Facebook posts, movies, translations, weather, math,
+      and nearby shops or locations.
+      <br><br>
+      For a comprehensive list of PAL's services, see our
+      <a href="https://github.com/Machyne/pal/blob/master/README.md#services">readme</a>.
+    </p>
+    <hr>
+    <h2>Things to Try</h2>
+    <ul class="try-me">
+      <li>find nearby bars</li>
+      <li>what's the weather like tomorrow?</li>
+      <li>order a medium pizza with olives</li>
+      <li>what are the laws of robotics?</li>
+      <li>how far away is the moon?</li>
+    </ul>
+    <hr>
+    <h2>Meet the PAL Team</h2>
+    <img src="{{ url_for('static', filename='team.jpg') }}" class="team-pic">
+    <ul class="pal-team">
+      <li><a href="https://github.com/lhyonnaes">Quinn Radich</a></li>
+      <li><a href="https://github.com/kenadia">Ken Schiller</a></li>
+      <li><a href="https://github.com/machyne">Matt Cotter</a></li>
+      <li><a href="https://github.com/alex-cs">Alex Simonides</a></li>
+      <li><a href="https://github.com/bonooru">Greg Fournier</a></li>
+      <li><a href="https://github.com/charmquark">Brian Charous</a></li>
+    </ul>
+    <hr>
+    <p>
+      Pal is Open Source on <a href="https://github.com/Machyne/pal">GitHub</a>
+      under the <a href="https://github.com/Machyne/pal/blob/master/LICENSE">New BSD License</a>.
+      <br><br>
+      Feel free to send us a pull request with improvements!
+    </p>
+  </div>
+  <div class="navbar navbar-default navbar-fixed-bottom footer" style="padding-top: 14px;">
+    <div class="container">
+      © 2015 PAL &ndash; BC Team
+    </div>
+  </div>
+</body>
+</html>

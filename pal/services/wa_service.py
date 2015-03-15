@@ -1,8 +1,8 @@
-# From the Wolfram Site
-# APP NAME: PAL
-# APPID: QG6645-R77PAAXQX9
-
-APPID = "QG6645-R77PAAXQX9"
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
 
 import urllib
 import xml.etree.ElementTree as ET
@@ -11,6 +11,8 @@ import requests
 
 from pal.services.base_service import Service
 from pal.services.base_service import wrap_response
+
+from config import WA_KEY
 
 
 class WAService(Service):
@@ -32,7 +34,7 @@ class WAService(Service):
                      "appid={}&podindex=2")
         # Rebuild original query from features dictionary
         input_url = urllib.quote(query, '')
-        query_url = query_url.format(input_url, APPID)
+        query_url = query_url.format(input_url, WA_KEY)
 
         # send the query to WA
         response = requests.get(query_url)

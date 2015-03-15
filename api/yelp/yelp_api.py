@@ -23,6 +23,10 @@ import sys
 import oauth2
 import requests
 
+from config import YELP_CONSUMER_KEY as CONSUMER_KEY
+from config import YELP_CONSUMER_SECRET as CONSUMER_SECRET
+from config import YELP_TOKEN as TOKEN
+from config import YELP_TOKEN_SECRET as TOKEN_SECRET
 
 API_HOST = 'api.yelp.com'
 DEFAULT_TERM = 'dinner'
@@ -31,10 +35,6 @@ SEARCH_LIMIT = 3
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
 
-CONSUMER_KEY = 'yCvKVXaC0lZSvCFDkwzvrg'
-CONSUMER_SECRET = 'MNOC-nytnZiXoIFicf16NJweS2Q'
-TOKEN = '-dDJM7fYdCBinzn4eOX8OVx4Ip-6tPxF'
-TOKEN_SECRET = 'fe5f8pXgFtGo1BjahpkW2EEeKoI'
 
 is_main = __name__ == '__main__'
 

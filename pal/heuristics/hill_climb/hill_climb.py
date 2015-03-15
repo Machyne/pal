@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Copyright (c) 2015, PAL Team.
+# All rights reserved. See LICENSE for details.
 import sys
 from os import path
 
@@ -24,7 +29,7 @@ def get_confs_kws(query, services):
 
 
 def climbing(examples, services, step_size):
-    """ Returns the set of services to climb on. Otherwise, an empty set
+    """ Returns the set of services to climb on if any.
     """
     to_be_climbed = set()
     for service, queries in examples.iteritems():
