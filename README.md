@@ -14,23 +14,29 @@
 We recommend installing PAL in a python virtual environment by using the `virtualenv` package.
 Use pip to install virtualenv then create a new virtualenv in the pal directory
 
-`virtualenv env`
+```sh
+virtualenv env
+```
 
 and activate the virtual environment
 
-`source env/bin/activate`
+```sh
+source env/bin/activate
+```
 
 If not using the directory service and/or PostgreSQL is not installed, remove the line containing
 `psycopg2` from the `requirements.txt` file. Install the required packages
 
-`pip install -r requirements.txt`
+```sh
+pip install -r requirements.txt
+```
 
 Next, install the required `nltk` libraries. Open a python shell and type
 
-~~~
+```python
 >>> import nltk
 >>> nltk.download()
-~~~
+```
 
 and install `maxent_ne_chunker`, `maxent_treebank_pos_tagger`, `punkt`, `qc`, and `words`.
 
@@ -40,11 +46,23 @@ Obtain a Facebook app ID and insert it into `static/home.js`.
 PAL is now ready to run locally. Start it by running `python server.py`.
 PAL can be accessed by connecting to `localhost:5000` in a browser.
 
+### Git Hooks
+To install the git hooks run the following command from the project root:
+
+```sh
+hooks/install.sh
+```
+
+Which will install the scripts in `hooks` by creating symlinks to them in your 
+`.git` directory.
+
 ### Hill Climb Instructions
 To ensure that queries are properly sorted into the proper services,
 hill climbing should be run. From the base directory, run
 
-`python -m pal.heuristics/hill_climb.hill_climb`
+```sh
+python -m pal.heuristics.hill_climb.hill_climb
+```
 
 After running hill climbing, updated heuristics values can be found in the
 `pal/heuristics/hill_climb/climbed_values` directory, and will be automatically
@@ -55,15 +73,21 @@ service is added to PAL.
 The pizza service requires Node.js or io.js. Install one of these and `npm`.
 Navigate to the `api/dominos` directory and run
 
-`npm install`
+```sh
+npm install
+```
 
 Next, install `forever` with
 
-`npm install -g forever`
+```sh
+npm install -g forever
+```
 
 Start the pizza server with
 
-`forever start server.js`
+```sh
+forever start server.js
+```
 
 ### Scraping the Directory
 In order for the directory service to function, the directory must be
@@ -73,17 +97,23 @@ file with the format `postgresql://username:password@database_url/table_name`
 
 Create the database schema by running
 
-`python models.py`
+```sh
+python models.py
+```
 
 Populate the buildings, majors, and departments tables by running
 
-`python stalkernet_scraper.py -b buildings.txt`
-`python stalkernet_scraper.py -m majors.txt`
-`python stalkernet_scraper.py -d depts.txt`
+```sh
+python stalkernet_scraper.py -b buildings.txt
+python stalkernet_scraper.py -m majors.txt
+python stalkernet_scraper.py -d depts.txt
+```
 
 Finally, scrape the directory with
 
-`python stalkernet_scraper.py -s`
+```sh
+python stalkernet_scraper.py -s
+```
 
 ### Installing in Apache
 PAL can be run by Apache HTTP Server by using the `mod_wsgi` module.

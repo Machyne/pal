@@ -13,7 +13,7 @@ from pal.nlp.standard_nlp import StandardNLP
 from pal.services import get_all_service_names
 from pal.test import parse_examples
 
-STEPS_BETWEEN_WRITES = 10 # The interval between data writes
+STEPS_BETWEEN_WRITES = 10  # The interval between data writes
 THRESHOLD = 15  # The minimum confidence to consider it classified
 FIRST_STEP_SIZE = 20  # The first amount to increment/decrement by
 
