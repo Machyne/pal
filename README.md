@@ -87,22 +87,24 @@ Finally, scrape the directory with
 
 ### Installing in Apache
 PAL can be run by Apache HTTP Server by using the `mod_wsgi` module.
-The Flask documentation has pretty detailed instructions on how to set
-this up. Please see `http://flask.pocoo.org/docs/0.10/deploying/mod_wsgi/`
+The [Flask documentation](http://flask.pocoo.org/docs/0.10/deploying/mod_wsgi/)
+has pretty detailed instructions on how to set this up.
+
 
 ## Services
-- Bon Appetit (actively scraped from [Bon Appetit website]
+--------------------------------
+### Bon Appetit (actively scraped from [Bon Appetit website]
         (http://carleton.cafebonappetit.com/cafe/))
     - [x] Single dining hall, single day, any or all meals
 
-- Dictionary/Thesaurus (actively scraped from [dictionary]
+### Dictionary/Thesaurus (actively scraped from [dictionary]
         (http://dictionary.reference.com/browse/) or [thesaurus]
         (http://www.thesaurus.com/browse/))
     - [x] Definitions
     - [x] Synonyms
     - [x] Antonyms
 
-- Directory (pre-scraped from [Carleton campus directory]
+### Directory (pre-scraped from [Carleton campus directory]
         (http://apps.carleton.edu/campus/directory/))
     - Single-person queries
         - [x] Professor offices / Student rooms
@@ -116,7 +118,7 @@ this up. Please see `http://flask.pocoo.org/docs/0.10/deploying/mod_wsgi/`
         - [ ] All professors in a department
         - [ ] "Show me all the Brians on campus"
 
-- Dominos (requests to [Dominos online order]
+### Dominos (requests to [Dominos online order]
         (https://order.dominos.com/en/pages/order/))
     - Pizza cost
         - [x] price of a single pizza
@@ -127,11 +129,11 @@ this up. Please see `http://flask.pocoo.org/docs/0.10/deploying/mod_wsgi/`
         - [x] order multiple same pizzas
         - [ ] order multiple different pizzas
 
-- Facebook (requests to [Facebook Graph API]
+### Facebook (requests to [Facebook Graph API]
         (https://developers.facebook.com/docs/graph-api))
     - [x] Post to timeline on behalf of user
 
-- Movies (using the [TMDB API]
+### Movies (using the [TMDB API]
         (https://www.themoviedb.org/documentation/api))
     - [x] What movies was this person involved in (acting, directing, etc.)
     - [x] Was this person involved in this movie?
@@ -140,26 +142,26 @@ this up. Please see `http://flask.pocoo.org/docs/0.10/deploying/mod_wsgi/`
     - [x] Who acted/directed/etc. in this movie?
     - [ ] Who played this character in this movie?
 
-- Translations (requests through [UltraLingua REST API]
-        (http://api.ultralingua.com/ulapi/rest)
+### Translations (requests through [UltraLingua REST API]
+        (http://api.ultralingua.com/ulapi/rest))
     - [x] From English to {Spanish, French, German, Italian, Portuguese}
     - [x] From {Spanish, French, German, Italian, Portuguese} to English
     - [x] Between {Spanish, French, German, Italian, Portuguese}
     - [ ] Use correct SpeechSynthesisVoice for the destination language
 
-- Weather (requests to [Yahoo weather API]
+### Weather (requests to [Yahoo weather API]
         (https://query.yahooapis.com/v1/public/yql?))
     - [x] High/low temperatures
     - [x] Snow/rain
     - [x] General forecast
     - [x] Geolocation
 
-- Wolfram|Alpha (requests using [Wolfram|Alpha's API]
+### Wolfram|Alpha (requests using [Wolfram|Alpha's API]
         (http://products.wolframalpha.com/api/))
     - [x] Run queries on natural language and get numerical output
     - [ ] Keep track of our limited number of queries (difficult due to concurrency issues)
 
-- Yelp (requests to [Yelp API]
+### Yelp (requests to [Yelp API]
         (http://www.yelp.com/developers/documentation))
     - [x] Businesses by search terms
     - [x] Ratings, URL, Phone Number
